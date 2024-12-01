@@ -4,7 +4,7 @@ import { guaranteeList } from '@/services';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProFormDigitRange, ProTable } from '@ant-design/pro-components';
-import { useModel, useNavigate } from '@umijs/max';
+import { Access, useAccess, useModel, useNavigate } from '@umijs/max';
 import { Button, DatePicker } from 'antd';
 import { useMemo, useRef, useState } from 'react';
 
@@ -27,6 +27,7 @@ export default () => {
     return `共 ${total} 条数据`;
   }, [total]);
   let { financialOrg } = useModel('financialOrg');
+  const access = useAccess();
   const columns: ProColumns<GithubIssueItem>[] = useMemo(
     () => [
       {
@@ -44,11 +45,11 @@ export default () => {
         sorter: true,
         renderFormItem: () => (
           <ProFormDigitRange
-          className='w-full'
+            className="w-full"
             placeholder={['最低利率', '最高利率']}
           />
         ),
-        
+
         search: {
           transform: (value) => {
             console.log(value);
@@ -80,6 +81,7 @@ export default () => {
         align: 'center',
         width: '300px',
         hideInSearch: true,
+        hideInTable: !access.canEdit,
         render: (text, record, _, action) => [
           // <TzButton
           //   type="link"
@@ -175,17 +177,19 @@ export default () => {
       }}
       headerTitle={headerTitle}
       toolBarRender={() => [
-        <Button
-          key="button"
-          icon={<PlusOutlined />}
-          onClick={() => {
-            navigate(`/product/guarantee/info`);
-            // actionRef.current?.reload();
-          }}
-          type="primary"
-        >
-          添加
-        </Button>,
+        <Access accessible={access.canEdit}>
+          <Button
+            key="button"
+            icon={<PlusOutlined />}
+            onClick={() => {
+              navigate(`/product/guarantee/info`);
+              // actionRef.current?.reload();
+            }}
+            type="primary"
+          >
+            添加
+          </Button>
+        </Access>,
       ]}
     />
   );

@@ -102,6 +102,19 @@ export async function financialDetail(
     ...(options || {}),
   });
 }
+export async function financialSave(
+  params:any,
+  options?: { [key: string]: any },
+) {
+  return request<any>(`${api.financialSave}`, {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
 export async function getArea(
   params?: any,
   options?: { [key: string]: any },

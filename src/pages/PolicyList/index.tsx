@@ -5,7 +5,7 @@ import { policyDelete, policyList } from '@/services';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
-import { useAccess, useModel, useNavigate } from '@umijs/max';
+import { Access, useAccess, useModel, useNavigate } from '@umijs/max';
 import { Button } from 'antd';
 import { useMemo, useRef, useState } from 'react';
 type GithubIssueItem = {
@@ -28,103 +28,109 @@ export default () => {
   }, [total]);
 
   const access = useAccess();
-  const columns: ProColumns<GithubIssueItem>[] = useMemo(()=>[
-    {
-      title: '标题',
-      dataIndex: 'keyword',
-      hideInTable: true,
-    },
-    {
-      title: '标题',
-      dataIndex: 'title',
-      hideInSearch: true,
-      ellipsis: true,
-    },
+  const columns: ProColumns<GithubIssueItem>[] = useMemo(
+    () => [
+      {
+        title: '标题',
+        dataIndex: 'keyword',
+        hideInTable: true,
+      },
+      {
+        title: '标题',
+        dataIndex: 'title',
+        hideInSearch: true,
+        ellipsis: true,
+      },
 
-    {
-      title: '层级',
-      dataIndex: 'area_type',
-      valueType: 'select',
-      valueEnum: AREA_TYPE,
-    },
-    {
-      title: '类型',
-      dataIndex: 'body_type',
-      valueType: 'select',
-      valueEnum: BODY_TYPE,
-    },
-    {
-      title: '政策来源',
-      dataIndex: 'sub_title',
-      ellipsis: true,
-      order: -1,
-    },
-    {
-      title: '主题',
-      dataIndex: 'theme_id',
-      valueType: 'select',
-      valueEnum: theme,
-    },
-    {
-      title: '特色',
-      dataIndex: 'feature_id',
-      valueType: 'select',
-      valueEnum: feature,
-    },
+      {
+        title: '层级',
+        dataIndex: 'area_type',
+        valueType: 'select',
+        valueEnum: AREA_TYPE,
+      },
+      {
+        title: '类型',
+        dataIndex: 'body_type',
+        valueType: 'select',
+        valueEnum: BODY_TYPE,
+      },
+      {
+        title: '政策来源',
+        dataIndex: 'sub_title',
+        ellipsis: true,
+        order: -1,
+      },
+      {
+        title: '主题',
+        dataIndex: 'theme_id',
+        valueType: 'select',
+        valueEnum: theme,
+      },
+      {
+        title: '特色',
+        dataIndex: 'feature_id',
+        valueType: 'select',
+        valueEnum: feature,
+      },
 
-    {
-      title: '发布时间区间',
-      dataIndex: 'created_at',
-      hideInTable: true,
-      valueType: 'dateRange',
-      order: -2,
-      search: {
-        transform: (value) => {
-          return {
-            start: value[0],
-            end: value[1],
-          };
+      {
+        title: '发布时间区间',
+        dataIndex: 'created_at',
+        hideInTable: true,
+        valueType: 'dateRange',
+        order: -2,
+        search: {
+          transform: (value) => {
+            return {
+              start: value[0],
+              end: value[1],
+            };
+          },
         },
       },
-    },
-    {
-      title: '发布时间',
-      dataIndex: 'add_time',
-      hideInSearch: true,
-      valueType: 'date',
-    },
+      {
+        title: '发布时间',
+        dataIndex: 'add_time',
+        hideInSearch: true,
+        valueType: 'date',
+      },
 
-    {
-      title: '操作',
-      fixed: 'right',
-      align: 'center',
-      hideInTable: !access.canEdit,
-      hideInSearch: true,
-      render: (text, record, _, action) => [
-        <TzButton
-          type="link"
-          key={'edit'}
-          onClick={() => {
-            navigate(`/policy/list/policy-info?id=${record.id}`);
-          }}
-        >
-          编辑
-        </TzButton>,
-        <TzPopconfirm description="确认删除政策?" 
-        key={'del'} onConfirm={()=>{
-          action?.reload()
-          return;
-          policyDelete({id:record.id}).then(res=>{
-            action?.reload()
-          })
-        }}>
-          <TzButton type="link" danger onClick={() => {}}>
-            删除
-          </TzButton>
-        </TzPopconfirm>
-      ],
-    },
-  ],[])
+      {
+        title: '操作',
+        fixed: 'right',
+        align: 'center',
+        hideInTable: !access.canEdit,
+        hideInSearch: true,
+        render: (text, record, _, action) => [
+          <TzButton
+            type="link"
+            key={'edit'}
+            onClick={() => {
+              navigate(`/policy/list/policy-info?id=${record.id}`);
+            }}
+          >
+            编辑
+          </TzButton>,
+          <TzPopconfirm
+            description="确认删除政策?"
+            key={'del'}
+            onConfirm={() => {
+              action?.reload();
+              return;
+              policyDelete({ id: record.id }).then((res) => {
+                action?.reload();
+              });
+            }}
+          >
+            <TzButton type="link" danger onClick={() => {}}>
+              删除
+            </TzButton>
+          </TzPopconfirm>,
+        ],
+      },
+    ],
+    [],
+  );
   return (
     <ProTable<GithubIssueItem>
       columns={columns}
@@ -134,11 +140,11 @@ export default () => {
         const res = await policyList({
           ...params,
         });
-        setTotal(res.count)
+        setTotal(res.count);
         return {
-          success:true,
+          success: true,
           data: res.dataList,
-          total:res.count
+          total: res.count,
         };
       }}
       editable={{
@@ -183,17 +189,19 @@ export default () => {
       }}
       headerTitle={headerTitle}
       toolBarRender={() => [
-        <Button
-          key="button"
-          icon={<PlusOutlined />}
-          onClick={() => {
-            // actionRef.current?.reload();
-            navigate(`/policy/list/policy-info`);
-          }}
-          type="primary"
-        >
-          添加
-        </Button>,
+        <Access accessible={access.canEdit}>
+          <Button
+            key="button"
+            icon={<PlusOutlined />}
+            onClick={() => {
+              // actionRef.current?.reload();
+              navigate(`/policy/list/policy-info`);
+            }}
+            type="primary"
+          >
+            添加
+          </Button>
+        </Access>,
       ]}
     />
   );

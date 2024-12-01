@@ -40,12 +40,14 @@ const routes = [
         title: '金融机构列表',
         path: '/customer/financial-list',
         component: './FinancialList',
+        access: 'admin',
       },
       {
         name: '政府部门列表',
         title: '政府部门列表',
         path: '/customer/government-list',
         component: './GovernmentList',
+        access: 'admin',
       },
     ],
   },
@@ -69,8 +71,8 @@ const routes = [
       {
         name: '详情',
         title: '详情',
-        path: '/customer/financial-list/financial-info',
-        component: './FinanceInfo',
+        path: '/customer/financial-list/info',
+        component: './FinancialList/Info',
         breadcrumb: [
           { title: '金融机构', path: '/customer/financial-list' },
           { title: '金融机构详情' },

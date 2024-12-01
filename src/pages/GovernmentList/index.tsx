@@ -1,7 +1,7 @@
 import { TzButton } from '@/components/TzButton';
 import TzPopconfirm from '@/components/TzPopconfirm';
 import { useAreaData } from '@/hooks';
-import { departmentList, financialDelete, financialList } from '@/services';
+import { financialDelete, financialList, governmentList } from '@/services';
 import { findParentIds } from '@/utils';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
@@ -10,6 +10,7 @@ import { Link } from '@umijs/max';
 import { Button, DatePicker } from 'antd';
 import dayjs from 'dayjs';
 import { useCallback, useMemo, useRef, useState } from 'react';
+import { Access, useAccess } from '@umijs/max';
 
 const { RangePicker } = DatePicker;
 type GithubIssueItem = {
@@ -29,6 +30,7 @@ export default () => {
     return `共 ${total} 条数据`;
   }, [total]);
   let { areaData } = useAreaData();
+  const access = useAccess();
   const columns: ProColumns<GithubIssueItem>[] = useMemo(
     () => [
       {
@@ -37,24 +39,6 @@ export default () => {
         ellipsis: true,
         onFilter: true,
       },
-      {
-        title: '账号',
-        dataIndex: 'user_name',
-        ellipsis: true,
-        onFilter: true,
-      },
-      {
-        title: '密码',
-        dataIndex: 'password',
-        ellipsis: true,
-        hideInSearch: true,
-      },
-      {
-        title: '联系电话',
-        dataIndex: 'contact_phone',
-        ellipsis: true,
-      },
-
       {
         title: '地区',
         dataIndex: 'area_id',
@@ -71,7 +55,6 @@ export default () => {
           },
         },
       },
-
       {
         title: '地区',
         dataIndex: 'area_desc',
@@ -85,11 +68,23 @@ export default () => {
       },
       {
         title: '添加时间',
-        dataIndex: 'add_time_desc',
         sorter: true,
-        hideInSearch: true,
+        dataIndex: 'add_time',
+        formItemProps: {
+          label: '添加时间区间',
+        }, 
+        valueType: 'dateTime',
         renderFormItem: () => {
           return <RangePicker format="YYYY-MM-DD" />;
+        },
+        search: {
+          transform: (value) => {
+            let [start, end] = value;
+            return {
+              start,
+              end,
+            };
+          },
         },
       },
       {
@@ -97,14 +92,17 @@ export default () => {
         fixed: 'right',
         align: 'center',
         hideInSearch: true,
+        hideInTable: !access.canEdit,
         render: (text, record, _, action) => [
-          <TzButton type="link" key={'edit'}>
-            <Link
-              to={`/customer/financial-list/financial-info?id=${record.id}`}
-            >
-              编辑
-            </Link>
-          </TzButton>,
+          <Access accessible={access.canEdit}>
+            <TzButton type="link" key={'edit'}>
+              <Link
+                to={`/customer/financial-list/financial-info?id=${record.id}`}
+              >
+                编辑
+              </Link>
+            </TzButton>
+          </Access>,
           <TzPopconfirm
             key={'del'}
             description="确认删除此金融机构?"
@@ -116,7 +114,7 @@ export default () => {
               });
             }}
           >
-            <TzButton type="link" danger onClick={() => {}}>
+            <TzButton type="link" danger onClick={() => { }}>
               删除
             </TzButton>
           </TzPopconfirm>,
@@ -132,11 +130,12 @@ export default () => {
         return {
           ...values,
           area_id: [...idPath],
+          add_time:[values.start, values.end]
         };
       }
       return values;
     },
-    [areaData],
+    [areaData,access],
   );
   return (
     <ProTable<GithubIssueItem>
@@ -144,14 +143,14 @@ export default () => {
       actionRef={actionRef}
       cardBordered
       request={async (params, sorter, filter) => {
-        const res = await departmentList({
+        const res = await governmentList({
           ...params,
         });
         setTotal(res.count)
         return {
-          success:true,
+          success: true,
           data: res.dataList,
-          total:res.count
+          total: res.count
         };
       }}
       editable={{

@@ -5,7 +5,7 @@ import { fundDelete, fundList } from '@/services';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
-import { useModel, useNavigate } from '@umijs/max';
+import { Access, useAccess, useModel, useNavigate } from '@umijs/max';
 import { Button, DatePicker } from 'antd';
 import { useMemo, useRef, useState } from 'react';
 import { PriceInput } from './components/PriceInput';
@@ -29,6 +29,7 @@ export default () => {
     return `共 ${total} 条数据`;
   }, [total]);
   let { financialOrg } = useModel('financialOrg');
+  const access = useAccess();
   const columns: ProColumns<GithubIssueItem>[] = useMemo(
     () => [
       {
@@ -62,9 +63,6 @@ export default () => {
           label: '注册时间区间',
         },
         valueType: 'dateTime',
-        renderFormItem: () => {
-          return <RangePicker format="YYYY-MM-DD" />;
-        },
         search: {
           transform: (value) => {
             let [start, end] = value;
@@ -81,6 +79,7 @@ export default () => {
         align: 'center',
         width: '300px',
         hideInSearch: true,
+        hideInTable: !access.canEdit,
         render: (text, record, _, action) => [
           <TzButton
             type="link"
@@ -170,17 +169,19 @@ export default () => {
       }}
       headerTitle={headerTitle}
       toolBarRender={() => [
-        <Button
-          key="button"
-          icon={<PlusOutlined />}
-          onClick={() => {
-            navigate(`/product/fund/info`);
-            // actionRef.current?.reload();
-          }}
-          type="primary"
-        >
-          添加
-        </Button>,
+        <Access accessible={access.canEdit}>
+          <Button
+            key="button"
+            icon={<PlusOutlined />}
+            onClick={() => {
+              navigate(`/product/fund/info`);
+              // actionRef.current?.reload();
+            }}
+            type="primary"
+          >
+            添加
+          </Button>
+        </Access>,
       ]}
     />
   );

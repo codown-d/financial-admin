@@ -5,7 +5,7 @@ import { loanDelete, loanList } from '@/services';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProFormDigitRange, ProTable } from '@ant-design/pro-components';
-import { useAccess, useModel, useNavigate } from '@umijs/max';
+import { useAccess, useModel, useNavigate ,Access} from '@umijs/max';
 import { Button, DatePicker } from 'antd';
 import { useMemo, useRef, useState } from 'react';
 import { URLPATH } from '../constants';
@@ -221,6 +221,8 @@ export default (props: { product_type: product_type }) => {
       }}
       headerTitle={headerTitle}
       toolBarRender={() => [
+        <Access  accessible={access.canEdit}>
+          
         <Button
           key="button"
           icon={<PlusOutlined />}
@@ -230,7 +232,8 @@ export default (props: { product_type: product_type }) => {
           type="primary"
         >
           添加
-        </Button>,
+        </Button>
+        </Access>,
       ]}
     />
   );

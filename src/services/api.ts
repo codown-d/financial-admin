@@ -6,6 +6,7 @@ export default {
   governmentList:'/admin/government/department/all/list',
   financialDelete:'/admin/financial/organs/delete',
   financialDetail:'/admin/financial/organs/detail',
+  financialSave:'/admin/financial/organs/save',
   getArea:'/get/area',
   policyList:'/admin/enterprise/service/policy/all/list',
   policyThemeFeature:'/admin/policy/theme/feature/list',
