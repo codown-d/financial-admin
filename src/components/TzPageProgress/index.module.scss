@@ -1,0 +1,17 @@
+.progress {
+  position: fixed;
+  bottom:  60px;
+  right:  20px;
+  transform: rotate(-90deg);
+  z-index: 99;
+}
+.circle {
+  stroke-dashoffset: 0;
+  stroke-width: 30%;
+  fill: none;
+}
+
+.progress {
+  stroke: var(--accent);
+  stroke-dasharray: 0, 1;
+}

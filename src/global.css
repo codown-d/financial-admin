@@ -1,0 +1,18 @@
+.ant-pro-layout .ant-pro-sider.ant-pro-sider-fixed{
+    margin: 20px;
+    height: calc(100% - 40px);
+    padding-right: 20px;
+}
+.ant-pro-layout .ant-pro-sider.ant-pro-sider-collapsed{
+    padding-right: 0px;
+}
+.ant-pro-layout .ant-pro-sider .ant-layout-sider-children{
+    border-inline-end:0px;
+    background-color: #fff;
+    border-radius: 12px;
+}
+
+.ant-menu-light .ant-menu-item-selected{
+    background-color:#3C5BF6 ;
+    color: #fff;
+}
