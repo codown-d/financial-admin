@@ -1,10 +1,11 @@
-import { first, get, set } from 'lodash';
+import { first, get, isArray, keys, set } from 'lodash';
 // import * as NProgress from 'nprogress';
 import { history, proxy } from '@umijs/max';
 import { message } from 'antd';
 import { AxiosCanceler } from './axiosCancel';
 import { storage } from './utils/storage';
 import { showError } from './utils';
+import queryString from 'query-string';
 
 type requestStoreProps = { url?: string; timestamp: number };
 const requestStoreAction = (url: string, interval = 1000) => {
@@ -98,6 +99,21 @@ const responseInterceptors = async (response: any) => {
   return Promise.reject(response);
 };
 export const requestConfig = {
+  paramsSerializer: (params: { [x: string]: any; }) => {
+    const { current:page,pageSize:limit, ...rest } = params;
+    if(params?.current||params?.pageSize){
+      params = {limit,page,...rest}
+    }
+    const newParams = {};
+    keys(params)?.forEach((key) =>
+      set(
+        newParams,
+        key,
+        isArray(params[key]) && !params[key].length ? '' : params[key],
+      ),
+    );
+    return queryString.stringify(newParams);
+  },
   baseURL: process.env.UMI_APP_API_BASE_URL,
   retryTimes: 3,
   timeout: 10 * 1000,

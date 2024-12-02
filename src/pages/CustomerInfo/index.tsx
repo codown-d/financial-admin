@@ -2,9 +2,11 @@ import { TzButton } from '@/components/TzButton';
 import TzTitleDesc from '@/components/TzTitleDesc';
 import { InfoCircleFilled } from '@ant-design/icons';
 import { ProForm, ProFormText } from '@ant-design/pro-components';
-import { Col, ConfigProvider, message, Row } from 'antd';
+import { Col, ConfigProvider, message, Modal, Row } from 'antd';
 import FinanceTable from './components/FinanceTable';
 import ProductTable from './components/ProductTable';
+import { adminUserLogout } from '@/services';
+import { useSearchParams } from '@umijs/max';
 const waitTime = (time: number = 100) => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -13,8 +15,25 @@ const waitTime = (time: number = 100) => {
   });
 };
 export default () => {
+  let [searchParams] = useSearchParams();
+  let uid = searchParams.get('id');
+  const [modal, contextHolder] = Modal.useModal();
+
+  const confirm = () => {
+    modal.confirm({
+      content: '是否确认注销此账号？',
+      onOk: ()=>{
+        adminUserLogout({uid}).then((res)=>{
+          message.success('注销成功')
+        })
+      },
+      okText: '确认',
+      cancelText: '取消',
+    });
+  };
   return (
     <>
+    {contextHolder}
       <ProForm
         onFinish={async (values) => {
           await waitTime(2000);
@@ -86,7 +105,7 @@ export default () => {
               },
             }}
           >
-            <TzButton>注销账号</TzButton>
+            <TzButton onClick={confirm}>注销账号</TzButton>
           </ConfigProvider>
           <InfoCircleFilled className="ml-5 mr-1" />
           注销后账号不可找回

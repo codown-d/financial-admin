@@ -455,3 +455,15 @@ export async function departmentList(
     ...(options || {}),
   });
 }
+export async function adminUserLogout(
+  params?: any,
+  options?: { [key: string]: any },
+) {
+  return request<any>(`${api.adminUserLogout}`, {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}

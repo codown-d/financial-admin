@@ -22,7 +22,6 @@ const Layout = () => {
       has(item, 'redirect') || item.hideInMenu;
     const _menu: any = values(_routes).filter((item: MenuDataItem) => {
       item.icon && (item.icon = <img src={`/images/${item.icon}.png`} />);
-      console.log(item.access,noAccess(item.access),accessFull )
       return !(notInMenu(item) || noAccess(item.access));
     });
     let treeData = buildTree(_menu, {

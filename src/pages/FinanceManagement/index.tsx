@@ -8,6 +8,7 @@ import { ProFormDigitRange, ProTable } from '@ant-design/pro-components';
 import { useNavigate } from '@umijs/max';
 import { Button, DatePicker } from 'antd';
 import { useMemo, useRef, useState } from 'react';
+import { SearchAndOptionsProps } from '../ProductManagement';
 
 const { RangePicker } = DatePicker;
 type GithubIssueItem = {
@@ -19,8 +20,8 @@ type GithubIssueItem = {
   real_name: string;
   certification: string;
 };
-
-export default () => {
+export default (props:{proTableProps?:SearchAndOptionsProps}) => {
+  let {proTableProps}=props
   const actionRef = useRef<ActionType>();
   const navigate = useNavigate();
   const [total, setTotal] = useState(0);
@@ -84,16 +85,23 @@ export default () => {
       },
       {
         title: '发布时间',
-        dataIndex: 'created_at',
+        dataIndex: 'add_time',
+        valueType: 'dateTime',
+        hideInSearch: true,
         sorter: true,
+      },
+      {
+        title: '发布时间区间',
+        dataIndex: 'created_at',
         valueType: 'dateTimeRange',
-        formItemProps: {
-          label: '发布时间区间',
-        },
+        hideInTable: true,
         search: {
           transform: (value) => {
             let [start, end] = value;
-            return { start, end };
+            return {
+              start,
+              end,
+            };
           },
         },
       },
@@ -189,18 +197,7 @@ export default () => {
         onChange: (page) => console.log(page),
       }}
       headerTitle={headerTitle}
-      // toolBarRender={() => [
-      //   <Button
-      //     key="button"
-      //     icon={<PlusOutlined />}
-      //     onClick={() => {
-      //       actionRef.current?.reload();
-      //     }}
-      //     type="primary"
-      //   >
-      //     添加
-      //   </Button>,
-      // ]}
+      {...proTableProps}
     />
   );
 };

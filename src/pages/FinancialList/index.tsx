@@ -71,13 +71,14 @@ export default () => {
         title: '添加时间',
         sorter: true,
         dataIndex: 'add_time',
-        formItemProps: {
-          label: '添加时间区间',
-        }, 
+        hideInSearch: true,
         valueType: 'dateTime',
-        renderFormItem: () => {
-          return <RangePicker format="YYYY-MM-DD" />;
-        },
+      },
+      {
+        title: '添加时间区间',
+        hideInTable: true,
+        dataIndex: 'created_at',
+        valueType: 'dateTimeRange',
         search: {
           transform: (value) => {
             let [start, end] = value;
@@ -97,9 +98,7 @@ export default () => {
         render: (text, record, _, action) => [
           <Access accessible={access.canEdit}>
             <TzButton type="link" key={'edit'}>
-              <Link
-                to={`/customer/financial-list/info?id=${record.id}`}
-              >
+              <Link to={`/customer/financial-list/info?id=${record.id}`}>
                 编辑
               </Link>
             </TzButton>
@@ -115,7 +114,7 @@ export default () => {
               });
             }}
           >
-            <TzButton type="link" danger onClick={() => { }}>
+            <TzButton type="link" danger onClick={() => {}}>
               删除
             </TzButton>
           </TzPopconfirm>,
@@ -128,15 +127,16 @@ export default () => {
     (values: Record<string, any>, type: 'get' | 'set') => {
       if (type === 'get') {
         let idPath = findParentIds(areaData, values.area_id);
+        console.log([values.start, values.end])
         return {
           ...values,
           area_id: [...idPath],
-          add_time:[values.start, values.end]
+          created_at: [values.start, values.end]
         };
       }
       return values;
     },
-    [areaData,access],
+    [areaData, access],
   );
   return (
     <ProTable<GithubIssueItem>

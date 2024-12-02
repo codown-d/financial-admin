@@ -37,18 +37,6 @@ const columns: ProColumns<GithubIssueItem>[] = [
     hideInSearch:true,
   },
   {
-    title: '注册时间',
-    dataIndex: 'registerTime',
-    sorter: true,
-    formItemProps:{
-      label:'注册时间区间'
-    },
-    order:1,
-    renderFormItem: () => {
-      return <RangePicker format="YYYY-MM-DD" />;
-    },
-  },
-  {
     title: '地区',
     dataIndex: 'area',
     onFilter: true,

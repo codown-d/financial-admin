@@ -92,7 +92,7 @@ export default () => {
         title: '发布时间',
         dataIndex: 'add_time',
         hideInSearch: true,
-        valueType: 'date',
+        valueType: 'dateTime',
       },
 
       {

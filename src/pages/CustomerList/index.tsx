@@ -98,9 +98,10 @@ export default () => {
     },
     {
       title: '注册时间',
-      dataIndex: 'add_time_desc',
+      dataIndex: 'add_time',
       sorter: true,
       hideInSearch: true,
+      valueType: 'dateTime',
     },
     {
       title: '地区',

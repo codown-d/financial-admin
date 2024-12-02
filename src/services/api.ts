@@ -39,4 +39,5 @@ export default {
   userInfo:'/user/info',
   applyList:'/apply/all/list',
   departmentList:'/admin/government/department/all/list',
+  adminUserLogout:'/admin/user/logout',
 };

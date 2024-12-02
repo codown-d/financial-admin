@@ -1,12 +1,17 @@
 import { TzButton } from '@/components/TzButton';
-import { action_status, action_status_filter, data_type, GUARANTEE_METHOD, product_type_filter, purpose, repayment_method, term } from '@/constants';
+import {
+  action_status_filter,
+  GUARANTEE_METHOD,
+  product_type_filter,
+  purpose,
+  repayment_method,
+} from '@/constants';
 import { useAreaData } from '@/hooks';
-import { allList, applyList } from '@/services';
-import { PlusOutlined } from '@ant-design/icons';
-import type { ActionType, ProColumns } from '@ant-design/pro-components';
+import { applyList } from '@/services';
+import type { ActionType, ProColumns, ProTableProps } from '@ant-design/pro-components';
 import { ProFormDigitRange, ProTable } from '@ant-design/pro-components';
 import { useNavigate } from '@umijs/max';
-import { Button, DatePicker } from 'antd';
+import { DatePicker } from 'antd';
 import { useMemo, useRef, useState } from 'react';
 
 const { RangePicker } = DatePicker;
@@ -19,8 +24,9 @@ type GithubIssueItem = {
   real_name: string;
   certification: string;
 };
-
-export default () => {
+export type SearchAndOptionsProps = Pick<ProTableProps<any,Record<string, any>>, 'search' | 'options'|'headerTitle'>;
+export default (props:{proTableProps?:SearchAndOptionsProps}) => {
+  let {proTableProps}=props
   const actionRef = useRef<ActionType>();
   const navigate = useNavigate();
   const [total, setTotal] = useState(0);
@@ -35,7 +41,13 @@ export default () => {
         dataIndex: 'apply_user',
       },
       {
+        title: '类型',
+        dataIndex: 'product_type',
+        valueEnum: product_type_filter,
+      },
+      {
         title: '金额范围',
+        sorter: true,
         dataIndex: 'account',
         renderFormItem: () => (
           <ProFormDigitRange placeholder={['最低金额', '最高金额']} />
@@ -47,12 +59,7 @@ export default () => {
           },
         },
       },
-      
-      {
-        title: '类型',
-        dataIndex: 'product_type',
-        valueEnum: product_type_filter,
-      },
+
       {
         title: '用途',
         dataIndex: 'purpose',
@@ -97,17 +104,24 @@ export default () => {
         dataIndex: 'beneficiary',
       },
       {
-        title: '发布时间',
-        dataIndex: 'created_at',
+        title: '申请时间',
+        dataIndex: 'add_time',
         sorter: true,
+        hideInSearch: true,
+        valueType: 'dateTime',
+      },
+      {
+        title: '申请时间区间',
+        hideInTable: true,
+        dataIndex: 'created_at',
         valueType: 'dateTimeRange',
-        formItemProps: {
-          label: '申请时间区间',
-        },
         search: {
           transform: (value) => {
             let [start, end] = value;
-            return { start, end };
+            return {
+              start,
+              end,
+            };
           },
         },
       },
@@ -188,7 +202,6 @@ export default () => {
       form={{
         labelWidth: 120,
         colon: false,
-        // 由于配置了 transform，提交的参数与定义的不同这里需要转化一下
         syncToUrl: (values, type) => {
           if (type === 'get') {
             return {
@@ -204,18 +217,7 @@ export default () => {
         onChange: (page) => console.log(page),
       }}
       headerTitle={headerTitle}
-      // toolBarRender={() => [
-      //   <Button
-      //     key="button"
-      //     icon={<PlusOutlined />}
-      //     onClick={() => {
-      //       actionRef.current?.reload();
-      //     }}
-      //     type="primary"
-      //   >
-      //     添加
-      //   </Button>,
-      // ]}
+      {...proTableProps}
     />
   );
 };

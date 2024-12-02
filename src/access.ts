@@ -8,7 +8,7 @@ export default (initialState: any) => {
   console.log(user,user?.user_type == 4);
   // }, [role])
   return {
-    role: user.data?.user_type== 4 ? 'admin' : 'user' ,
-    canEdit: user.data?.user_type == 4 ,
+    role: user?.data?.user_type== 4 ? 'admin' : 'user' ,
+    canEdit: user?.data?.user_type == 4 ,
   };
 };

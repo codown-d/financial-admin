@@ -104,15 +104,16 @@ export default (props: { product_type: product_type }) => {
       },
       {
         title: '添加时间',
-        dataIndex: 'add_time',
         sorter: true,
-        formItemProps: {
-          label: '添加时间区间',
-        },
+        dataIndex: 'add_time',
+        hideInSearch: true,
         valueType: 'dateTime',
-        renderFormItem: () => {
-          return <RangePicker format="YYYY-MM-DD" />;
-        },
+      },
+      {
+        title: '添加时间区间',
+        hideInTable: true,
+        dataIndex: 'created_at',
+        valueType: 'dateTimeRange',
         search: {
           transform: (value) => {
             let [start, end] = value;
@@ -210,6 +211,7 @@ export default (props: { product_type: product_type }) => {
             const { ...rest } = values;
             return {
               ...rest,
+              created_at: [values.start, values.end]
             };
           }
           return values;

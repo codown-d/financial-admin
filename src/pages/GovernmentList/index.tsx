@@ -70,13 +70,14 @@ export default () => {
         title: '添加时间',
         sorter: true,
         dataIndex: 'add_time',
-        formItemProps: {
-          label: '添加时间区间',
-        }, 
+        hideInSearch: true,
         valueType: 'dateTime',
-        renderFormItem: () => {
-          return <RangePicker format="YYYY-MM-DD" />;
-        },
+      },
+      {
+        title: '添加时间区间',
+        hideInTable: true,
+        dataIndex: 'created_at',
+        valueType: 'dateTimeRange',
         search: {
           transform: (value) => {
             let [start, end] = value;
@@ -130,7 +131,7 @@ export default () => {
         return {
           ...values,
           area_id: [...idPath],
-          add_time:[values.start, values.end]
+          created_at:[values.start, values.end]
         };
       }
       return values;

@@ -58,11 +58,15 @@ export default () => {
       {
         title: '添加时间',
         dataIndex: 'add_time',
+        hideInSearch: true,
         sorter: true,
-        formItemProps: {
-          label: '注册时间区间',
-        },
         valueType: 'dateTime',
+      },
+      {
+        title: '注册时间区间',
+        hideInTable: true,
+        dataIndex: 'created_at',
+        valueType: 'dateTimeRange',
         search: {
           transform: (value) => {
             let [start, end] = value;
@@ -158,6 +162,7 @@ export default () => {
             return {
               subscription_unit: '1',
               ...rest,
+              created_at: [values.start, values.end]
             };
           }
           return values;
