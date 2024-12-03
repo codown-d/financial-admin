@@ -272,14 +272,17 @@ export const purpose = {
 export const action_status = {
   1: {
     text: '未受理',
+    status: 'Warning',
   },
 
   2: {
     text: '谢绝',
+    status: 'Error',
   },
 
   3: {
     text: '已受理',
+    status: 'Success',
   },
 };
 export const term = {
@@ -329,18 +332,22 @@ export const product_type_filter = {
 export const action_status_filter = {
   1: {
     text: '已申请',
+    status: 'Warning',
   },
-
   2: {
     text: '未受理',
+    status: 'Default',
   },
   3: {
     text: '办理中',
+    status: 'Processing',
   },
   4: {
     text: '谢绝',
+    status: 'Error',
   },
   5: {
     text: '完成',
+    status: 'Success',
   },
 };

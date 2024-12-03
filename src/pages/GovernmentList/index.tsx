@@ -1,12 +1,12 @@
 import { TzButton } from '@/components/TzButton';
 import TzPopconfirm from '@/components/TzPopconfirm';
 import { useAreaData } from '@/hooks';
-import { financialDelete, financialList, governmentList } from '@/services';
+import { financialDelete, financialList, governmentDepartmentDelete, governmentList } from '@/services';
 import { findParentIds } from '@/utils';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
-import { Link } from '@umijs/max';
+import { Link, useNavigate } from '@umijs/max';
 import { Button, DatePicker } from 'antd';
 import dayjs from 'dayjs';
 import { useCallback, useMemo, useRef, useState } from 'react';
@@ -30,6 +30,7 @@ export default () => {
     return `共 ${total} 条数据`;
   }, [total]);
   let { areaData } = useAreaData();
+  const navigate = useNavigate();
   const access = useAccess();
   const columns: ProColumns<GithubIssueItem>[] = useMemo(
     () => [
@@ -98,7 +99,7 @@ export default () => {
           <Access accessible={access.canEdit}>
             <TzButton type="link" key={'edit'}>
               <Link
-                to={`/customer/financial-list/financial-info?id=${record.id}`}
+                to={`/customer/government-list/info?id=${record.id}`}
               >
                 编辑
               </Link>
@@ -106,11 +107,9 @@ export default () => {
           </Access>,
           <TzPopconfirm
             key={'del'}
-            description="确认删除此金融机构?"
+            description="确认删除此部门?"
             onConfirm={() => {
-              action?.reload();
-              return;
-              financialDelete({ id: record.id }).then((res) => {
+              governmentDepartmentDelete({ id: record.id }).then((res) => {
                 action?.reload();
               });
             }}
@@ -192,7 +191,7 @@ export default () => {
           key="button"
           icon={<PlusOutlined />}
           onClick={() => {
-            actionRef.current?.reload();
+            navigate(`/customer/government-list/info`);
           }}
           type="primary"
         >

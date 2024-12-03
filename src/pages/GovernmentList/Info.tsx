@@ -1,6 +1,6 @@
 import TzTitleDesc from '@/components/TzTitleDesc';
 import { useAreaData } from '@/hooks';
-import { financialDetail, financialSave } from '@/services';
+import { financialDetail, financialSave, governmentDepartmentDetail, governmentDepartmentSave } from '@/services';
 import {
   ProForm,
   ProFormCascader,
@@ -32,13 +32,13 @@ export default () => {
       <ProForm
         form={form}
         onFinish={async (values) => {
-          await financialSave({...values,logo:values.logo?.[0],area_id:values.area_id?.[2]});
+          await governmentDepartmentSave({...values,logo:values.logo?.[0],area_id:values.area_id?.[2]});
           messageApi.success('提交成功');
         }}
         request={async () => {
           let id = searchParams.get('id');
           if (id) {
-            let { data } = await financialDetail({ id });
+            let { data } = await governmentDepartmentDetail({ id });
             return {
               ...data,
               area_id: [data.prov_id, data.city_id, data.area_id],

@@ -5,31 +5,46 @@ import {
   ProConfigProvider,
   ProLayout,
 } from '@ant-design/pro-components';
-import { Outlet, useAccess, useAppData, useNavigate } from '@umijs/max';
+import {
+  Outlet,
+  useAccess,
+  useAppData,
+  useModel,
+  useNavigate,
+} from '@umijs/max';
 
 import { App, ConfigProvider } from 'antd';
-import { cloneDeepWith, get, has, values } from 'lodash';
+import { cloneDeepWith, has, values } from 'lodash';
 import { memo, useMemo } from 'react';
 const Layout = () => {
   const AppData = useAppData();
   const accessFull = useAccess();
   const navigate = useNavigate();
   const { routes } = AppData;
+  let { userPermission } = useModel('userInfo');
   let menu = useMemo(() => {
+    console.log(userPermission);
     const _routes = cloneDeepWith(routes);
-    const noAccess = (access: string) => access &&accessFull.role!=access;//&& !get(accessFull, access)
+    const noPermission = (key: any) => {
+      return key === undefined || userPermission.includes(key);
+    };
+    const noAccess = (access: string) => access && accessFull.role != access; //&& !get(accessFull, access)
     const notInMenu = (item: MenuDataItem) =>
       has(item, 'redirect') || item.hideInMenu;
-    const _menu: any = values(_routes).filter((item: MenuDataItem) => {
-      item.icon && (item.icon = <img src={`/images/${item.icon}.png`} />);
-      return !(notInMenu(item) || noAccess(item.access));
-    });
+    const _menu: any = values(_routes)
+      .filter((item: MenuDataItem) => {
+        item.icon && (item.icon = <img src={`/images/${item.icon}.png`} />);
+        return !(notInMenu(item) || noAccess(item.access));
+      })
+      .filter((item:MenuDataItem) => {
+        return noPermission(item.key);
+      });
     let treeData = buildTree(_menu, {
       children: 'routes',
       parentKey: '@@/global-layout',
     });
     return treeData;
-  }, [routes]);
+  }, [routes, userPermission]);
   return (
     <App>
       <ProConfigProvider dark={false}>

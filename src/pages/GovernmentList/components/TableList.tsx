@@ -1,6 +1,6 @@
 import { TzButton } from '@/components/TzButton';
 import TzPopconfirm from '@/components/TzPopconfirm';
-import { financialUserDelete, financialUserList } from '@/services';
+import { financialUserDelete, financialUserList, governmentDepartmentUserDelete, governmentUserList } from '@/services';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
@@ -39,7 +39,7 @@ const columns: ProColumns<any>[] = [
         description="确认删除此账号?"
         key={'del'}
         onConfirm={() => {
-          financialUserDelete({ id: record.id }).then((res) => {
+          governmentDepartmentUserDelete({ id: record.id }).then((res) => {
             action?.reload();
           });
         }}
@@ -60,7 +60,7 @@ export default () => {
     <ProTable<any>
       columns={columns}
       request={async (params, sorter, filter) => {
-        const res = await financialUserList({ fo_id: uid });
+        const res = await governmentUserList({ fo_id: uid });
         return {
           success: true,
           data: res?.dataList || [],

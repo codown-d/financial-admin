@@ -5,6 +5,7 @@ export type CertifyStatusProps = '1' | '2' | '3'
 export default function (props: { title: string; status: CertifyStatusProps }) {
   let { title, status } = props;
   let data = useMemo(() => {
+    console.log(status)
     return VERIFY_STATUS[status];
   }, [status]);
   return (

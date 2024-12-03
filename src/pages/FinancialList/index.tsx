@@ -107,8 +107,6 @@ export default () => {
             key={'del'}
             description="确认删除此金融机构?"
             onConfirm={() => {
-              action?.reload();
-              return;
               financialDelete({ id: record.id }).then((res) => {
                 action?.reload();
               });
@@ -142,7 +140,6 @@ export default () => {
     <ProTable<GithubIssueItem>
       columns={columns}
       actionRef={actionRef}
-      cardBordered
       request={async (params, sorter, filter) => {
         const res = await financialList({
           ...params,

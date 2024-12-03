@@ -1,9 +1,10 @@
 import { TzButton } from '@/components/TzButton';
 import TzCard from '@/components/TzCard';
-import { permission } from '@/services';
-import { merge, ProCard } from '@ant-design/pro-components';
+import { adminPermission } from '@/services';
+import {  ProCard } from '@ant-design/pro-components';
 import { useModel } from '@umijs/max';
-import { Switch } from 'antd';
+import { Spin, Switch } from 'antd';
+import { keys } from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
 
 export default () => {
@@ -14,27 +15,17 @@ export default () => {
     admin_user_permission: [],
   });
   let menuList = useMemo(() => {
-    return menu.filter((item) => item.path != '/permission');
+    console.log(menu)
+    return menu.filter((item) => item.key != '/permissionConfig');
   }, [menu]);
-  let getPermission = () => {
-    permission().then((res) => {
-      console.log(res);
-      setSendData(
-        merge(res.permission, {
-          financial_organs_user_permission: [],
-          government_department_user_permission: [],
-          admin_user_permission: [],
-        }),
-      );
-    });
-  };
+  
+  let { permissionData } = useModel('permission');
   useEffect(() => {
-    getPermission();
-  }, []);
+    setSendData(permissionData)
+  },[permissionData])
   let onChange = (checked: boolean, path: string, key: string) => {
     setSendData((pre: { [x: string]: any[] }) => {
       if (checked) {
-        console.log(pre, key);
         pre[key].push(path);
       } else {
         pre[key] = pre[key].filter((item) => item != path);
@@ -42,13 +33,13 @@ export default () => {
       return pre;
     });
   };
-  // if (
-  //   sendData.financial_organs_user_permission.length == 0 &&
-  //   sendData.government_department_user_permission.length == 0 &&
-  //   sendData.admin_user_permission.length == 0
-  // ) {
-  //   return <Spin />;
-  // }
+  if (
+    sendData.financial_organs_user_permission.length == 0 &&
+    sendData.government_department_user_permission.length == 0 &&
+    sendData.admin_user_permission.length == 0
+  ) {
+    return <Spin />;
+  }
   return (
     <ProCard>
       <div className="flex justify-between">
@@ -77,16 +68,16 @@ export default () => {
                 {item.routes.map((ite: any) => {
                   return (
                     <div
-                      key={ite.path}
+                      key={ite.key}
                       className="pl-7  flex justify-between leading-[40px]  items-center"
                     >
                       <span>{ite.name}</span>
                       <Switch
                         defaultChecked={sendData.admin_user_permission.includes(
-                          ite.path,
+                          ite.key,
                         )}
                         onChange={(checked) =>
-                          onChange(checked, ite.path, 'admin_user_permission')
+                          onChange(checked, ite.key, 'admin_user_permission')
                         }
                         size="small"
                       />
@@ -122,18 +113,18 @@ export default () => {
                 {item.routes.map((ite: any) => {
                   return (
                     <div
-                      key={ite.path}
+                      key={ite.key}
                       className="pl-7 flex justify-between items-center  leading-[40px] "
                     >
                       <span>{ite.name}</span>
                       <Switch
                         defaultChecked={sendData.financial_organs_user_permission.includes(
-                          ite.path,
+                          ite.key,
                         )}
                         onChange={(checked) =>
                           onChange(
                             checked,
-                            ite.path,
+                            ite.key,
                             'financial_organs_user_permission',
                           )
                         }
@@ -160,7 +151,6 @@ export default () => {
             return (
               <div key={item.path}>
                 <div className="flex items-center leading-[40px] text-[#CCCCCC]">
-                  {' '}
                   <span>
                     <img
                       className="w-[16px] mr-3"
@@ -172,18 +162,18 @@ export default () => {
                 {item.routes.map((ite: any) => {
                   return (
                     <div
-                      key={ite.path}
+                      key={ite.key}
                       className="pl-7  flex justify-between  items-center  leading-[40px] "
                     >
                       <span>{ite.name}</span>
                       <Switch
                         defaultChecked={sendData.government_department_user_permission.includes(
-                          ite.path,
+                          ite.key,
                         )}
                         onChange={(checked) =>
                           onChange(
                             checked,
-                            ite.path,
+                            ite.key,
                             'government_department_user_permission',
                           )
                         }
@@ -202,7 +192,14 @@ export default () => {
           type={'primary'}
           className="mt-[60px] mr-[20px] mb-[60px]"
           onClick={() => {
-            console.log(sendData);
+            console.log(sendData)
+            let obj = keys(sendData).reduce((pre: any, item) => {
+              pre[item] = sendData[item].join(",")
+              return pre
+            }, {})
+            adminPermission(sendData).then(res => {
+              console.log(res);
+            })
           }}
         >
           保存

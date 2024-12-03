@@ -220,18 +220,18 @@ export default () => {
         onChange: (page) => console.log(page),
       }}
       headerTitle={headerTitle}
-      toolBarRender={() => [
-        <Button
-          key="button"
-          icon={<PlusOutlined />}
-          onClick={() => {
-            navigate(`/customer/customer-list/customer-info`);
-          }}
-          type="primary"
-        >
-          添加
-        </Button>,
-      ]}
+      // toolBarRender={() => [
+      //   <Button
+      //     key="button"
+      //     icon={<PlusOutlined />}
+      //     onClick={() => {
+      //       navigate(`/customer/customer-list/customer-info`);
+      //     }}
+      //     type="primary"
+      //   >
+      //     添加
+      //   </Button>,
+      // ]}
     />
   );
 };

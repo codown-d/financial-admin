@@ -40,4 +40,19 @@ export default {
   applyList:'/apply/all/list',
   departmentList:'/admin/government/department/all/list',
   adminUserLogout:'/admin/user/logout',
+  applyAction:'/apply/info/action',
+  adminUpdateInfo:'/admin/user/updateInfo',
+
+  financialUserList:'/admin/financial/organs/user/all/list',
+  financialUserDetail:'/admin/financial/organs/user/detail',
+  financialUserDelete:'/admin/financial/organs/user/delete',
+
+  governmentUserList:'/admin/government/department/user/all/list',
+  governmentDepartmentSave:'/admin/government/department/save',
+  governmentDepartmentDetail:'/admin/government/department/detail',
+  governmentUserSave:'/admin/government/department/user/save',
+  governmentUserDetail:'/admin/government/department/user/detail',
+  governmentDepartmentDelete:'/admin/government/department/delete',
+  governmentDepartmentUserDelete:'/admin/government/department/user/delete',
+  adminPermission:'/admin/save/permission'
 };

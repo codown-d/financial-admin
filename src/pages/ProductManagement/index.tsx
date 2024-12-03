@@ -7,8 +7,12 @@ import {
   repayment_method,
 } from '@/constants';
 import { useAreaData } from '@/hooks';
-import { applyList } from '@/services';
-import type { ActionType, ProColumns, ProTableProps } from '@ant-design/pro-components';
+import { applyAction, applyList } from '@/services';
+import type {
+  ActionType,
+  ProColumns,
+  ProTableProps,
+} from '@ant-design/pro-components';
 import { ProFormDigitRange, ProTable } from '@ant-design/pro-components';
 import { useNavigate } from '@umijs/max';
 import { DatePicker } from 'antd';
@@ -24,9 +28,12 @@ type GithubIssueItem = {
   real_name: string;
   certification: string;
 };
-export type SearchAndOptionsProps = Pick<ProTableProps<any,Record<string, any>>, 'search' | 'options'|'headerTitle'>;
-export default (props:{proTableProps?:SearchAndOptionsProps}) => {
-  let {proTableProps}=props
+export type SearchAndOptionsProps = Pick<
+  ProTableProps<any, Record<string, any>>,
+  'search' | 'options' | 'headerTitle'
+>;
+export default (props: { proTableProps?: SearchAndOptionsProps }) => {
+  let { proTableProps } = props;
   const actionRef = useRef<ActionType>();
   const navigate = useNavigate();
   const [total, setTotal] = useState(0);
@@ -39,6 +46,9 @@ export default (props:{proTableProps?:SearchAndOptionsProps}) => {
       {
         title: '申请人',
         dataIndex: 'apply_user',
+        render: (text, record: any, _, action) => {
+          return record.name;
+        },
       },
       {
         title: '类型',
@@ -46,8 +56,18 @@ export default (props:{proTableProps?:SearchAndOptionsProps}) => {
         valueEnum: product_type_filter,
       },
       {
+        title: '金额',
+        sorter: true,
+        dataIndex: 'apply_money',
+        hideInSearch: true,
+        render: (text, record: any, _, action) => {
+          return text + '元';
+        },
+      },
+      {
         title: '金额范围',
         sorter: true,
+        hideInTable: true,
         dataIndex: 'account',
         renderFormItem: () => (
           <ProFormDigitRange placeholder={['最低金额', '最高金额']} />
@@ -84,10 +104,16 @@ export default (props:{proTableProps?:SearchAndOptionsProps}) => {
             };
           },
         },
+        render: (text, record: any, _, action) => {
+          return record.user.area_desc;
+        },
       },
       {
         title: '联系方式',
         dataIndex: 'user_name',
+        render: (text, record: any, _, action) => {
+          return record.user.user_name;
+        },
       },
       {
         title: '状态',
@@ -131,35 +157,76 @@ export default (props:{proTableProps?:SearchAndOptionsProps}) => {
         fixed: 'right',
         align: 'center',
         hideInSearch: true,
-        render: (text, record, _, action) => [
-          <TzButton
-            type="link"
-            key={'accept'}
-            onClick={() => {
-              navigate(`/customer/customer-list/customer-info?id=${record.id}`);
-            }}
-          >
-            受理
-          </TzButton>,
-          <TzButton
-            type="link"
-            key={'un-accept'}
-            onClick={() => {
-              navigate(`/customer/customer-list/customer-info?id=${record.id}`);
-            }}
-          >
-            不受理
-          </TzButton>,
-          <TzButton
-            type="link"
-            key={'info'}
-            onClick={() => {
-              navigate(`/customer/customer-list/customer-info?id=${record.id}`);
-            }}
-          >
-            查看详情
-          </TzButton>,
-        ],
+        width: 320,
+        render: (text, record: any, _, action) => {
+          let arr:any = [];
+          if (record.action_status == 1) {
+            arr = [
+              <TzButton
+                type="link"
+                key={'accept'}
+                onClick={() => {
+                  applyAction({ id: record.id, status: 3 }).then((res) => {
+                    actionRef.current?.reload();
+                  });
+                }}
+              >
+                受理
+              </TzButton>,
+              <TzButton
+                type="link"
+                key={'un-accept'}
+                onClick={() => {
+                  applyAction({ id: record.id, status: 2 }).then((res) => {
+                    actionRef.current?.reload();
+                  });
+                }}
+              >
+                不受理
+              </TzButton>,
+            ];
+          } else if (record.action_status == 4) {
+            arr = [
+              <TzButton
+                type="link"
+                key={'2'}
+                onClick={() => {
+                  // applyAction({ id: record.id, status: 2 }).then(res => {
+                  //   actionRef.current?.reload()
+                  // })
+                }}
+              >
+                完成
+              </TzButton>,
+              <TzButton
+                type="link"
+                key={'3'}
+                danger
+                onClick={() => {
+                  // applyAction({ id: record.id, status: 2 }).then(res => {
+                  //   actionRef.current?.reload()
+                  // })
+                }}
+              >
+                谢绝
+              </TzButton>,
+            ];
+          }
+          // arr.push(
+          //   <TzButton
+          //     type="link"
+          //     key={'info'}
+          //     onClick={() => {
+          //       navigate(
+          //         `/customer/customer-list/customer-info?id=${record.id}`,
+          //       );
+          //     }}
+          //   >
+          //     查看详情
+          //   </TzButton>,
+          // );
+          return arr;
+        },
       },
     ],
     [areaData],
@@ -168,7 +235,6 @@ export default (props:{proTableProps?:SearchAndOptionsProps}) => {
     <ProTable<GithubIssueItem>
       columns={columns}
       actionRef={actionRef}
-      cardBordered
       request={async (params, sorter, filter) => {
         const res = await applyList({
           ...params,

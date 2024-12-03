@@ -148,7 +148,6 @@ export default (props:{proTableProps?:SearchAndOptionsProps}) => {
     <ProTable<GithubIssueItem>
       columns={columns}
       actionRef={actionRef}
-      cardBordered
       request={async (params, sorter, filter) => {
         const res = await allList({
           ...params,

@@ -5,17 +5,14 @@ import { ProForm, ProFormText } from '@ant-design/pro-components';
 import { Col, ConfigProvider, message, Modal, Row } from 'antd';
 import FinanceTable from './components/FinanceTable';
 import ProductTable from './components/ProductTable';
-import { adminUserLogout } from '@/services';
-import { useSearchParams } from '@umijs/max';
-const waitTime = (time: number = 100) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true);
-    }, time);
-  });
-};
+import { adminUpdateInfo, adminUserLogout, getUserInfo } from '@/services';
+import { useModel, useSearchParams } from '@umijs/max';
+import Certify from '@/components/UI/Certify';
+import { useState } from 'react';
 export default () => {
-  let [searchParams] = useSearchParams();
+  let [userInfo,setUserInfo] = useState({realname_name:'',verify_status:'1',enterprise_name:'',enterprise_verify_status:'1'});
+ 
+  let [searchParams] = useSearchParams(); 
   let uid = searchParams.get('id');
   const [modal, contextHolder] = Modal.useModal();
 
@@ -36,14 +33,19 @@ export default () => {
     {contextHolder}
       <ProForm
         onFinish={async (values) => {
-          await waitTime(2000);
-          console.log(values);
+          const response = await adminUpdateInfo({...values,uid})          
+          console.log(response);
           message.success('提交成功');
         }}
-        initialValues={{
-          name: '蚂蚁设计有限公司',
-          name2: '蚂蚁设计集团',
-          useMode: 'chapter',
+        request={async () => {
+          if (uid) {
+            let {data} = await getUserInfo({query_uid:uid});
+            console.log(data);
+            setUserInfo(data)
+            return { ...data };
+          } else {
+            return { };
+          }
         }}
         layout={'horizontal'}
         labelCol={{ flex: '100px' }}
@@ -53,28 +55,28 @@ export default () => {
         <TzTitleDesc title={'客户信息'} className="mt-1" />
         <Row>
           <Col span={8}>
-            <ProFormText name="name" label="账号" placeholder="请输入账号" />
+            <ProFormText name="user_name" label="账号" placeholder="请输入账号" />
           </Col>
           <Col span={8}>
             <ProFormText
               disabled
-              name={'name2'}
+              name={'area_desc'}
               label="地区"
               placeholder="请输入地区"
             />
           </Col>
           <Col span={8}>
             <ProForm.Item name={'text'} label={'实名认证'}>
-              <div>123</div>
+            <Certify title={userInfo?.realname_name} key={userInfo.realname_name} status={userInfo.verify_status} />
             </ProForm.Item>
           </Col>
           <Col span={8}>
-            <ProFormText name={'name2'} label="密码" placeholder="请输入密码" />
+            <ProFormText name={'user_pass'} label="密码" placeholder="请输入密码" />
           </Col>
           <Col span={8}>
             <ProFormText
               disabled
-              name={'name2'}
+              name={'add_time_desc'}
               label="注册时间"
               placeholder="请输入注册时间"
             />
@@ -85,7 +87,8 @@ export default () => {
               label={'企业认证'}
               wrapperCol={{ span: 8 }}
             >
-              <div>123</div>
+             <Certify title={userInfo?.enterprise_name} key={userInfo.enterprise_name} status={userInfo.enterprise_verify_status} />
+           
             </ProForm.Item>
           </Col>
         </Row>

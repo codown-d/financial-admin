@@ -61,7 +61,7 @@ export default () => {
               disabled
               name={'name2'}
               label="账号"
-              placeholder="请输入地区"
+              placeholder="请输入账号"
             />
           </Col>
           <Col span={8}>

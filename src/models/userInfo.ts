@@ -3,15 +3,27 @@ import { useCallback, useEffect, useState } from 'react';
 
 export default function () {
   const [userInfo, setUserInfo] = useState({user_name:''});
-  let fetchPermissions = useCallback(async () => {
+  const [userPermission, setUserPermission] = useState(["financialList",
+    "financeManagement",
+    "productManagement",
+    "productBank",
+    "productMicroloan",
+    "productFinanceGuarantee",
+    "productEmergency",
+    "productGuarantee",
+    "productInsurance",
+    "productFund",
+    "policyList"]);
+  let fetchUserInfo = useCallback(async () => {
     const response = await getUserInfo();
-    console.log(response.data)
     setUserInfo(response.data);
+    // setUserPermission(response.permission)
   }, []);
   useEffect(() => {
-    fetchPermissions();
-  }, [fetchPermissions]);
+    fetchUserInfo();
+  }, [fetchUserInfo]);
   return {
-    userInfo
+    userInfo,
+    userPermission
   };
 }

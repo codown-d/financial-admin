@@ -467,3 +467,165 @@ export async function adminUserLogout(
     ...(options || {}),
   });
 }
+export async function applyAction(
+  params?: any,
+  options?: { [key: string]: any },
+) {
+  return request<any>(`${api.applyAction}`, {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+export async function adminUpdateInfo(
+  params?: any,
+  options?: { [key: string]: any },
+) {
+  return request<any>(`${api.adminUpdateInfo}`, {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+export async function financialUserDetail(
+  params?: any,
+  options?: { [key: string]: any },
+) {
+  let {id} = params
+  return request<any>(`${api.financialUserDetail}/${id}`, {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+export async function financialUserList(
+  params?: any,
+  options?: { [key: string]: any },
+) {
+  return request<any>(`${api.financialUserList}`, {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+export async function financialUserDelete(
+  params?: any,
+  options?: { [key: string]: any },
+) {
+  let {id} = params
+  return request<any>(`${api.financialUserDelete}/${id}`, {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+export async function governmentDepartmentDelete(
+  params?: any,
+  options?: { [key: string]: any },
+) {
+  let {id} = params
+  return request<any>(`${api.governmentDepartmentDelete}/${id}`, {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+export async function governmentUserList(
+  params?: any,
+  options?: { [key: string]: any },
+) {
+  return request<any>(`${api.governmentUserList}`, {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+export async function governmentDepartmentSave(
+  params?: any,
+  options?: { [key: string]: any },
+) {
+  return request<any>(`${api.governmentDepartmentSave}`, {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+export async function governmentUserSave(
+  params?: any,
+  options?: { [key: string]: any },
+) {
+  return request<any>(`${api.governmentUserSave}`, {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+export async function governmentUserDetail(
+  params?: any,
+  options?: { [key: string]: any },
+) {
+  let {id} = params
+  return request<any>(`${api.governmentUserDetail}/${id}`, {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+export async function governmentDepartmentUserDelete(
+  params?: any,
+  options?: { [key: string]: any },
+) {
+  let {id} = params
+  return request<any>(`${api.governmentDepartmentUserDelete}/${id}`, {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+export async function governmentDepartmentDetail(
+  params?: any,
+  options?: { [key: string]: any },
+) {
+  let {id} = params
+  return request<any>(`${api.governmentDepartmentDetail}/${id}`, {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+export async function adminPermission(
+  params?: any,
+  options?: { [key: string]: any },
+) {
+  return request<any>(`${api.adminPermission}`, {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
