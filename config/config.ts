@@ -2,23 +2,28 @@ import { defineConfig } from '@umijs/max';
 import routes from './routes';
 import { layout } from './layout';
 import proxy from './proxy';
+const {
+  API_BASE_URL = '',
+} = process.env;
 export default defineConfig({
+  define: {
+    'process.env.UMI_APP_API_BASE_URL': process.env.UMI_APP_API_BASE_URL
+  },
   title: '广元市综合金融管理平台',
-  // history: {
-  //   type: 'browser',
-  // },
+  base: '/admin/',
+  publicPath: '/admin/',
+  history: { type: 'browser' },
   antd: {},
   access: {},
   model: {},
   valtio: {},
   initialState: {},
-  request: { 
+  request: {
     // dataField: 'data' 
   },
-  history: { type: 'browser' },
   proxy,
   routes,
-  layout:false,
+  layout: false,
   npmClient: 'pnpm',
   tailwindcss: {},
   mock: {

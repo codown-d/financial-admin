@@ -33,7 +33,7 @@ const Layout = () => {
       has(item, 'redirect') || item.hideInMenu;
     const _menu: any = values(_routes)
       .filter((item: MenuDataItem) => {
-        item.icon && (item.icon = <img src={`/images/${item.icon}.png`} />);
+        item.icon && (item.icon = <img src={`/admin/images/${item.icon}.png`} />);
         return !(notInMenu(item) || noAccess(item.access));
       })
       .filter((item:MenuDataItem) => {
@@ -65,7 +65,7 @@ const Layout = () => {
           menuHeaderRender={() => {
             return (
               <div className="flex justify-center items-center">
-                <img src="/images/logo.png" alt="" />
+                <img src="/admin/images/logo.png" alt="" />
                 <div>
                   广元市综合金融
                   <br />

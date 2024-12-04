@@ -3,7 +3,15 @@ import { useCallback, useEffect, useState } from 'react';
 
 export default function () {
   const [userInfo, setUserInfo] = useState({user_name:''});
-  const [userPermission, setUserPermission] = useState(["financialList",
+  const [userPermission, setUserPermission] = useState([
+    ]);
+  let fetchUserInfo = useCallback(async () => {
+    const response = await getUserInfo();
+    setUserInfo(response.data);
+    setUserPermission(response.permission||[
+      "financialList",
+      'customerList',
+    'governmentList',
     "financeManagement",
     "productManagement",
     "productBank",
@@ -13,11 +21,7 @@ export default function () {
     "productGuarantee",
     "productInsurance",
     "productFund",
-    "policyList"]);
-  let fetchUserInfo = useCallback(async () => {
-    const response = await getUserInfo();
-    setUserInfo(response.data);
-    // setUserPermission(response.permission)
+    "policyList"])
   }, []);
   useEffect(() => {
     fetchUserInfo();

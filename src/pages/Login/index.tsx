@@ -15,12 +15,12 @@ const Login: React.FC = () => {
     <div
       className="bg-cover bg-center h-screen w-full flex items-center justify-center"
       style={{
-        backgroundImage: "url('/images/login-bg.png')",
+        backgroundImage: "url('/admin/images/login-bg.png')",
         backgroundSize: 'cover',
       }}
     >
       <div className="relative flex items-start justify-around w-full">
-        <img src="/images/dlpt.png" alt="" />
+        <img src="/admin/images/dlpt.png" alt="" />
         <TzCard className=" w-[400px] px-4 py-9">
           <h1 className=" text-2xl font-semibold mb-[76px]">欢迎登录</h1>
           <ProForm

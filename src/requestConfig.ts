@@ -98,6 +98,7 @@ const responseInterceptors = async (response: any) => {
   }
   return Promise.reject(response);
 };
+console.log('process.env.UMI_APP_API_BASE_URL',process.env)
 export const requestConfig = {
   paramsSerializer: (params: { [x: string]: any; }) => {
     const { current:page,pageSize:limit, ...rest } = params;
@@ -114,7 +115,7 @@ export const requestConfig = {
     );
     return queryString.stringify(newParams);
   },
-  baseURL: process.env.UMI_APP_API_BASE_URL,
+  baseURL: process.env.NODE_ENV === 'production' ? '/' : '/api',
   retryTimes: 3,
   timeout: 10 * 1000,
   // getResponse: true,

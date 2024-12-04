@@ -1,6 +1,6 @@
 const proxy = {
     '/api': {
-      target: 'http://34282y467g.oicp.vip/',
+      target: 'http://219.151.185.167:3900/',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
   },
