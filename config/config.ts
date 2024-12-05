@@ -10,8 +10,8 @@ export default defineConfig({
     'process.env.UMI_APP_API_BASE_URL': process.env.UMI_APP_API_BASE_URL
   },
   title: '广元市综合金融管理平台',
-  base: '/admin/',
-  publicPath: '/admin/',
+  base: '/backendadmin/',
+  publicPath: '/backendadmin/',
   history: { type: 'browser' },
   antd: {},
   access: {},
