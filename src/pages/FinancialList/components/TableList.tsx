@@ -7,55 +7,55 @@ import { ProTable } from '@ant-design/pro-components';
 import { Link, useNavigate, useSearchParams } from '@umijs/max';
 import { Button } from 'antd';
 
-const columns: ProColumns<any>[] = [
-  {
-    title: '账号',
-    dataIndex: 'user_name',
-  },
-  {
-    title: '密码',
-    dataIndex: 'user_pass',
-  },
-  {
-    title: '联系电话',
-    dataIndex: 'user_name',
-  },
-  {
-    title: '添加时间',
-    dataIndex: 'add_time',
-    valueType: 'dateTime',
-  },
 
-  {
-    title: '操作',
-    key: 'option',
-    render: (text, record, _, action) => [
-      <TzButton type="link" key={'edit'}>
-        <Link to={`/customer/financial-list/user-info?id=${record.id}`}>
-          编辑
-        </Link>
-      </TzButton>,
-      <TzPopconfirm
-        description="确认删除此账号?"
-        key={'del'}
-        onConfirm={() => {
-          financialUserDelete({ id: record.id }).then((res) => {
-            action?.reload();
-          });
-        }}
-      >
-        <TzButton type="link" danger onClick={() => {}}>
-          删除
-        </TzButton>
-      </TzPopconfirm>,
-    ],
-  },
-];
 
-export default () => {
-  let [searchParams] = useSearchParams();
-  let uid = searchParams.get('id');
+export default (props: { uid: any; }) => {
+  let{uid}=props
   const navigate = useNavigate();
+  const columns: ProColumns<any>[] = [
+    {
+      title: '账号',
+      dataIndex: 'user_name',
+    },
+    {
+      title: '密码',
+      dataIndex: 'user_pass_view',
+    },
+    {
+      title: '联系电话',
+      dataIndex: 'user_name',
+    },
+    {
+      title: '添加时间',
+      dataIndex: 'add_time',
+      valueType: 'dateTime',
+    },
+  
+    {
+      title: '操作',
+      key: 'option',
+      render: (text, record, _, action) => [
+        <TzButton type="link" key={'edit'}>
+          <Link to={`/customer/financial-list/user-info?id=${record.id}&fo_id=${uid}`}>
+            编辑
+          </Link>
+        </TzButton>,
+        <TzPopconfirm
+          description="确认删除此账号?"
+          key={'del'}
+          onConfirm={() => {
+            financialUserDelete({ id: record.id }).then((res) => {
+              action?.reload();
+            });
+          }}
+        >
+          <TzButton type="link" danger onClick={() => {}}>
+            删除
+          </TzButton>
+        </TzPopconfirm>,
+      ],
+    },
+  ];
   return (
     <ProTable<any>
       columns={columns}
@@ -89,9 +89,10 @@ export default () => {
       toolBarRender={() => [
         <Button
           key="button"
+          disabled={!uid}
           icon={<PlusOutlined />}
           onClick={() => {
-            navigate(`/customer/financial-list/user-info`);
+            navigate(`/customer/financial-list/user-info?fo_id=${uid}`);
           }}
           type="primary"
         >

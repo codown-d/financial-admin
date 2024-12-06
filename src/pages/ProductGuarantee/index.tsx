@@ -1,6 +1,6 @@
 import { TzButton } from '@/components/TzButton';
 import { GUARANTEE_FROM, GUARANTEE_METHOD } from '@/constants';
-import { guaranteeList } from '@/services';
+import { guaranteeList, loanList } from '@/services';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProFormDigitRange, ProTable } from '@ant-design/pro-components';
@@ -121,7 +121,8 @@ export default () => {
       actionRef={actionRef}
       cardBordered
       request={async (params, sorter, filter) => {
-        const res = await guaranteeList({
+        const res = await loanList({
+          product_type:7,
           ...params,
         });
         setTotal(res.count);

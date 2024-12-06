@@ -1,5 +1,5 @@
 import TzTitleDesc from '@/components/TzTitleDesc';
-import { fundDetail, fundSave } from '@/services';
+import { fundDetail, fundSave, loanDetail, loanSave } from '@/services';
 import {
   ProForm,
   ProFormDateTimePicker,
@@ -20,14 +20,14 @@ export default () => {
       {contextHolder}
       <ProForm
         onFinish={async (values) => {
-          await fundSave(values);
+          await loanSave({product_type: 5,...values});
           console.log(values);
           messageApi.success('提交成功');
         }}
         request={async () => {
           let id = searchParams.get('id');
           if (id) {
-            let res = await fundDetail({ id });
+            let res = await loanDetail({ product_type: 5,id });
             return { ...res };
           } else {
             return {

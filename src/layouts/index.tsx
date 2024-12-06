@@ -1,3 +1,4 @@
+import TzImg from '@/components/TzImg';
 import { AppConfigProvider } from '@/contexts/AppConfigContext';
 import { buildTree } from '@/utils';
 import {
@@ -23,7 +24,6 @@ const Layout = () => {
   const { routes } = AppData;
   let { userPermission } = useModel('userInfo');
   let menu = useMemo(() => {
-    console.log(userPermission);
     const _routes = cloneDeepWith(routes);
     const noPermission = (key: any) => {
       return key === undefined || userPermission.includes(key);
@@ -33,7 +33,7 @@ const Layout = () => {
       has(item, 'redirect') || item.hideInMenu;
     const _menu: any = values(_routes)
       .filter((item: MenuDataItem) => {
-        item.icon && (item.icon = <img src={`/admin/images/${item.icon}.png`} />);
+        item.icon && (item.icon = <TzImg src={`/images/${item.icon}.png`} />);
         return !(notInMenu(item) || noAccess(item.access));
       })
       .filter((item:MenuDataItem) => {
@@ -65,7 +65,7 @@ const Layout = () => {
           menuHeaderRender={() => {
             return (
               <div className="flex justify-center items-center">
-                <img src="/admin/images/logo.png" alt="" />
+                <TzImg src="/images/logo.png" alt="" />
                 <div>
                   广元市综合金融
                   <br />

@@ -93,7 +93,7 @@ export const VERIFY_STATUS = {
   },
 };
 
-export const AREA_TYPE = {
+export const AREA_TYPE:any = {
   1: {
     text: '国家级',
   },
@@ -109,7 +109,6 @@ export const AREA_TYPE = {
   510811: {
     text: '昭化区',
   },
-
   510812: {
     text: '朝天区',
   },

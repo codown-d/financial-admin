@@ -1,7 +1,7 @@
 import { TzButton } from '@/components/TzButton';
 import TzPopconfirm from '@/components/TzPopconfirm';
 import { insurance_type, SUB_UNIT } from '@/constants';
-import { insuranceDelete, insuranceList } from '@/services';
+import { insuranceDelete, insuranceList, loanDelete, loanList } from '@/services';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProFormDigitRange, ProTable } from '@ant-design/pro-components';
@@ -117,9 +117,8 @@ export default () => {
             description="确认删除此保险?"
             key={'del'}
             onConfirm={() => {
-              action?.reload();
-              return;
-              insuranceDelete({ id: record.id }).then((res) => {
+              loanDelete({ id: record.id,
+                product_type:6, }).then((res) => {
                 action?.reload();
               });
             }}
@@ -139,7 +138,8 @@ export default () => {
       actionRef={actionRef}
       cardBordered
       request={async (params, sorter, filter) => {
-        const res = await insuranceList({
+        const res = await loanList({
+          product_type:6,
           ...params,
         });
         setTotal(res.count);

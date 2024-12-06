@@ -54,5 +54,6 @@ export default {
   governmentUserDetail:'/admin/government/department/user/detail',
   governmentDepartmentDelete:'/admin/government/department/delete',
   governmentDepartmentUserDelete:'/admin/government/department/user/delete',
-  adminPermission:'/admin/save/permission'
+  adminPermission:'/admin/save/permission',
+  organsUserSave:'/admin/financial/organs/user/save'
 };

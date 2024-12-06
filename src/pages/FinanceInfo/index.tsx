@@ -6,7 +6,7 @@ import {
   ProFormUploadButton,
 } from '@ant-design/pro-components';
 import { useSearchParams } from '@umijs/max';
-import { Col, message, Row } from 'antd';
+import { Col, Form, message, Row } from 'antd';
 import { useCallback, useEffect } from 'react';
 const waitTime = (time: number = 100) => {
   return new Promise((resolve) => {
@@ -19,16 +19,18 @@ export default () => {
   let [searchParams, setSearchParams] = useSearchParams();
   let getFinanceInfo = useCallback(() => {
     console.log(searchParams);
-    financialDetail({ id: searchParams.get('id') }).then(res=>{
+    financialDetail({ id: searchParams.get('id') }).then((res) => {
       console.log(res);
-    })
+    });
   }, [searchParams]);
   useEffect(() => {
     getFinanceInfo();
   }, []);
+  const [form] = Form.useForm();
   return (
     <>
       <ProForm
+        form={form}
         onFinish={async (values) => {
           await waitTime(2000);
           console.log(values);

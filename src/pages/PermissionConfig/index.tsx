@@ -1,5 +1,6 @@
 import { TzButton } from '@/components/TzButton';
 import TzCard from '@/components/TzCard';
+import TzImg from '@/components/TzImg';
 import { adminPermission } from '@/services';
 import {  ProCard } from '@ant-design/pro-components';
 import { useModel } from '@umijs/max';
@@ -46,7 +47,7 @@ export default () => {
         <TzCard
           title={'管理员'}
           className="w-[380px]"
-          extra={<img className="w-[66px] mr-3" src={`/admin/images/admin.png`} />}
+          extra={<TzImg className="w-[66px] mr-3" src={`/images/admin.png`} />}
           styles={{
             header: {
               background: 'linear-gradient( 180deg, #F3F5FF 0%, #FFFFFF 100%)',
@@ -58,9 +59,9 @@ export default () => {
               <div key={item.path}>
                 <div className="flex items-center leading-[40px] text-[#CCCCCC]">
                   <span>
-                    <img
+                    <TzImg
                       className="w-[16px] mr-3"
-                      src={`/admin/images/${item.icon}-u.png`}
+                      src={`/images/${item.icon}-u.png`}
                     />
                   </span>
                   {item.name}
@@ -96,16 +97,16 @@ export default () => {
               background: 'linear-gradient( 180deg, #F3FFFD 0%, #FFFFFF 100%)',
             },
           }}
-          extra={<img className="w-[66px] mr-3" src={`/admin/images/jrjg.png`} />}
+          extra={<TzImg className="w-[66px] mr-3" src={`/images/jrjg.png`} />}
         >
           {menuList.map((item) => {
             return (
               <div key={item.path}>
                 <div className="flex items-center leading-[40px] text-[#CCCCCC]">
                   <span>
-                    <img
+                    <TzImg
                       className="w-[16px] mr-3"
-                      src={`/admin/images/${item.icon}-u.png`}
+                      src={`/images/${item.icon}-u.png`}
                     />
                   </span>
                   {item.name}
@@ -140,7 +141,7 @@ export default () => {
         <TzCard
           title={'政府部门'}
           className="w-[380px]"
-          extra={<img className="w-[66px] mr-3" src={`/admin/images/zfbm.png`} />}
+          extra={<TzImg className="w-[66px] mr-3" src={`/images/zfbm.png`} />}
           styles={{
             header: {
               background: 'linear-gradient( 180deg, #FFF8F3 0%, #FFFFFF 100%)',
@@ -152,9 +153,9 @@ export default () => {
               <div key={item.path}>
                 <div className="flex items-center leading-[40px] text-[#CCCCCC]">
                   <span>
-                    <img
+                    <TzImg
                       className="w-[16px] mr-3"
-                      src={`/admin/images/${item.icon}-u.png`}
+                      src={`/images/${item.icon}-u.png`}
                     />
                   </span>
                   {item.name}

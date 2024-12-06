@@ -17,7 +17,6 @@ export async function getInitialState() {
   return { name: '@umijs/max', history, user };
 }
 
-console.log('process.env.UMI_APP_API_BASE_URL',process.env.UMI_APP_API_BASE_URL)
 export const request = {
   ...requestConfig,
 };

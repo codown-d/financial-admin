@@ -77,7 +77,7 @@ export async function governmentList(
   });
 }
 export async function financialDelete(
-  params: { id: string|number },
+  params: { id: string | number },
   options?: { [key: string]: any },
 ) {
   let { id } = params;
@@ -90,7 +90,7 @@ export async function financialDelete(
   });
 }
 export async function financialDetail(
-  params: { id: string|number|null },
+  params: { id: string | number | null },
   options?: { [key: string]: any },
 ) {
   let { id } = params;
@@ -103,7 +103,7 @@ export async function financialDetail(
   });
 }
 export async function financialSave(
-  params:any,
+  params: any,
   options?: { [key: string]: any },
 ) {
   return request<any>(`${api.financialSave}`, {
@@ -115,10 +115,7 @@ export async function financialSave(
   });
 }
 
-export async function getArea(
-  params?: any,
-  options?: { [key: string]: any },
-) {
+export async function getArea(params?: any, options?: { [key: string]: any }) {
   return request<any>(`${api.getArea}`, {
     method: 'GET',
     params: {
@@ -152,7 +149,7 @@ export async function policyThemeFeature(
   });
 }
 export async function policyDetail(
-  params: { id: string|number },
+  params: { id: string | number },
   options?: { [key: string]: any },
 ) {
   let { id } = params;
@@ -178,7 +175,7 @@ export async function policySave(
 }
 
 export async function policyDelete(
-  params: { id: string|number },
+  params: { id: string | number },
   options?: { [key: string]: any },
 ) {
   let { id } = params;
@@ -239,7 +236,7 @@ export async function guaranteeSave(
   });
 }
 export async function guaranteeDetail(
-  params: { id: string|number },
+  params: { id: string | number },
   options?: { [key: string]: any },
 ) {
   let { id } = params;
@@ -252,10 +249,7 @@ export async function guaranteeDetail(
   });
 }
 
-export async function fundList(
-  params: any,
-  options?: { [key: string]: any },
-) {
+export async function fundList(params: any, options?: { [key: string]: any }) {
   return request<any>(`${api.fundList}`, {
     method: 'GET',
     params: {
@@ -265,7 +259,7 @@ export async function fundList(
   });
 }
 export async function fundDetail(
-  params: { id: string|number },
+  params: { id: string | number },
   options?: { [key: string]: any },
 ) {
   let { id } = params;
@@ -277,10 +271,7 @@ export async function fundDetail(
     ...(options || {}),
   });
 }
-export async function fundSave(
-  params?: any,
-  options?: { [key: string]: any },
-) {
+export async function fundSave(params?: any, options?: { [key: string]: any }) {
   return request<any>(`${api.fundSave}`, {
     method: 'POST',
     data: {
@@ -303,7 +294,6 @@ export async function fundDelete(
   });
 }
 
-
 export async function insuranceList(
   params: any,
   options?: { [key: string]: any },
@@ -317,7 +307,7 @@ export async function insuranceList(
   });
 }
 export async function insuranceDetail(
-  params: { id: string|number },
+  params: { id: string | number },
   options?: { [key: string]: any },
 ) {
   let { id } = params;
@@ -355,10 +345,11 @@ export async function insuranceDelete(
   });
 }
 
-
-
 export async function loanList(
-  params: any,
+  params: {
+    product_type: any;
+    [x: string]: any;
+  },
   options?: { [key: string]: any },
 ) {
   return request<any>(`${api.loanList}`, {
@@ -370,7 +361,11 @@ export async function loanList(
   });
 }
 export async function loanDetail(
-  params:any,
+  params: {
+    id: any;
+    product_type: any;
+    [x: string]: any;
+  },
   options?: { [key: string]: any },
 ) {
   let { id } = params;
@@ -383,7 +378,10 @@ export async function loanDetail(
   });
 }
 export async function loanSave(
-  params?: any,
+  params?: {
+    product_type: any;
+    [x: string]: any;
+  },
   options?: { [key: string]: any },
 ) {
   return request<any>(`${api.loanSave}`, {
@@ -395,7 +393,11 @@ export async function loanSave(
   });
 }
 export async function loanDelete(
-  params: any,
+  params: {
+    id: any;
+    product_type: any;
+    [x: string]: any;
+  },
   options?: { [key: string]: any },
 ) {
   let { id } = params;
@@ -407,10 +409,7 @@ export async function loanDelete(
     ...(options || {}),
   });
 }
-export async function allList(
-  params: any,
-  options?: { [key: string]: any },
-) {
+export async function allList(params: any, options?: { [key: string]: any }) {
   return request<any>(`${api.allList}`, {
     method: 'GET',
     params: {
@@ -495,7 +494,7 @@ export async function financialUserDetail(
   params?: any,
   options?: { [key: string]: any },
 ) {
-  let {id} = params
+  let { id } = params;
   return request<any>(`${api.financialUserDetail}/${id}`, {
     method: 'GET',
     params: {
@@ -520,7 +519,7 @@ export async function financialUserDelete(
   params?: any,
   options?: { [key: string]: any },
 ) {
-  let {id} = params
+  let { id } = params;
   return request<any>(`${api.financialUserDelete}/${id}`, {
     method: 'GET',
     params: {
@@ -533,7 +532,7 @@ export async function governmentDepartmentDelete(
   params?: any,
   options?: { [key: string]: any },
 ) {
-  let {id} = params
+  let { id } = params;
   return request<any>(`${api.governmentDepartmentDelete}/${id}`, {
     method: 'GET',
     params: {
@@ -582,7 +581,7 @@ export async function governmentUserDetail(
   params?: any,
   options?: { [key: string]: any },
 ) {
-  let {id} = params
+  let { id } = params;
   return request<any>(`${api.governmentUserDetail}/${id}`, {
     method: 'GET',
     params: {
@@ -595,7 +594,7 @@ export async function governmentDepartmentUserDelete(
   params?: any,
   options?: { [key: string]: any },
 ) {
-  let {id} = params
+  let { id } = params;
   return request<any>(`${api.governmentDepartmentUserDelete}/${id}`, {
     method: 'GET',
     params: {
@@ -608,7 +607,7 @@ export async function governmentDepartmentDetail(
   params?: any,
   options?: { [key: string]: any },
 ) {
-  let {id} = params
+  let { id } = params;
   return request<any>(`${api.governmentDepartmentDetail}/${id}`, {
     method: 'GET',
     params: {
@@ -622,6 +621,18 @@ export async function adminPermission(
   options?: { [key: string]: any },
 ) {
   return request<any>(`${api.adminPermission}`, {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+export async function organsUserSave(
+  params?: any,
+  options?: { [key: string]: any },
+) {
+  return request<any>(`${api.organsUserSave}`, {
     method: 'POST',
     data: {
       ...params,

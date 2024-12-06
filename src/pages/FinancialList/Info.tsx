@@ -1,6 +1,7 @@
 import TzTitleDesc from '@/components/TzTitleDesc';
 import { useAreaData } from '@/hooks';
 import { financialDetail, financialSave } from '@/services';
+import { refreshPageUrl, urlToBase64 } from '@/utils';
 import {
   ProForm,
   ProFormCascader,
@@ -13,36 +14,62 @@ import { useSearchParams } from '@umijs/max';
 import { Col, message, Row } from 'antd';
 import { Form } from 'antd/lib';
 import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
 import TableList from './components/TableList';
-const waitTime = (time: number = 100) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true);
-    }, time);
-  });
-};
+
 export default () => {
   let [searchParams] = useSearchParams();
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   let { areaData } = useAreaData();
+  let [id ,setUid]=useState(searchParams.get('id'))
+  const [fileList, setFileList] = useState<any[]>([]);
+  const logo = Form.useWatch('logo', form);
+  useEffect(() => {
+    if (!logo || logo.length == 0) return;
+    let { url } = logo[0];
+    urlToBase64(url, (thumbUrl) => {
+      setFileList([
+        {
+          status: 'done',
+          url: url,
+          thumbUrl: thumbUrl,
+        },
+      ]);
+    });
+  }, [logo]);
   return (
     <>
       {contextHolder}
       <ProForm
         form={form}
         onFinish={async (values) => {
-          await financialSave({...values,logo:values.logo?.[0],area_id:values.area_id?.[2]});
+          let res = await financialSave({
+            ...values,
+            logo: values.logo?.[0]?.response.file,
+            prov_id: values.area_id?.[0],
+            city_id: values.area_id?.[1],
+            area_id: values.area_id?.[2],
+          });
           messageApi.success('提交成功');
+          refreshPageUrl('id', res.id);
+          setUid(res.id)
         }}
         request={async () => {
-          let id = searchParams.get('id');
           if (id) {
             let { data } = await financialDetail({ id });
             return {
               ...data,
               area_id: [data.prov_id, data.city_id, data.area_id],
-              logo:data.logo?[data.logo]:undefined
+              logo: data.logo
+                ? [
+                    {
+                      status: 'done',
+                      url: data.logo,
+                      thumbUrl: '',
+                    },
+                  ]
+                : undefined,
             };
           } else {
             return {
@@ -68,27 +95,29 @@ export default () => {
                 name="logo"
                 fieldProps={{
                   name: 'image',
-                  multiple:false,
+                  showUploadList: true,
+                  multiple: false,
                   onChange: ({ fileList }) => {
-                    const uploadedFile =  (Array.isArray(fileList) ? fileList : []).find(file => file.status === 'done');
-                    console.log(uploadedFile)
-                    if (uploadedFile && uploadedFile?.response) {
-                      console.log(uploadedFile,uploadedFile.response.file)
-                      form.setFieldsValue({
-                        logo: [uploadedFile.response.file], // 假设返回值中包含 url 字段
-                      });
-                    }
+                    let arr = fileList.map((item) => {
+                      return {
+                        ...item,
+                        url: item?.response?.file,
+                      };
+                    });
+                    setFileList(arr);
                   },
                 }}
                 max={1}
+                value={fileList}
                 listType="picture-card"
                 title="上传文件"
-                action={`${process.env.UMI_APP_API_BASE_URL}/upload/image`}
+                action={`${API_BASE_URL}/upload/image`}
               />
               <ProFormText
                 name="organs_name"
                 label="机构名称"
                 placeholder="请输入机构名称"
+                  rules={[{ required: true}]}
               />
             </Col>
           </Col>
@@ -99,6 +128,7 @@ export default () => {
                   name={'area_id'}
                   label="地区"
                   fieldProps={{ options: areaData }}
+                  rules={[{ required: true,message:'请选择地区'}]}
                 />
               </Col>
               <Col span={12}>
@@ -111,7 +141,7 @@ export default () => {
               </Col>
               <Col span={12}>
                 <ProFormTextArea
-                  name={'name2'}
+                  name={'address'}
                   label="详细地址"
                   placeholder="请输入详细地址"
                 />
@@ -121,7 +151,7 @@ export default () => {
         </Row>
 
         <TzTitleDesc title={'账号信息'} className="mt-4 mb-5" />
-        <TableList />
+        <TableList uid={id}/>
       </ProForm>
     </>
   );

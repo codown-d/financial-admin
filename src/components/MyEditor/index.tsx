@@ -1,16 +1,27 @@
 import { Editor } from '@tinymce/tinymce-react';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-const MyEditor = (props: { className?: string }) => {
-  let { className='' } = props;
+const MyEditor = (props: {
+  className?: string;
+  value?: string;
+  onChange?: (arg: string) => void;
+}) => {
+  let { className = '' } = props;
+  let [value, setValue] = useState(props.value);
   const handleEditorChange = (content: any) => {
-    console.log(content);
+    setValue(content);
+    props.onChange?.(content);
   };
-  const editorRef = useRef<any>()
+
+  useEffect(() => {
+    console.log(value);
+  }, [value]);
+  const editorRef = useRef<any>();
   return (
     <div className={`${className}`}>
       <Editor
         apiKey="pmrn9f1olgn9kqk4mjnrl701qz5szskne3i8uy55s5gqdpg5"
+        value={value}
         init={{
           height: 500,
           menubar: false,

@@ -1,7 +1,7 @@
 import { TzButton } from '@/components/TzButton';
 import TzPopconfirm from '@/components/TzPopconfirm';
 import { SUB_UNIT } from '@/constants';
-import { fundDelete, fundList } from '@/services';
+import { fundDelete, loanDelete, loanList } from '@/services';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
@@ -98,9 +98,7 @@ export default () => {
             description="确认删除此基金?"
             key={'del'}
             onConfirm={() => {
-              action?.reload();
-              return;
-              fundDelete({ id: record.id }).then((res) => {
+              loanDelete({ product_type: 5,id: record.id }).then((res) => {
                 action?.reload();
               });
             }}
@@ -120,9 +118,7 @@ export default () => {
       actionRef={actionRef}
       cardBordered
       request={async (params, sorter, filter) => {
-        const res = await fundList({
-          ...params,
-        });
+        const res = await loanList({ product_type: 5, ...params });
         setTotal(res.count);
         return {
           success: true,
@@ -162,7 +158,7 @@ export default () => {
             return {
               subscription_unit: '1',
               ...rest,
-              created_at: [values.start, values.end]
+              created_at: [values.start, values.end],
             };
           }
           return values;

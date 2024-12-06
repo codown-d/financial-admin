@@ -1,6 +1,5 @@
 import TzTitleDesc from '@/components/TzTitleDesc';
-import { useAreaData } from '@/hooks';
-import { financialDetail, financialSave, financialUserDetail, governmentUserDetail, governmentUserSave } from '@/services';
+import { governmentUserDetail, governmentUserSave } from '@/services';
 import {
   ProForm,
   ProFormDateTimePicker,
@@ -15,6 +14,8 @@ export default () => {
   let [searchParams] = useSearchParams();
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
+  let id = searchParams.get('id');
+  let fo_id = searchParams.get('fo_id');
   return (
     <>
       {contextHolder}
@@ -27,7 +28,6 @@ export default () => {
           messageApi.success('提交成功');
         }}
         request={async () => {
-          let id = searchParams.get('id');
           if (id) {
             let { data } = await governmentUserDetail({ id });
             return {
@@ -36,6 +36,7 @@ export default () => {
           } else {
             return {
               id: 0,
+              fo_id,
               add_time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
             };
           }
@@ -58,7 +59,7 @@ export default () => {
           </Col>
           <Col span={8}>
             <ProFormText
-              name={'user_pass'}
+              name={'user_pass_view'}
               label="密码"
               placeholder="请输入密码"
             />
@@ -73,7 +74,7 @@ export default () => {
           </Col>
           <Col span={8}>
             <ProFormText
-              name={'name2'}
+              name={'contact_phone'}
               label="联系方式"
               placeholder="请输入联系方式"
             />

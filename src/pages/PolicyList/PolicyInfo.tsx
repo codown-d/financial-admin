@@ -2,6 +2,7 @@ import MyEditor from '@/components/MyEditor';
 import TzTitleDesc from '@/components/TzTitleDesc';
 import { AREA_TYPE, BODY_TYPE } from '@/constants';
 import { policyDetail, policySave } from '@/services';
+import { formatOption } from '@/utils';
 import {
   ProForm,
   ProFormDateTimePicker,
@@ -9,7 +10,9 @@ import {
   ProFormText,
 } from '@ant-design/pro-components';
 import { useModel, useSearchParams } from '@umijs/max';
-import { Col, message, Row } from 'antd';
+import { Col, Form, message, Row } from 'antd';
+import FormItem from 'antd/es/form/FormItem';
+import dayjs from 'dayjs';
 const waitTime = (time: number = 100) => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -21,28 +24,29 @@ export default () => {
   let [searchParams] = useSearchParams();
   const [messageApi, contextHolder] = message.useMessage();
   let { theme, feature } = useModel('policy');
+  let id = searchParams.get('id');
+  const [form] = Form.useForm();
+  console.log(theme);
   return (
     <>
       {contextHolder}
       <ProForm
+        form={form}
         onFinish={async (values) => {
           await policySave(values);
           console.log(values);
           messageApi.success('提交成功');
         }}
         request={async () => {
-          let id = searchParams.get('id');
           if (id) {
-            await policyDetail({ id });
+            let res = await policyDetail({ id });
             return {
-              name: '蚂蚁设计有限公司',
-              useMode: 'chapter',
+              ...res.data,
             };
           } else {
             return {
-              name: '蚂蚁设计有限公司',
-              useMode: 'chapter',
-            }
+              add_time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+            };
           }
         }}
         layout={'horizontal'}
@@ -53,27 +57,48 @@ export default () => {
         <ProFormText name="id" hidden />
         <Row>
           <Col span={8}>
-            <ProFormSelect
-              name="area_type"
-              label="层级"
-              valueEnum={AREA_TYPE}
+            <ProFormText
+              name="title"
+              label="标题"
+              rules={[{ required: true }]}
             />
           </Col>
           <Col span={8}>
-            <ProFormSelect name={'theme_id'} label={'主题'} valueEnum={theme} />
+            <ProFormSelect
+              name="area_type"
+              rules={[{ required: true }]}
+              label="层级"
+              fieldProps={{
+                options: formatOption(AREA_TYPE),
+              }}
+            />
+          </Col>
+          <Col span={8}>
+            <ProFormSelect
+              name={'theme_id'}
+              label={'主题'}
+              fieldProps={{
+                options: formatOption(theme),
+              }}
+            />
           </Col>
           <Col span={8}>
             <ProFormSelect
               name={'feature_id'}
               label={'特色'}
-              valueEnum={feature}
+              fieldProps={{
+                options: formatOption(feature),
+              }}
             />
           </Col>
           <Col span={8}>
             <ProFormSelect
               name={'body_type'}
               label="类型"
-              valueEnum={BODY_TYPE}
+              rules={[{ required: true }]}
+              fieldProps={{
+                options: formatOption(BODY_TYPE),
+              }}
             />
           </Col>
           <Col span={8}>
@@ -84,21 +109,19 @@ export default () => {
               width={'md'}
               name={'add_time'}
               label="发布时间"
-              // transform={(value) => {
-              //   console.log(value)
-              //   return {
-              //     start: value[0],
-              //     end: value[1],
-              //   };
-              // }}
             />
+          </Col>
+          <Col span={8}>
+            <ProFormSelect name={'summary'} label="摘要" />
           </Col>
           <Col span={8}>
             <ProFormSelect name={'interpret'} label="关联解读" />
           </Col>
         </Row>
         <TzTitleDesc title={'正文内容'} className="mt-4 mb-5" />
-        <MyEditor className={'mb-[60px]'} />
+        <FormItem name={'body'} rules={[{ required: true }]}>
+          <MyEditor className={'mb-[60px]'} />
+        </FormItem>
       </ProForm>
     </>
   );

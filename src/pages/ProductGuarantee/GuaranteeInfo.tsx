@@ -1,6 +1,6 @@
 import TzTitleDesc from '@/components/TzTitleDesc';
 import { GUARANTEE_FROM_OP, GUARANTEE_METHOD } from '@/constants';
-import { guaranteeDetail, guaranteeSave } from '@/services';
+import { guaranteeDetail, guaranteeSave, loanDetail, loanSave } from '@/services';
 import {
   ProForm,
   ProFormCheckbox,
@@ -23,14 +23,14 @@ export default () => {
       {contextHolder}
       <ProForm
         onFinish={async (values) => {
-          await guaranteeSave(values);
+          await loanSave({ ...values, product_type: 7 });
           console.log(values);
           messageApi.success('提交成功');
         }}
         request={async () => {
           let id = searchParams.get('id');
           if (id) {
-            let res = await guaranteeDetail({ id });
+            let res = await loanDetail({ id ,product_type: 7});
             return { ...res };
           } else {
             return {
@@ -82,7 +82,7 @@ export default () => {
               name={'guarantee_form'}
               label="保函形式"
               options={GUARANTEE_FROM_OP}
-              rules={[{ required: true ,message: '请选择保函形式'}]}
+              rules={[{ required: true, message: '请选择保函形式' }]}
             />
           </Col>
           <Col span={8}>
@@ -90,7 +90,7 @@ export default () => {
               name={'data_type'}
               label="担保方式"
               valueEnum={GUARANTEE_METHOD}
-              rules={[{ required: true ,message: '请选择担保方式'}]}
+              rules={[{ required: true, message: '请选择担保方式' }]}
             />
           </Col>
           <Col span={8}>

@@ -2,7 +2,7 @@ import { role_type } from "@/constants";
 
 const routes = [
   {
-    path: '/',
+    path: '',
     redirect: '/customer',
   },
   {
