@@ -13,17 +13,11 @@ import { useModel, useSearchParams } from '@umijs/max';
 import { Col, Form, message, Row } from 'antd';
 import FormItem from 'antd/es/form/FormItem';
 import dayjs from 'dayjs';
-const waitTime = (time: number = 100) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true);
-    }, time);
-  });
-};
 export default () => {
   let [searchParams] = useSearchParams();
   const [messageApi, contextHolder] = message.useMessage();
   let { theme, feature } = useModel('policy');
+  let { interpretation } = useModel('policyInterpretation');
   let id = searchParams.get('id');
   const [form] = Form.useForm();
   console.log(theme);
@@ -42,6 +36,7 @@ export default () => {
             let res = await policyDetail({ id });
             return {
               ...res.data,
+              // ...formatKey(res.data, ['fo_id',  'data_type','repayment_method','application_form']),
             };
           } else {
             return {
@@ -112,10 +107,14 @@ export default () => {
             />
           </Col>
           <Col span={8}>
-            <ProFormSelect name={'summary'} label="摘要" />
+            <ProFormText name={'summary'} label="摘要" />
           </Col>
           <Col span={8}>
-            <ProFormSelect name={'interpret'} label="关联解读" />
+            <ProFormSelect
+              name={'interpret'}
+              label="关联解读"
+              valueEnum={interpretation}
+            />
           </Col>
         </Row>
         <TzTitleDesc title={'正文内容'} className="mt-4 mb-5" />

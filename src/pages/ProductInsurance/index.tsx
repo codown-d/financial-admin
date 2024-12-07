@@ -1,10 +1,10 @@
 import { TzButton } from '@/components/TzButton';
 import TzPopconfirm from '@/components/TzPopconfirm';
-import { insurance_type, SUB_UNIT } from '@/constants';
-import { insuranceDelete, insuranceList, loanDelete, loanList } from '@/services';
+import { insurance_type } from '@/constants';
+import { loanDelete, loanList } from '@/services';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
-import { ProFormDigitRange, ProTable } from '@ant-design/pro-components';
+import { ProTable } from '@ant-design/pro-components';
 import { Access, useAccess, useModel, useNavigate } from '@umijs/max';
 import { Button, DatePicker } from 'antd';
 import { useMemo, useRef, useState } from 'react';
@@ -42,21 +42,20 @@ export default () => {
       },
       {
         title: '种类',
-        dataIndex: 'insurance_type',
+        dataIndex: 'data_type',
         valueEnum: insurance_type,
       },
       {
         title: '保额（元）',
-        dataIndex: 'premium_desc',
+        dataIndex: 'highest_money',
         formItemProps: {
           label: '保费范围',
+          name: 'premiumRange',
         },
-        renderFormItem: () => (
-          <ProFormDigitRange
-          className='w-full'
-            placeholder={['最低金额', '最高金额']}
-          />
-        ),
+        fieldProps: {
+          suffix: '元',
+        },
+        valueType: 'digitRange',
         search: {
           transform: (value) => {
             console.log(value);
@@ -66,13 +65,19 @@ export default () => {
               highest_money,
             };
           },
-        },
+        }, 
+        render: (_, record:any) => {
+          return `${record.highest_money}元`
+        }
+     
       },
       {
         title: '期限',
         dataIndex: 'term',
         sorter: true,
-        hideInSearch: true,
+        hideInSearch: true,   
+        render: (_, record) => `${_}个月`
+    
       },
       {
         title: '添加时间',
@@ -80,6 +85,7 @@ export default () => {
         dataIndex: 'add_time',
         hideInSearch: true,
         valueType: 'dateTime',
+        width: '200px',
       },
       {
         title: '添加时间区间',
@@ -100,7 +106,7 @@ export default () => {
         title: '操作',
         fixed: 'right',
         align: 'center',
-        width: '300px',
+        width: '140px',
         hideInSearch: true,
         hideInTable: !access.canEdit,
         render: (text, record, _, action) => [
@@ -117,8 +123,7 @@ export default () => {
             description="确认删除此保险?"
             key={'del'}
             onConfirm={() => {
-              loanDelete({ id: record.id,
-                product_type:6, }).then((res) => {
+              loanDelete({ id: record.id, product_type: 6 }).then((res) => {
                 action?.reload();
               });
             }}
@@ -139,7 +144,7 @@ export default () => {
       cardBordered
       request={async (params, sorter, filter) => {
         const res = await loanList({
-          product_type:6,
+          product_type: 6,
           ...params,
         });
         setTotal(res.count);
@@ -181,7 +186,8 @@ export default () => {
             return {
               subscription_unit: '1',
               ...rest,
-              created_at: [values.start, values.end]
+              created_at: [values.start, values.end],
+              premiumRange: [values.minimum_money, values.highest_money],
             };
           }
           return values;
@@ -194,16 +200,17 @@ export default () => {
       headerTitle={headerTitle}
       toolBarRender={() => [
         <Access accessible={access.canEdit}>
-        <Button
-          key="button"
-          icon={<PlusOutlined />}
-          onClick={() => {
-            navigate(`/product/insurance/info`);
-          }}
-          type="primary"
-        >
-          添加
-        </Button></Access>,
+          <Button
+            key="button"
+            icon={<PlusOutlined />}
+            onClick={() => {
+              navigate(`/product/insurance/info`);
+            }}
+            type="primary"
+          >
+            添加
+          </Button>
+        </Access>,
       ]}
     />
   );

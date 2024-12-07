@@ -93,7 +93,7 @@ export const VERIFY_STATUS = {
   },
 };
 
-export const AREA_TYPE:any = {
+export const AREA_TYPE: any = {
   1: {
     text: '国家级',
   },
@@ -150,16 +150,25 @@ export const GUARANTEE_FROM = {
     text: '全部',
   },
 };
-export const GUARANTEE_FROM_OP = [
-  {
-    value: 1,
-    label: '电子保函',
+export const GUARANTEE_FROM_OP = {
+  1: {
+    text: '电子保函',
   },
-  {
-    value: 2,
-    label: '纸质保函',
+  2: {
+    text: '纸质保函',
   },
-];
+};
+
+// export const GUARANTEE_FROM_OP = [
+//   {
+//     value: 1,
+//     label: '电子保函',
+//   },
+//   {
+//     value: 2,
+//     label: '纸质保函',
+//   },
+// ];
 export const SUB_UNIT = {
   1: {
     text: '万元',
@@ -330,23 +339,19 @@ export const product_type_filter = {
 };
 export const action_status_filter = {
   1: {
-    text: '已申请',
-    status: 'Warning',
-  },
-  2: {
     text: '未受理',
     status: 'Default',
   },
-  3: {
-    text: '办理中',
+  2: {
+    text: '已受理',
     status: 'Processing',
+  },
+  3: {
+    text: '完成',
+    status: 'Success',
   },
   4: {
     text: '谢绝',
     status: 'Error',
-  },
-  5: {
-    text: '完成',
-    status: 'Success',
   },
 };

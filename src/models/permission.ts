@@ -10,17 +10,7 @@ export default function () {
       merge(response.permission, {
         financial_organs_user_permission: [],
         government_department_user_permission: [],
-        admin_user_permission: ["financialList",
-          "financeManagement",
-          "productManagement",
-          "productBank",
-          "productMicroloan",
-          "productFinanceGuarantee",
-          "productEmergency",
-          "productGuarantee",
-          "productInsurance",
-          "productFund",
-          "policyList"],
+        admin_user_permission: [],
       }),
     );
   }, []);

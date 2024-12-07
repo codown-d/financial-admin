@@ -125,7 +125,6 @@ export default () => {
     (values: Record<string, any>, type: 'get' | 'set') => {
       if (type === 'get') {
         let idPath = findParentIds(areaData, values.area_id);
-        console.log([values.start, values.end])
         return {
           ...values,
           area_id: [...idPath],
@@ -161,7 +160,6 @@ export default () => {
           option: { fixed: 'right', disable: true },
         },
         onChange(value) {
-          console.log('value: ', value);
         },
       }}
       rowKey="id"

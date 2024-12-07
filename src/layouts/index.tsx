@@ -6,6 +6,7 @@ import {
   ProConfigProvider,
   ProLayout,
 } from '@ant-design/pro-components';
+import './index.css'
 import {
   Outlet,
   useAccess,

@@ -14,7 +14,6 @@ const MyEditor = (props: {
   };
 
   useEffect(() => {
-    console.log(value);
   }, [value]);
   const editorRef = useRef<any>();
   return (

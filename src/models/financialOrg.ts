@@ -5,7 +5,6 @@ export default function () {
   const [financialOrg, setFinancialOrg] = useState({});
   let fetchFinancialOrgs = useCallback(async () => {
     const response = await financialOrgs();
-    console.log(response)
     setFinancialOrg(response);
     setFinancialOrg(
       response.dataList.reduce(

@@ -1,12 +1,11 @@
 import { TzButton } from '@/components/TzButton';
-import { action_status, action_status_filter, data_type, purpose, term } from '@/constants';
+import { action_status_filter, data_type, purpose, term } from '@/constants';
 import { useAreaData } from '@/hooks';
-import { allList } from '@/services';
-import { PlusOutlined } from '@ant-design/icons';
+import { allList, financeAction } from '@/services';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
-import { ProFormDigitRange, ProTable } from '@ant-design/pro-components';
+import { ProTable } from '@ant-design/pro-components';
 import { useNavigate } from '@umijs/max';
-import { Button, DatePicker } from 'antd';
+import { DatePicker, message } from 'antd';
 import { useMemo, useRef, useState } from 'react';
 import { SearchAndOptionsProps } from '../ProductManagement';
 
@@ -20,8 +19,8 @@ type GithubIssueItem = {
   real_name: string;
   certification: string;
 };
-export default (props:{proTableProps?:SearchAndOptionsProps}) => {
-  let {proTableProps}=props
+export default (props: { proTableProps?: SearchAndOptionsProps, uid: any }) => {
+  let { proTableProps, uid } = props;
   const actionRef = useRef<ActionType>();
   const navigate = useNavigate();
   const [total, setTotal] = useState(0);
@@ -34,18 +33,29 @@ export default (props:{proTableProps?:SearchAndOptionsProps}) => {
       {
         title: '申请人',
         dataIndex: 'apply_user',
+        render: (_, record: any) => {
+          return `${record.user.user_name}`;
+        },
       },
       {
-        title: '金额范围',
-        dataIndex: 'account',
-        renderFormItem: () => (
-          <ProFormDigitRange placeholder={['最低金额', '最高金额']} />
-        ),
+        title: '金额',
+        dataIndex: 'apply_money',
+        formItemProps: {
+          label: '金额范围',
+          name: 'moneyRange',
+        },
+        fieldProps: {
+          suffix: '元',
+        },
+        valueType: 'digitRange',
         search: {
           transform: (value) => {
             let [apply_money_start, apply_money_end] = value;
             return { apply_money_start, apply_money_end };
           },
+        },
+        render: (_, record: any) => {
+          return `${record.apply_money}元`;
         },
       },
       {
@@ -73,15 +83,14 @@ export default (props:{proTableProps?:SearchAndOptionsProps}) => {
         search: {
           transform: (value) => {
             return {
-              area_id: value.at(-1),
+              area_id: value?.at(-1),
             };
           },
         },
-      },
-      {
-        title: '状态',
-        dataIndex: 'action_status',
-        valueEnum: action_status_filter,
+
+        render: (_, record: any) => {
+          return `${record.user.area_desc}`;
+        },
       },
       {
         title: '发布时间',
@@ -89,6 +98,7 @@ export default (props:{proTableProps?:SearchAndOptionsProps}) => {
         valueType: 'dateTime',
         hideInSearch: true,
         sorter: true,
+        width: '200px',
       },
       {
         title: '发布时间区间',
@@ -105,41 +115,99 @@ export default (props:{proTableProps?:SearchAndOptionsProps}) => {
           },
         },
       },
+      {
+        title: '状态',
+        dataIndex: 'action_status',
+        valueEnum: action_status_filter,
+      },
 
       {
         title: '操作',
         fixed: 'right',
         align: 'center',
+        width: '300px',
         hideInSearch: true,
-        render: (text, record, _, action) => [
-          <TzButton
-            type="link"
-            key={'accept'}
-            onClick={() => {
-              navigate(`/customer/customer-list/customer-info?id=${record.id}`);
-            }}
-          >
-            受理
-          </TzButton>,
-          <TzButton
-            type="link"
-            key={'un-accept'}
-            onClick={() => {
-              navigate(`/customer/customer-list/customer-info?id=${record.id}`);
-            }}
-          >
-            不受理
-          </TzButton>,
-          <TzButton
-            type="link"
-            key={'info'}
-            onClick={() => {
-              navigate(`/customer/customer-list/customer-info?id=${record.id}`);
-            }}
-          >
-            查看详情
-          </TzButton>,
-        ],
+        render: (text, record: any, _, action) => {
+          let arr = [];
+          if (1 == record.action_status) {
+            arr.push(
+              <TzButton
+                type="link"
+                key={'accept'}
+                onClick={() => {
+                  financeAction({ id: record.id, status: 2 }).then((res) => {
+                    if (res.code == 200) {
+                      message.success('操作成功');
+                      actionRef.current?.reload();
+                    }
+                  });
+                }}
+              >
+                受理
+              </TzButton>,
+              <TzButton
+                type="link"
+                key={'un-accept'}
+                onClick={() => {
+                  financeAction({ id: record.id, status: 1 }).then((res) => {
+                    if (res.code == 200) {
+                      message.success('操作成功');
+                      actionRef.current?.reload();
+                    }
+                  });
+                }}
+              >
+                不受理
+              </TzButton>,
+            );
+          } else if (2 == record.action_status) {
+            arr.push(
+              <TzButton
+                type="link"
+                key={'3'}
+                onClick={() => {
+                  financeAction({ id: record.id, status: 3 }).then((res) => {
+                    if (res.code == 200) {
+                      message.success('操作成功');
+                      actionRef.current?.reload();
+                    }
+                  });
+                }}
+              >
+                完成
+              </TzButton>,
+              <TzButton
+                type="link"
+                key={'4'}
+                danger
+                onClick={() => {
+                  financeAction({ id: record.id, status: 4 }).then((res) => {
+                    if (res.code == 200) {
+                      message.success('操作成功');
+                      actionRef.current?.reload();
+                    }
+                  });
+                }}
+              >
+                谢绝
+              </TzButton>,
+            );
+          }
+          arr.push(
+            <TzButton
+              type="link"
+              key={'info'}
+              onClick={() => {
+                navigate(
+                  `/customer/customer-list/customer-info?uid=${record.uid}`,
+                );
+              }}
+            >
+              查看详情
+            </TzButton>,
+          );
+          return arr;
+        },
       },
     ],
     [areaData],
@@ -150,6 +218,7 @@ export default (props:{proTableProps?:SearchAndOptionsProps}) => {
       actionRef={actionRef}
       request={async (params, sorter, filter) => {
         const res = await allList({
+          uid,
           ...params,
         });
         setTotal(res.count);
@@ -186,6 +255,7 @@ export default (props:{proTableProps?:SearchAndOptionsProps}) => {
             return {
               ...values,
               created_at: [values.start, values.end],
+              moneyRange: [values.apply_money_start, values.apply_money_end],
             };
           }
           return values;

@@ -43,20 +43,18 @@ export default (props: { product_type: product_type }) => {
         valueEnum: financialOrg,
       },
       {
-        title: '最高额度',
+        title: '额度',
         dataIndex: 'highest_money',
         formItemProps: {
           label: '额度范围',
+          name: 'moneyRange',
         },
-        renderFormItem: () => (
-          <ProFormDigitRange
-            className="w-full"
-            placeholder={['请输入最低额度', '请输入最高额度']}
-          />
-        ),
+        fieldProps:{
+          suffix: '万元',
+        },
+        valueType:'digitRange',
         search: {
           transform: (value) => {
-            console.log(value);
             let [highest_money_start, highest_money_end] = value;
             return {
               highest_money_start,
@@ -64,21 +62,23 @@ export default (props: { product_type: product_type }) => {
             };
           },
         },
+        render: (_, record:any) => {
+          return `${record.highest_money}万元`
+        }
       },
       {
-        title: '最低利率',
-        dataIndex: 'premium_desc',
+        title: '利率',
+        dataIndex: 'rate',
         formItemProps: {
           label: '利率范围',
+          name: 'rateRange',
         },
-        renderFormItem: () => (
-          <ProFormDigitRange
-            placeholder={['请输入最低利率', '请输入最高利率']}
-          />
-        ),
+        fieldProps:{
+          suffix: '%',
+        },
+        valueType:'digitRange',
         search: {
           transform: (value) => {
-            console.log(value);
             let [rate_start, rate_end] = value;
             return {
               rate_start,
@@ -86,11 +86,15 @@ export default (props: { product_type: product_type }) => {
             };
           },
         },
+        render: (_, record:any) => {
+          return `${record.rate}%`
+        }
       },
       {
         title: '期限',
         dataIndex: 'term',
-        hideInSearch: true,
+        hideInSearch: true,  
+        render: (_, record) => `${_}个月`
       },
       {
         title: '担保方式',
@@ -108,6 +112,7 @@ export default (props: { product_type: product_type }) => {
         dataIndex: 'add_time',
         hideInSearch: true,
         valueType: 'dateTime',
+        width: '150px',
       },
       {
         title: '添加时间区间',
@@ -128,7 +133,7 @@ export default (props: { product_type: product_type }) => {
         title: '操作',
         fixed: 'right',
         align: 'center',
-        width: '300px',
+        width: '140px',
         hideInTable: !access.canEdit,
         hideInSearch: true,
         render: (text, record, _, action) => [
@@ -147,9 +152,7 @@ export default (props: { product_type: product_type }) => {
             description="确认删除此贷款产品?"
             key={'del'}
             onConfirm={() => {
-              action?.reload();
-              return;
-              loanDelete({ id: record.id }).then((res) => {
+              loanDelete({ id: record.id,product_type }).then((res) => {
                 action?.reload();
               });
             }}
@@ -204,6 +207,7 @@ export default (props: { product_type: product_type }) => {
       }}
       form={{
         labelWidth: 120,
+        wrapperCol:{flex:1},
         colon: false,
         // 由于配置了 transform，提交的参数与定义的不同这里需要转化一下
         syncToUrl: (values, type) => {
@@ -211,7 +215,9 @@ export default (props: { product_type: product_type }) => {
             const { ...rest } = values;
             return {
               ...rest,
-              created_at: [values.start, values.end]
+              created_at: [values.start, values.end],
+              moneyRange: [values.highest_money_start, values.highest_money_end],
+              rateRange: [values.rate_start, values.rate_end],
             };
           }
           return values;

@@ -1,6 +1,7 @@
 import TzTitleDesc from '@/components/TzTitleDesc';
 import { GUARANTEE_FROM_OP, GUARANTEE_METHOD } from '@/constants';
-import { guaranteeDetail, guaranteeSave, loanDetail, loanSave } from '@/services';
+import { loanDetail, loanSave } from '@/services';
+import { formatKey } from '@/utils';
 import {
   ProForm,
   ProFormCheckbox,
@@ -23,15 +24,18 @@ export default () => {
       {contextHolder}
       <ProForm
         onFinish={async (values) => {
-          await loanSave({ ...values, product_type: 7 });
+          await loanSave({ ...values, product_type: 7 ,guarantee_form:typeof values.guarantee_form==='string'?[values.guarantee_form]:values.guarantee_form});
           console.log(values);
           messageApi.success('提交成功');
         }}
         request={async () => {
           let id = searchParams.get('id');
           if (id) {
-            let res = await loanDetail({ id ,product_type: 7});
-            return { ...res };
+            let res = await loanDetail({ id, product_type: 7 });
+            return {
+              ...res.data,
+              ...formatKey(res.data, ['fo_id','guarantee_form','data_type']),
+            };
           } else {
             return {
               add_time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
@@ -74,6 +78,9 @@ export default () => {
             <ProFormDigit
               name={'term'}
               label="担保期限"
+              fieldProps={{
+                suffix: '月', // 添加后缀
+              }}
               rules={[{ required: true }]}
             />
           </Col>
@@ -81,7 +88,7 @@ export default () => {
             <ProFormCheckbox.Group
               name={'guarantee_form'}
               label="保函形式"
-              options={GUARANTEE_FROM_OP}
+              valueEnum={GUARANTEE_FROM_OP}
               rules={[{ required: true, message: '请选择保函形式' }]}
             />
           </Col>

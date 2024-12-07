@@ -23,7 +23,6 @@ const TzPageContainer: React.FC = () => {
   const { header, setHeader, tabList, setTabList, footer, setFooter } =
     useAppPageContext();
   useEffect(() => {
-    console.log(route?.breadcrumb)
     setHeader({
       title: undefined,
       breadcrumb: { items: route?.breadcrumb as ItemType[] },
@@ -36,7 +35,6 @@ const TzPageContainer: React.FC = () => {
     });
   }, [route]);
   let onBack = useCallback(() => {
-    console.log(header)
     navigate(-1);
   }, [header]);
   let proCardTitle = useMemo(() => {

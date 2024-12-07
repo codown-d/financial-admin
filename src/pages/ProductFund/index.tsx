@@ -43,24 +43,23 @@ export default () => {
       },
       {
         title: '认缴规模',
-        dataIndex: 'subscription_money',
+        dataIndex: 'highest_money',
         sorter: true,
-        renderFormItem: () => {
-          return <PriceInput />;
+        fieldProps:{
+          suffix: '万元',
         },
-        render: (_, record: any) => {
-          console.log(record);
-          return `${record.subscription_money}${
-            (SUB_UNIT as any)[record.subscription_unit]?.text
-          }`;
-        },
+        render: (_, record:any) => {
+          return `${record.highest_money}万元`
+        }
       },
+
       {
         title: '添加时间',
         dataIndex: 'add_time',
         hideInSearch: true,
         sorter: true,
         valueType: 'dateTime',
+        width:'200px'
       },
       {
         title: '注册时间区间',
@@ -81,7 +80,7 @@ export default () => {
         title: '操作',
         fixed: 'right',
         align: 'center',
-        width: '300px',
+        width: '160px',
         hideInSearch: true,
         hideInTable: !access.canEdit,
         render: (text, record, _, action) => [
@@ -118,7 +117,7 @@ export default () => {
       actionRef={actionRef}
       cardBordered
       request={async (params, sorter, filter) => {
-        const res = await loanList({ product_type: 5, ...params });
+        const res = await loanList({ product_type: 5,highest_money_unit:1, ...params });
         setTotal(res.count);
         return {
           success: true,

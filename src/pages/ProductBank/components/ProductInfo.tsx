@@ -1,6 +1,7 @@
 import TzTitleDesc from '@/components/TzTitleDesc';
 import { data_type, repayment_method } from '@/constants';
 import { loanDetail, loanSave } from '@/services';
+import { formatKey } from '@/utils';
 import {
   ProForm,
   ProFormDateTimePicker,
@@ -13,8 +14,8 @@ import { useModel, useSearchParams } from '@umijs/max';
 import { Col, Form, message, Row } from 'antd';
 import dayjs from 'dayjs';
 
-export default (props: { product_type: any; }) => {
-  let { product_type } = props
+export default (props: { product_type: any }) => {
+  let { product_type } = props;
   let [searchParams] = useSearchParams();
   const [messageApi, contextHolder] = message.useMessage();
   let { financialOrg } = useModel('financialOrg');
@@ -35,7 +36,10 @@ export default (props: { product_type: any; }) => {
           let id = searchParams.get('id');
           if (id) {
             let res = await loanDetail({ id, product_type });
-            return { ...res };
+            return {
+              ...res.data,
+              ...formatKey(res.data, ['fo_id',  'data_type','repayment_method','application_form']),
+            };
           } else {
             return {
               add_time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
@@ -92,6 +96,9 @@ export default (props: { product_type: any; }) => {
             <ProFormDigit
               name={'term'}
               label={'最高期限'}
+              fieldProps={{
+                suffix: '月',
+              }}
               rules={[{ required: true }]}
             />
           </Col>
@@ -143,7 +150,7 @@ export default (props: { product_type: any; }) => {
           <Col span={12}>
             <ProFormSelect
               name="application_form"
-              label="申请资料"
+              label="申请方式"
               style={{ width: '200px' }}
               valueEnum={{
                 '1': '不区分',

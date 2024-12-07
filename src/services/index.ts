@@ -640,3 +640,27 @@ export async function organsUserSave(
     ...(options || {}),
   });
 }
+export async function servicePolicy(
+  params?: any,
+  options?: { [key: string]: any },
+) {
+  return request<any>(`${api.servicePolicy}`, {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+export async function financeAction(
+  params?: any,
+  options?: { [key: string]: any },
+) {
+  return request<any>(`${api.financeAction}`, {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}

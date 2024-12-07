@@ -3,6 +3,7 @@ import { fundDetail, fundSave, loanDetail, loanSave } from '@/services';
 import {
   ProForm,
   ProFormDateTimePicker,
+  ProFormDigit,
   ProFormSelect,
   ProFormText,
   ProFormTextArea,
@@ -20,7 +21,7 @@ export default () => {
       {contextHolder}
       <ProForm
         onFinish={async (values) => {
-          await loanSave({product_type: 5,...values});
+          await loanSave({product_type: 5,highest_money_unit:1,...values});
           console.log(values);
           messageApi.success('提交成功');
         }}
@@ -32,7 +33,8 @@ export default () => {
           } else {
             return {
               add_time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-              subscription_unit:'1'
+              subscription_unit:'1',
+              product_type:5
             };
           }
         }}
@@ -42,6 +44,7 @@ export default () => {
       >
         <TzTitleDesc title={'基本信息'} className="mt-1" />
         <ProFormText name="id" hidden />
+        <ProFormText name="product_type" hidden />
         <Row>
           <Col span={8}>
             <ProFormText
@@ -59,16 +62,14 @@ export default () => {
             />
           </Col>
           <Col span={8}>
-          <Flex>
-              <Form.Item  name={'subscription_money'} label='认缴规模' rules={[{ required: true, message: '请输入认缴规模' }]}>
-                <InputNumber style={{ width: 200 }} placeholder="请输入" />
-              </Form.Item>
-              <Form.Item noStyle name={'subscription_unit'}>
-                <Select style={{ width: 80, }} className='!ml-[36px]'>
-                  <Select.Option value="1">万元</Select.Option>
-                  <Select.Option value="2">亿元</Select.Option>
-                </Select>
-              </Form.Item></Flex>
+          <ProFormDigit
+              name={'highest_money'}
+              fieldProps={{
+                suffix: '万元',
+              }}
+              label={'最高额度'}
+              rules={[{ required: true }]}
+            />
           </Col>
           <Col span={8}>
             <ProFormDateTimePicker
@@ -91,7 +92,7 @@ export default () => {
           </Col>
           <Col span={12}>
             <ProFormTextArea
-              name={'application_condition'}
+              name={'fund_company_intro'}
               label="公司简介"
               rules={[{ required: true }]}
             />

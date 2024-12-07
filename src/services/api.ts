@@ -13,6 +13,7 @@ export default {
   policyDetail:'/enterprise/service/policy/detail',
   policySave:'/admin/enterprise/service/policy/save',
   policyDelete:'/admin/enterprise/service/policy/delete',
+  servicePolicy:'/enterprise/service/policy',
   permission:'/admin/get/permission',
   financialOrgs:'/admin/financial/organs/all/list',
 
@@ -35,7 +36,7 @@ export default {
   loanSave:'/admin/bank/loan/save',
   loanDelete:'/admin/bank/loan/delete',
 
-  allList:'/all/list',
+  allList:'/finance/all/list',
   userInfo:'/user/info',
   applyList:'/apply/all/list',
   departmentList:'/admin/government/department/all/list',
@@ -55,5 +56,6 @@ export default {
   governmentDepartmentDelete:'/admin/government/department/delete',
   governmentDepartmentUserDelete:'/admin/government/department/user/delete',
   adminPermission:'/admin/save/permission',
-  organsUserSave:'/admin/financial/organs/user/save'
+  organsUserSave:'/admin/financial/organs/user/save',
+  financeAction:'/finance/info/action'
 };

@@ -1,6 +1,7 @@
 import { TzButton } from '@/components/TzButton';
+import TzPopconfirm from '@/components/TzPopconfirm';
 import { GUARANTEE_FROM, GUARANTEE_METHOD } from '@/constants';
-import { guaranteeList, loanList } from '@/services';
+import { guaranteeList, loanDelete, loanList } from '@/services';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProFormDigitRange, ProTable } from '@ant-design/pro-components';
@@ -42,14 +43,15 @@ export default () => {
       {
         title: '费率',
         dataIndex: 'rate',
+        formItemProps: {
+          label: '利率范围',
+          name: 'rateRange',
+        },
+        fieldProps:{
+          suffix: '%',
+        },
         sorter: true,
-        renderFormItem: () => (
-          <ProFormDigitRange
-            className="w-full"
-            placeholder={['最低利率', '最高利率']}
-          />
-        ),
-
+        valueType:'digitRange',
         search: {
           transform: (value) => {
             console.log(value);
@@ -60,10 +62,17 @@ export default () => {
             };
           },
         },
+        render: (_, record:any) => {
+          return `${record.rate}%`
+        }
       },
       {
         title: '担保期限',
-        dataIndex: 'registerTime',
+        dataIndex: 'term',
+        fieldProps:{
+          suffix: '月',
+        },
+        render: (_, record) => `${_}个月`
       },
       {
         title: '保函形式',
@@ -72,7 +81,7 @@ export default () => {
       },
       {
         title: '担保方式',
-        dataIndex: 'guarantee_type',
+        dataIndex: 'data_type',
         valueEnum: GUARANTEE_METHOD,
       },
       {
@@ -83,24 +92,6 @@ export default () => {
         hideInSearch: true,
         hideInTable: !access.canEdit,
         render: (text, record, _, action) => [
-          // <TzButton
-          //   type="link"
-          //   key={'accept'}
-          //   onClick={() => {
-          //     navigate(`/customer/customer-list/customer-info?id=${record.id}`);
-          //   }}
-          // >
-          //   受理
-          // </TzButton>,
-          // <TzButton
-          //   type="link"
-          //   key={'unAccept'}
-          //   onClick={() => {
-          //     navigate(`/customer/customer-list/customer-info?id=${record.id}`);
-          //   }}
-          // >
-          //   不受理
-          // </TzButton>,
           <TzButton
             type="link"
             key={'info'}
@@ -110,6 +101,19 @@ export default () => {
           >
             编辑
           </TzButton>,
+            <TzPopconfirm
+            description="确认删除此保函产品?"
+            key={'del'}
+            onConfirm={() => {
+              loanDelete({ id: record.id,product_type:7 }).then((res) => {
+                action?.reload();
+              });
+            }}
+          >
+            <TzButton type="link" danger>
+              删除
+            </TzButton>
+          </TzPopconfirm>,
         ],
       },
     ],

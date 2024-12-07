@@ -1,7 +1,7 @@
 import { TzButton } from '@/components/TzButton';
 import TzPopconfirm from '@/components/TzPopconfirm';
 import { AREA_TYPE, BODY_TYPE } from '@/constants';
-import { policyDelete, policyList } from '@/services';
+import { policyDelete, policyList, servicePolicy } from '@/services';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
@@ -32,13 +32,7 @@ export default () => {
     () => [
       {
         title: '标题',
-        dataIndex: 'keyword',
-        hideInTable: true,
-      },
-      {
-        title: '标题',
         dataIndex: 'title',
-        hideInSearch: true,
         ellipsis: true,
       },
 
@@ -59,18 +53,29 @@ export default () => {
         dataIndex: 'sub_title',
         ellipsis: true,
         order: -1,
+        request: async (params) => {
+          const res = await servicePolicy({
+            body_type:2,
+            page: 1,
+            limit: 10,
+          });
+          console.log(res)
+          return [];
+        }
       },
       {
         title: '主题',
         dataIndex: 'theme_id',
         valueType: 'select',
         valueEnum: theme,
+        render: (_, record:any) => `${record.theme_id==0?'-':record.theme_id}`
       },
       {
         title: '特色',
         dataIndex: 'feature_id',
         valueType: 'select',
         valueEnum: feature,
+        render: (_, record:any) => `${record.feature_id==0?'-':record.feature_id}`
       },
 
       {

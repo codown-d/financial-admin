@@ -1,11 +1,10 @@
-import { first, get, isArray, keys, set } from 'lodash';
+import { get, isArray, keys, set } from 'lodash';
 // import * as NProgress from 'nprogress';
 import { history, proxy } from '@umijs/max';
-import { message } from 'antd';
-import { AxiosCanceler } from './axiosCancel';
-import { storage } from './utils/storage';
-import { showError } from './utils';
 import queryString from 'query-string';
+import { AxiosCanceler } from './axiosCancel';
+import { showError } from './utils';
+import { storage } from './utils/storage';
 
 type requestStoreProps = { url?: string; timestamp: number };
 const requestStoreAction = (url: string, interval = 1000) => {
@@ -46,25 +45,22 @@ export const requestStore = proxy<requestStoreProps>({
 
 const axiosCanceler = new AxiosCanceler();
 
-
 const errorHandler = (response: any) => {
-  console.log('response', response);
   if (response?.status) {
     const { status, data } = response;
     const errorTxt = data?.desc;
     showError({
-        key: status === 401 ? status : +new Date(),
-        content: errorTxt,
-      });
-    if (status === 401||data.code === 401) {
+      key: status === 401 ? status : +new Date(),
+      content: errorTxt,
+    });
+    if (status === 401 || data.code === 401) {
       storage.remove('userInfo');
       storage.removeCookie('token');
       history.replace('/login');
-      
-    }else if(503===status){
+    } else if (503 === status) {
       history.replace('/503');
     }
-    
+
     return response;
   } else if (!response) {
     // message.error(translate('request.errorTip'));
@@ -99,10 +95,10 @@ const responseInterceptors = async (response: any) => {
   return Promise.reject(response);
 };
 export const requestConfig = {
-  paramsSerializer: (params: { [x: string]: any; }) => {
-    const { current:page,pageSize:limit, ...rest } = params;
-    if(params?.current||params?.pageSize){
-      params = {limit,page,...rest}
+  paramsSerializer: (params: { [x: string]: any }) => {
+    const { current: page, pageSize: limit, ...rest } = params;
+    if (params?.current || params?.pageSize) {
+      params = { limit, page, ...rest };
     }
     const newParams = {};
     keys(params)?.forEach((key) =>
@@ -124,13 +120,15 @@ export const requestConfig = {
     [
       responseInterceptors,
       (error: any) => {
-        console.log('error', error);
         const { config, response } = error;
         // NProgress.done();
-        if (!config?.skipErrorHandler) {
+        if (config?.skipErrorHandler) {
           errorHandler(error);
+        } else {
+          showError({
+            content: response?.data.message,
+          });
         }
-        console.log('response', response);
         return Promise.reject(response?.data);
       },
     ],

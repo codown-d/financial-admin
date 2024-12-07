@@ -15,7 +15,7 @@ import type {
 } from '@ant-design/pro-components';
 import { ProFormDigitRange, ProTable } from '@ant-design/pro-components';
 import { useNavigate } from '@umijs/max';
-import { DatePicker } from 'antd';
+import { DatePicker, message } from 'antd';
 import { useMemo, useRef, useState } from 'react';
 
 const { RangePicker } = DatePicker;
@@ -32,8 +32,8 @@ export type SearchAndOptionsProps = Pick<
   ProTableProps<any, Record<string, any>>,
   'search' | 'options' | 'headerTitle'
 >;
-export default (props: { proTableProps?: SearchAndOptionsProps }) => {
-  let { proTableProps } = props;
+export default (props: { proTableProps?: SearchAndOptionsProps;uid:any }) => {
+  let { proTableProps,uid } = props;
   const actionRef = useRef<ActionType>();
   const navigate = useNavigate();
   const [total, setTotal] = useState(0);
@@ -57,26 +57,23 @@ export default (props: { proTableProps?: SearchAndOptionsProps }) => {
       },
       {
         title: '金额',
-        sorter: true,
         dataIndex: 'apply_money',
-        hideInSearch: true,
-        render: (text, record: any, _, action) => {
-          return text + '元';
+        formItemProps: {
+          label: '金额范围',
+          name: 'moneyRange',
         },
-      },
-      {
-        title: '金额范围',
-        sorter: true,
-        hideInTable: true,
-        dataIndex: 'account',
-        renderFormItem: () => (
-          <ProFormDigitRange placeholder={['最低金额', '最高金额']} />
-        ),
+        fieldProps: {
+          suffix: '元',
+        },
+        valueType: 'digitRange',
         search: {
           transform: (value) => {
             let [apply_money_start, apply_money_end] = value;
             return { apply_money_start, apply_money_end };
           },
+        },
+        render: (_, record: any) => {
+          return `${record.apply_money}元`;
         },
       },
 
@@ -116,11 +113,6 @@ export default (props: { proTableProps?: SearchAndOptionsProps }) => {
         },
       },
       {
-        title: '状态',
-        dataIndex: 'action_status',
-        valueEnum: action_status_filter,
-      },
-      {
         title: '还款方式',
         dataIndex: 'repayment_method',
         valueEnum: repayment_method,
@@ -151,6 +143,11 @@ export default (props: { proTableProps?: SearchAndOptionsProps }) => {
           },
         },
       },
+      {
+        title: '状态',
+        dataIndex: 'action_status',
+        valueEnum: action_status_filter,
+      },
 
       {
         title: '操作',
@@ -168,6 +165,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps }) => {
                 onClick={() => {
                   applyAction({ id: record.id, status: 3 }).then((res) => {
                     actionRef.current?.reload();
+                    message.success('操作成功');
                   });
                 }}
               >
@@ -179,21 +177,23 @@ export default (props: { proTableProps?: SearchAndOptionsProps }) => {
                 onClick={() => {
                   applyAction({ id: record.id, status: 2 }).then((res) => {
                     actionRef.current?.reload();
+                    message.success('操作成功');
                   });
                 }}
               >
                 不受理
               </TzButton>,
             ];
-          } else if (record.action_status == 4) {
+          } else if (record.action_status == 2) {
             arr = [
               <TzButton
                 type="link"
                 key={'2'}
                 onClick={() => {
-                  // applyAction({ id: record.id, status: 2 }).then(res => {
-                  //   actionRef.current?.reload()
-                  // })
+                  applyAction({ id: record.id, status: 4 }).then(res => {
+                    actionRef.current?.reload()
+                    message.success('操作成功');
+                  })
                 }}
               >
                 完成
@@ -203,28 +203,29 @@ export default (props: { proTableProps?: SearchAndOptionsProps }) => {
                 key={'3'}
                 danger
                 onClick={() => {
-                  // applyAction({ id: record.id, status: 2 }).then(res => {
-                  //   actionRef.current?.reload()
-                  // })
+                  applyAction({ id: record.id, status: 5 }).then(res => {
+                    actionRef.current?.reload()
+                    message.success('操作成功');
+                  })
                 }}
               >
                 谢绝
               </TzButton>,
             ];
           }
-          // arr.push(
-          //   <TzButton
-          //     type="link"
-          //     key={'info'}
-          //     onClick={() => {
-          //       navigate(
-          //         `/customer/customer-list/customer-info?id=${record.id}`,
-          //       );
-          //     }}
-          //   >
-          //     查看详情
-          //   </TzButton>,
-          // );
+          arr.push(
+            <TzButton
+              type="link"
+              key={'info'}
+              onClick={() => {
+                navigate(
+                  `/customer/customer-list/customer-info?uid=${record.uid}`,
+                );
+              }}
+            >
+              查看详情
+            </TzButton>,
+          );
           return arr;
         },
       },
@@ -237,6 +238,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps }) => {
       actionRef={actionRef}
       request={async (params, sorter, filter) => {
         const res = await applyList({
+          uid,
           ...params,
         });
         setTotal(res.count);

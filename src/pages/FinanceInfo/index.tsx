@@ -18,9 +18,7 @@ const waitTime = (time: number = 100) => {
 export default () => {
   let [searchParams, setSearchParams] = useSearchParams();
   let getFinanceInfo = useCallback(() => {
-    console.log(searchParams);
     financialDetail({ id: searchParams.get('id') }).then((res) => {
-      console.log(res);
     });
   }, [searchParams]);
   useEffect(() => {
@@ -33,7 +31,6 @@ export default () => {
         form={form}
         onFinish={async (values) => {
           await waitTime(2000);
-          console.log(values);
           message.success('提交成功');
         }}
         initialValues={{

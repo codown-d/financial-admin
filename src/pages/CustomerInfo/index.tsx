@@ -2,7 +2,7 @@ import { TzButton } from '@/components/TzButton';
 import TzTitleDesc from '@/components/TzTitleDesc';
 import { InfoCircleFilled } from '@ant-design/icons';
 import { ProForm, ProFormText } from '@ant-design/pro-components';
-import { Col, ConfigProvider, message, Modal, Row } from 'antd';
+import { Col, ConfigProvider, Form, message, Modal, Row } from 'antd';
 import FinanceTable from './components/FinanceTable';
 import ProductTable from './components/ProductTable';
 import { adminUpdateInfo, adminUserLogout, getUserInfo } from '@/services';
@@ -10,10 +10,9 @@ import { useModel, useSearchParams } from '@umijs/max';
 import Certify from '@/components/UI/Certify';
 import { useState } from 'react';
 export default () => {
-  let [userInfo,setUserInfo] = useState({realname_name:'',verify_status:'1',enterprise_name:'',enterprise_verify_status:'1'});
- 
+  let [userInfo,setUserInfo] = useState({realname_name:'',verify_status:'1',enterprise_name:'',enterprise_verify_status:'1',});
   let [searchParams] = useSearchParams(); 
-  let uid = searchParams.get('id');
+  let uid = searchParams.get('uid')||'';
   const [modal, contextHolder] = Modal.useModal();
 
   const confirm = () => {
@@ -28,31 +27,31 @@ export default () => {
       cancelText: '取消',
     });
   };
+  const [form] = Form.useForm();
   return (
     <>
     {contextHolder}
       <ProForm
+        form={form}
         onFinish={async (values) => {
           const response = await adminUpdateInfo({...values,uid})          
-          console.log(response);
           message.success('提交成功');
         }}
         request={async () => {
           if (uid) {
-            let {data} = await getUserInfo({query_uid:uid});
-            console.log(data);
-            setUserInfo(data)
-            return { ...data };
+            let res = await getUserInfo({query_uid:uid});
+            setUserInfo(res.data)
+            console.log(res)
+            return { ...res.data };
           } else {
             return { };
           }
         }}
         layout={'horizontal'}
         labelCol={{ flex: '100px' }}
-        wrapperCol={{ flex: '360px' }}
         colon={false}
       >
-        <TzTitleDesc title={'客户信息'} className="mt-1" />
+        <TzTitleDesc title={'客户信息'} className="mt-1 mb-5" />
         <Row>
           <Col span={8}>
             <ProFormText name="user_name" label="账号" placeholder="请输入账号" />
@@ -88,15 +87,13 @@ export default () => {
               wrapperCol={{ span: 8 }}
             >
              <Certify title={userInfo?.enterprise_name} key={userInfo.enterprise_name} status={userInfo.enterprise_verify_status} />
-           
             </ProForm.Item>
           </Col>
         </Row>
         <TzTitleDesc title={'一键融资'} className="mt-4 mb-5" />
-        <FinanceTable />
-
+        <FinanceTable uid={uid}/>
         <TzTitleDesc title={'产品申请'} className="mt-10 mb-5" />
-        <ProductTable />
+        <ProductTable  uid={uid}/>
         <TzTitleDesc title={'注销账号'} className="mt-10 mb-5" />
         <div className="mb-[70px] text-[#999999] text-[12px]">
           <ConfigProvider

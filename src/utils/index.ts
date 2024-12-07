@@ -121,3 +121,12 @@ export const formatOption=(Object:{
 })=>{
   return keys(Object).map(item=>({ label: Object[item].text, value: Number(item) }))
 }
+export const formatKey=(object:any,keyList:string[])=>{
+  return {
+    ...object,
+    ...keyList.reduce((acc:any, key) => {
+      acc[key]=object[key]+''
+      return acc
+    },{})
+  }
+}
