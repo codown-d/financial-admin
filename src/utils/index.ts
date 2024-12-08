@@ -89,29 +89,22 @@ export const refreshPageUrl = (key: string, value: any) => {
 
 export function urlToBase64(url: string, callback: (arg: string) => void) {
   if(!url)return;
+  console.log(url)
   const img = new Image();
   img.crossOrigin = "Anonymous"; // 如果图片是跨域的，需要设置这个属性
 
   img.onload = function () {
-    // 创建一个 Canvas 元素
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-
-    // 设置 Canvas 尺寸为图片的实际尺寸
     canvas.width = img.width;
     canvas.height = img.height;
-
-    // 将图片绘制到 Canvas 上
     ctx.drawImage(img, 0, 0);
-
-    // 将 Canvas 转换为 Base64
     const base64 = canvas.toDataURL("image/png");
-
-    // 调用回调函数，返回 Base64 字符串
     callback(base64);
   };
 
   img.onerror = function () {
+    callback(url)
     console.error("图片加载失败");
   };
   img.src = url.replace('http://219.151.185.167:3900',API_BASE_URL);

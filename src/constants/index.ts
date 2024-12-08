@@ -355,3 +355,20 @@ export const action_status_filter = {
     status: 'Error',
   },
 };
+export const organs_data_type = {
+  1: {
+    text: '银行机构',
+  },
+  2: {
+    text: '小贷公司',
+  },
+  3: {
+    text: '担保公司',
+  },
+  4: {
+    text: '基金公司',
+  },
+  5: {
+    text: '保险公司',
+  },
+};

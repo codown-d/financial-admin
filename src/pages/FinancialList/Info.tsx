@@ -1,11 +1,12 @@
 import TzTitleDesc from '@/components/TzTitleDesc';
 import { useAreaData } from '@/hooks';
 import { financialDetail, financialSave } from '@/services';
-import { refreshPageUrl, urlToBase64 } from '@/utils';
+import { formatKey, refreshPageUrl, urlToBase64 } from '@/utils';
 import {
   ProForm,
   ProFormCascader,
   ProFormDateTimePicker,
+  ProFormSelect,
   ProFormText,
   ProFormTextArea,
   ProFormUploadButton,
@@ -16,6 +17,7 @@ import { Form } from 'antd/lib';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import TableList from './components/TableList';
+import { organs_data_type } from '@/constants';
 
 export default () => {
   let [searchParams] = useSearchParams();
@@ -44,9 +46,10 @@ export default () => {
       <ProForm
         form={form}
         onFinish={async (values) => {
+          console.log(values)
           let res = await financialSave({
             ...values,
-            logo: values.logo?.[0]?.response.file,
+            logo: values.logo?.[0]?.response?.file,
             prov_id: values.area_id?.[0],
             city_id: values.area_id?.[1],
             area_id: values.area_id?.[2],
@@ -58,8 +61,11 @@ export default () => {
         request={async () => {
           if (id) {
             let { data } = await financialDetail({ id });
+            console.log(data,{
+              data_type:data.data_type+'',})
             return {
               ...data,
+              data_type:data.data_type+'',
               area_id: [data.prov_id, data.city_id, data.area_id],
               logo: data.logo
                 ? [
@@ -123,12 +129,27 @@ export default () => {
           </Col>
           <Col span={16}>
             <Row>
+            <Col span={12}>
+                <ProFormSelect
+                  name={'data_type'}
+                  label="机构类型"
+                  valueEnum={organs_data_type}
+                  rules={[{ required: true}]}
+                />
+              </Col>
               <Col span={12}>
                 <ProFormCascader
                   name={'area_id'}
                   label="地区"
                   fieldProps={{ options: areaData }}
                   rules={[{ required: true,message:'请选择地区'}]}
+                />
+              </Col>
+              <Col span={12}>
+                <ProFormTextArea
+                  name={'address'}
+                  label="详细地址"
+                  placeholder="请输入详细地址"
                 />
               </Col>
               <Col span={12}>
@@ -139,18 +160,11 @@ export default () => {
                   placeholder="请输入注册时间"
                 />
               </Col>
-              <Col span={12}>
-                <ProFormTextArea
-                  name={'address'}
-                  label="详细地址"
-                  placeholder="请输入详细地址"
-                />
-              </Col>
             </Row>
           </Col>
         </Row>
 
-        <TzTitleDesc title={'账号信息'} className="mt-4 mb-5" />
+        <TzTitleDesc title={'账号信息'} className="mt-4" />
         <TableList uid={id}/>
       </ProForm>
     </>

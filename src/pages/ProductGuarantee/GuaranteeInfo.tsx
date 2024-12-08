@@ -1,5 +1,5 @@
 import TzTitleDesc from '@/components/TzTitleDesc';
-import { GUARANTEE_FROM_OP, GUARANTEE_METHOD } from '@/constants';
+import { data_type, GUARANTEE_FROM_OP, GUARANTEE_METHOD } from '@/constants';
 import { loanDetail, loanSave } from '@/services';
 import { formatKey } from '@/utils';
 import {
@@ -96,7 +96,7 @@ export default () => {
             <ProFormSelect
               name={'data_type'}
               label="担保方式"
-              valueEnum={GUARANTEE_METHOD}
+              valueEnum={data_type}
               rules={[{ required: true, message: '请选择担保方式' }]}
             />
           </Col>

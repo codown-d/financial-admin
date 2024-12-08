@@ -1,5 +1,6 @@
 import TzTitleDesc from '@/components/TzTitleDesc';
 import { fundDetail, fundSave, loanDetail, loanSave } from '@/services';
+import { formatKey } from '@/utils';
 import {
   ProForm,
   ProFormDateTimePicker,
@@ -16,10 +17,12 @@ export default () => {
   let [searchParams] = useSearchParams();
   const [messageApi, contextHolder] = message.useMessage();
   let { financialOrg } = useModel('financialOrg');
+  const [form] = Form.useForm();
   return (
     <>
       {contextHolder}
       <ProForm
+        form={form}
         onFinish={async (values) => {
           await loanSave({product_type: 5,highest_money_unit:1,...values});
           console.log(values);
@@ -29,7 +32,9 @@ export default () => {
           let id = searchParams.get('id');
           if (id) {
             let res = await loanDetail({ product_type: 5,id });
-            return { ...res };
+            return { ...res.data, 
+              ...formatKey(res.data, ['fo_id']),
+            };
           } else {
             return {
               add_time: dayjs().format('YYYY-MM-DD HH:mm:ss'),

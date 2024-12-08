@@ -1,6 +1,6 @@
 import { TzButton } from '@/components/TzButton';
 import TzPopconfirm from '@/components/TzPopconfirm';
-import { GUARANTEE_FROM, GUARANTEE_METHOD } from '@/constants';
+import { data_type, GUARANTEE_FROM, GUARANTEE_METHOD } from '@/constants';
 import { guaranteeList, loanDelete, loanList } from '@/services';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
@@ -82,7 +82,7 @@ export default () => {
       {
         title: '担保方式',
         dataIndex: 'data_type',
-        valueEnum: GUARANTEE_METHOD,
+        valueEnum: data_type,
       },
       {
         title: '操作',
