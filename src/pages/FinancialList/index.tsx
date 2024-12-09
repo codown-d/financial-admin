@@ -11,6 +11,7 @@ import { Button, DatePicker } from 'antd';
 import dayjs from 'dayjs';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { Access, useAccess } from '@umijs/max';
+import TzImage from '@/components/TzImage';
 
 const { RangePicker } = DatePicker;
 type GithubIssueItem = {
@@ -39,6 +40,9 @@ export default () => {
         dataIndex: 'organs_name',
         ellipsis: true,
         onFilter: true,
+        render:(_,record:any)=>{
+          return <span className='flex items-center'><TzImage  src={record.logo} width={80} height={80}/>&nbsp;&nbsp; {record.organs_name}</span>
+        }
       },
       {
         title: '地区',

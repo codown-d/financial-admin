@@ -40,6 +40,7 @@ export default () => {
       ]);
     });
   }, [logo]);
+  console.log(API_BASE_URL)
   return (
     <>
       {contextHolder}
