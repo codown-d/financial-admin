@@ -81,32 +81,6 @@ export default () => {
         <Row>
           <Col span={8}>
             <ProFormText name="id" hidden />
-            {/* <ProFormUploadButton
-              
-                accept=".jpg,.jpeg,.png"
-                extra="支持扩展名：.jpg .png .jpeg"
-                label="企业LOGO"
-                name="logo"
-                fieldProps={{
-                  name: 'image',
-                  multiple: false,
-                  onChange: ({ fileList }) => {
-                    setFileList(
-                      fileList.map((item) => {
-                        return {
-                          ...item,
-                          url: item?.response?.file,
-                        };
-                      }),
-                    );
-                  },
-                }}
-                max={1}
-                value={fileList}
-                listType="picture-card"
-                title="上传文件"
-                action={`${API_BASE_URL}/upload/image`}
-              /> */}
             <ProFormText
               name="organs_name"
               label="政府名称"
@@ -132,7 +106,7 @@ export default () => {
           </Col>
           <Col span={8}>
             <ProFormTextArea
-              name={'name2'}
+              name={'address'}
               label="详细地址"
               placeholder="请输入详细地址"
             />

@@ -19,7 +19,7 @@ export default (props: { uid: any; }) => {
     },
     {
       title: '密码',
-      dataIndex: 'user_pass.view',
+      dataIndex: 'user_pass_view',
     },
     {
       title: '联系电话',
@@ -36,7 +36,7 @@ export default (props: { uid: any; }) => {
       key: 'option',
       render: (text, record, _, action) => [
         <TzButton type="link" key={'edit'}>
-          <Link to={`/customer/financial-list/user-info?id=${record.id}&fo_id=${uid}`}>
+          <Link to={`/customer/government-list/user-info?id=${record.id}&fo_id=${uid}`}>
             编辑
           </Link>
         </TzButton>,
@@ -92,7 +92,7 @@ export default (props: { uid: any; }) => {
           disabled={!uid}
           icon={<PlusOutlined />}
           onClick={() => {
-            navigate(`/customer/financial-list/user-info?fo_id=${uid}`);
+            navigate(`/customer/government-list/user-info?fo_id=${uid}`);
           }}
           type="primary"
         >
