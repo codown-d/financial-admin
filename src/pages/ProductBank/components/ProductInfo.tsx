@@ -38,12 +38,13 @@ export default (props: { product_type: any }) => {
             let res = await loanDetail({ id, product_type });
             return {
               ...res.data,
-              ...formatKey(res.data, ['fo_id',  'data_type','repayment_method','application_form']),
+              ...formatKey(res.data, ['fo_id',  'application_form']),
             };
           } else {
             return {
               add_time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
               application_form: '4',
+              highest_money_unit:2,
               id: 0,
               product_type,
             };
@@ -56,6 +57,7 @@ export default (props: { product_type: any }) => {
         <TzTitleDesc title={'基本信息'} className="mt-1" />
         <ProFormText name="id" hidden />
         <ProFormText name="product_type" hidden />
+        <ProFormText name="highest_money_unit" hidden />
         <Row>
           <Col span={8}>
             <ProFormText
@@ -76,7 +78,7 @@ export default (props: { product_type: any }) => {
             <ProFormDigit
               name={'highest_money'}
               fieldProps={{
-                suffix: '元',
+                suffix: '万元',
               }}
               label={'最高额度'}
               rules={[{ required: true }]}
@@ -106,6 +108,7 @@ export default (props: { product_type: any }) => {
             <ProFormSelect
               name={'data_type'}
               label={'担保类型'}
+              mode="multiple"
               valueEnum={data_type}
               rules={[{ required: true, message: '请选择担保类型' }]}
             />
@@ -114,6 +117,7 @@ export default (props: { product_type: any }) => {
             <ProFormSelect
               name={'repayment_method'}
               label={'还款方式'}
+              mode="multiple"
               valueEnum={repayment_method}
               rules={[{ required: true, message: '请选择还款方式' }]}
             />
@@ -150,7 +154,7 @@ export default (props: { product_type: any }) => {
           <Col span={12}>
             <ProFormSelect
               name="application_form"
-              label="申请方式"
+              label="申请资料"
               style={{ width: '200px' }}
               valueEnum={{
                 '1': '不区分',

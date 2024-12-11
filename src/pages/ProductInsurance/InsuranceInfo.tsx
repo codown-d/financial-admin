@@ -96,7 +96,7 @@ export default () => {
               name={'highest_money'}
               label={'保额'}
               fieldProps={{
-                suffix: '元',
+                suffix: '万元',
               }}
               rules={[{ required: true }]}
             />
@@ -143,7 +143,7 @@ export default () => {
           <Col span={12}>
             <ProFormSelect
               name="application_form"
-              label="申请方式"
+              label="申请资料"
               style={{ width: '200px' }}
               valueEnum={{
                 '1': '不区分',

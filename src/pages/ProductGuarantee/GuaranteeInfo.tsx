@@ -34,7 +34,7 @@ export default () => {
             let res = await loanDetail({ id, product_type: 7 });
             return {
               ...res.data,
-              ...formatKey(res.data, ['fo_id','guarantee_form','data_type']),
+              ...formatKey(res.data, ['fo_id','guarantee_form']),
             };
           } else {
             return {
@@ -97,6 +97,7 @@ export default () => {
               name={'data_type'}
               label="担保方式"
               valueEnum={data_type}
+              mode="multiple"
               rules={[{ required: true, message: '请选择担保方式' }]}
             />
           </Col>

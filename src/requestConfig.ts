@@ -126,7 +126,7 @@ export const requestConfig = {
           errorHandler(error);
         } else {
           showError({
-            content: response?.data.message,
+            content: response?.data?.message,
           });
         }
         return Promise.reject(response?.data);

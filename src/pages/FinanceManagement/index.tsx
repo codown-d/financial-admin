@@ -45,7 +45,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps, uid: any }) => {
           name: 'moneyRange',
         },
         fieldProps: {
-          suffix: '元',
+          suffix: '万元',
         },
         valueType: 'digitRange',
         search: {
@@ -55,7 +55,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps, uid: any }) => {
           },
         },
         render: (_, record: any) => {
-          return `${record.apply_money}元`;
+          return `${record.apply_money}万元`;
         },
       },
       {

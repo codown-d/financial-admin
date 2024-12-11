@@ -46,14 +46,14 @@ export default () => {
         valueEnum: insurance_type,
       },
       {
-        title: '保额（元）',
+        title: '保额（万元）',
         dataIndex: 'highest_money',
         formItemProps: {
           label: '保费范围',
           name: 'premiumRange',
         },
         fieldProps: {
-          suffix: '元',
+          suffix: '万元',
         },
         valueType: 'digitRange',
         search: {
@@ -67,7 +67,7 @@ export default () => {
           },
         }, 
         render: (_, record:any) => {
-          return `${record.highest_money}元`
+          return `${record.highest_money}万元`
         }
      
       },

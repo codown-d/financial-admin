@@ -45,7 +45,7 @@ const columns: ProColumns<TableListItem>[] = [
     dataIndex: 'name',
   },
   {
-    title: '金额（元）',
+    title: '金额（万元）',
     dataIndex: 'containers',
     sorter: (a, b) => a.containers - b.containers,
   },

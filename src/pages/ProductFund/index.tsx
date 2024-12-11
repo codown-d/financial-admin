@@ -44,9 +44,22 @@ export default () => {
       {
         title: '认缴规模',
         dataIndex: 'highest_money',
-        sorter: true,
+        formItemProps: {
+          label: '认缴规模范围',
+          name: 'moneyRange',
+        },
         fieldProps:{
           suffix: '万元',
+        },
+        valueType:'digitRange',
+        search: {
+          transform: (value) => {
+            let [highest_money_start, highest_money_end] = value;
+            return {
+              highest_money_start,
+              highest_money_end,
+            };
+          },
         },
         render: (_, record:any) => {
           return `${record.highest_money}万元`
@@ -158,6 +171,7 @@ export default () => {
               subscription_unit: '1',
               ...rest,
               created_at: [values.start, values.end],
+              moneyRange:[values.highest_money_start, values.highest_money_end]
             };
           }
           return values;

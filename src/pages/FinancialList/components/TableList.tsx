@@ -23,7 +23,7 @@ export default (props: { uid: any; }) => {
     },
     {
       title: '联系电话',
-      dataIndex: 'user_name',
+      dataIndex: 'contact_phone',
     },
     {
       title: '添加时间',
