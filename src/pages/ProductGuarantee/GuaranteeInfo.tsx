@@ -1,5 +1,5 @@
 import TzTitleDesc from '@/components/TzTitleDesc';
-import { data_type, GUARANTEE_FROM_OP, GUARANTEE_METHOD } from '@/constants';
+import { data_type, GUARANTEE_FROM_OP } from '@/constants';
 import { loanDetail, loanSave } from '@/services';
 import { formatKey } from '@/utils';
 import {
@@ -34,7 +34,7 @@ export default () => {
             let res = await loanDetail({ id, product_type: 7 });
             return {
               ...res.data,
-              ...formatKey(res.data, ['fo_id','guarantee_form']),
+              ...formatKey(res.data, ['fo_id','guarantee_form','data_type']),
             };
           } else {
             return {
@@ -97,7 +97,6 @@ export default () => {
               name={'data_type'}
               label="担保方式"
               valueEnum={data_type}
-              mode="multiple"
               rules={[{ required: true, message: '请选择担保方式' }]}
             />
           </Col>

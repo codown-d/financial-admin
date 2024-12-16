@@ -76,16 +76,22 @@ export default (props: { proTableProps?: SearchAndOptionsProps;uid:any }) => {
           return `${record.apply_money}万元`;
         },
       },
-
+      {
+        title: '期限',
+        dataIndex: 'term',
+        render: (text, record: any, _, action) => {
+          return record.term+'个月';
+        },
+      },
       {
         title: '用途',
         dataIndex: 'purpose',
-        valueEnum: purpose,
+        valueEnum: {...purpose,0:'-'},
       },
       {
         title: '担保方式',
         dataIndex: 'loan_guarantee_method',
-        valueEnum: data_type,
+        valueEnum:  {...data_type,0:'-'},
       },
       {
         title: '地区',
@@ -115,7 +121,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps;uid:any }) => {
       {
         title: '还款方式',
         dataIndex: 'repayment_method',
-        valueEnum: repayment_method,
+        valueEnum: {...repayment_method,0:'-'},
       },
       {
         title: '受益人',
