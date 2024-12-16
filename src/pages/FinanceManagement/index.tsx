@@ -218,7 +218,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps, uid: any }) => {
       actionRef={actionRef}
       request={async (params, sorter, filter) => {
         const res = await allList({
-          uid,
+          query_uid:uid,
           ...params,
         });
         setTotal(res.count);
