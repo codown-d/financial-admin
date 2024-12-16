@@ -229,27 +229,28 @@ export const insurance_type = {
   },
 };
 
-export const GUARANTEE_METHOD = {
-  1: {
-    text: '履约保函',
-  },
+export const GUARANTEE_METHOD = data_type
+// {
+//   1: {
+//     text: '履约保函',
+//   },
 
-  2: {
-    text: '农民工工资保函',
-  },
+//   2: {
+//     text: '农民工工资保函',
+//   },
 
-  3: {
-    text: '财产保全保函',
-  },
+//   3: {
+//     text: '财产保全保函',
+//   },
 
-  4: {
-    text: '通用保函',
-  },
+//   4: {
+//     text: '通用保函',
+//   },
 
-  // 2: {
-  //   text: '农民工工资保函',
-  // },
-};
+//   // 2: {
+//   //   text: '农民工工资保函',
+//   // },
+// };
 
 export enum product_type {
   Bank = '1',

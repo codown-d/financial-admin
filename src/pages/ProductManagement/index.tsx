@@ -1,7 +1,7 @@
 import { TzButton } from '@/components/TzButton';
 import {
   action_status_filter,
-  GUARANTEE_METHOD,
+  data_type,
   product_type_filter,
   purpose,
   repayment_method,
@@ -85,7 +85,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps;uid:any }) => {
       {
         title: '担保方式',
         dataIndex: 'loan_guarantee_method',
-        valueEnum: GUARANTEE_METHOD,
+        valueEnum: data_type,
       },
       {
         title: '地区',

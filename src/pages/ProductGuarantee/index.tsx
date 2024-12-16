@@ -1,6 +1,6 @@
 import { TzButton } from '@/components/TzButton';
 import TzPopconfirm from '@/components/TzPopconfirm';
-import { data_type, GUARANTEE_FROM, GUARANTEE_METHOD } from '@/constants';
+import { data_type, GUARANTEE_FROM } from '@/constants';
 import { guaranteeList, loanDelete, loanList } from '@/services';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
