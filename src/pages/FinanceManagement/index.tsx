@@ -1,10 +1,10 @@
 import { TzButton } from '@/components/TzButton';
 import { action_status_filter, data_type, purpose, term } from '@/constants';
 import { useAreaData } from '@/hooks';
-import { allList, financeAction } from '@/services';
+import { allList, allocation, financeAction, financialOrgs } from '@/services';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
-import { ProTable } from '@ant-design/pro-components';
-import { useNavigate } from '@umijs/max';
+import { ModalForm, ProFormSelect, ProTable } from '@ant-design/pro-components';
+import { Access, useAccess, useNavigate } from '@umijs/max';
 import { DatePicker, message } from 'antd';
 import { useMemo, useRef, useState } from 'react';
 import { SearchAndOptionsProps } from '../ProductManagement';
@@ -19,7 +19,7 @@ type GithubIssueItem = {
   real_name: string;
   certification: string;
 };
-export default (props: { proTableProps?: SearchAndOptionsProps, uid: any }) => {
+export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
   let { proTableProps, uid } = props;
   const actionRef = useRef<ActionType>();
   const navigate = useNavigate();
@@ -28,6 +28,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps, uid: any }) => {
   let headerTitle = useMemo(() => {
     return `共 ${total} 条数据`;
   }, [total]);
+  const access = useAccess();
   const columns: ProColumns<GithubIssueItem>[] = useMemo(
     () => [
       {
@@ -128,85 +129,132 @@ export default (props: { proTableProps?: SearchAndOptionsProps, uid: any }) => {
         width: '300px',
         hideInSearch: true,
         render: (text, record: any, _, action) => {
-          let arr = [];
-          if (1 == record.action_status) {
-            arr.push(
+          return (
+            <>
+              <Access accessible={access.canEdit}>
+                <ModalForm
+                  title="分配机构"
+                  width={500}
+                  trigger={
+                    <TzButton type="link" key={'fp'}>
+                      分配
+                    </TzButton>
+                  }
+                  labelAlign={'left'}
+                  submitter={{
+                    searchConfig: {
+                      submitText: '确认',
+                      resetText: '取消',
+                    },
+                  }}
+                  onFinish={(values) => {
+                    return allocation({ ...values, id: record.id }).then(
+                      (res) => {
+                        message.success('提交成功');
+                      },
+                    );
+                  }}
+                >
+                  <ProFormSelect
+                    name="fo_id"
+                    label="机构名称"
+                    request={async () => {
+                      let res = await financialOrgs();
+                      return res.dataList.map(
+                        (item: { organs_name: any; id: any }) => {
+                          return { label: item.organs_name, value: item.id };
+                        },
+                      );
+                    }}
+                  />
+                </ModalForm>
+              </Access>
+              {1 == record.action_status ? (
+                <>
+                  <TzButton
+                    type="link"
+                    key={'accept'}
+                    onClick={() => {
+                      financeAction({ id: record.id, status: 2 }).then(
+                        (res) => {
+                          if (res.code == 200) {
+                            message.success('操作成功');
+                            actionRef.current?.reload();
+                          }
+                        },
+                      );
+                    }}
+                  >
+                    受理
+                  </TzButton>
+                  <TzButton
+                    type="link"
+                    key={'un-accept'}
+                    onClick={() => {
+                      financeAction({ id: record.id, status: 1 }).then(
+                        (res) => {
+                          if (res.code == 200) {
+                            message.success('操作成功');
+                            actionRef.current?.reload();
+                          }
+                        },
+                      );
+                    }}
+                  >
+                    不受理
+                  </TzButton>
+                </>
+              ) : null}
+              {2 == record.action_status ? (
+                <>
+                  <TzButton
+                    type="link"
+                    key={'3'}
+                    onClick={() => {
+                      financeAction({ id: record.id, status: 3 }).then(
+                        (res) => {
+                          if (res.code == 200) {
+                            message.success('操作成功');
+                            actionRef.current?.reload();
+                          }
+                        },
+                      );
+                    }}
+                  >
+                    完成
+                  </TzButton>
+                  <TzButton
+                    type="link"
+                    key={'4'}
+                    danger
+                    onClick={() => {
+                      financeAction({ id: record.id, status: 4 }).then(
+                        (res) => {
+                          if (res.code == 200) {
+                            message.success('操作成功');
+                            actionRef.current?.reload();
+                          }
+                        },
+                      );
+                    }}
+                  >
+                    谢绝
+                  </TzButton>
+                </>
+              ) : null}
               <TzButton
                 type="link"
-                key={'accept'}
+                key={'info'}
                 onClick={() => {
-                  financeAction({ id: record.id, status: 2 }).then((res) => {
-                    if (res.code == 200) {
-                      message.success('操作成功');
-                      actionRef.current?.reload();
-                    }
-                  });
+                  navigate(
+                    `/customer/customer-list/customer-info?uid=${record.uid}`,
+                  );
                 }}
               >
-                受理
-              </TzButton>,
-              <TzButton
-                type="link"
-                key={'un-accept'}
-                onClick={() => {
-                  financeAction({ id: record.id, status: 1 }).then((res) => {
-                    if (res.code == 200) {
-                      message.success('操作成功');
-                      actionRef.current?.reload();
-                    }
-                  });
-                }}
-              >
-                不受理
-              </TzButton>,
-            );
-          } else if (2 == record.action_status) {
-            arr.push(
-              <TzButton
-                type="link"
-                key={'3'}
-                onClick={() => {
-                  financeAction({ id: record.id, status: 3 }).then((res) => {
-                    if (res.code == 200) {
-                      message.success('操作成功');
-                      actionRef.current?.reload();
-                    }
-                  });
-                }}
-              >
-                完成
-              </TzButton>,
-              <TzButton
-                type="link"
-                key={'4'}
-                danger
-                onClick={() => {
-                  financeAction({ id: record.id, status: 4 }).then((res) => {
-                    if (res.code == 200) {
-                      message.success('操作成功');
-                      actionRef.current?.reload();
-                    }
-                  });
-                }}
-              >
-                谢绝
-              </TzButton>,
-            );
-          }
-          arr.push(
-            <TzButton
-              type="link"
-              key={'info'}
-              onClick={() => {
-                navigate(
-                  `/customer/customer-list/customer-info?uid=${record.uid}`,
-                );
-              }}
-            >
-              查看详情
-            </TzButton>,
+                查看详情
+              </TzButton>
+            </>
           );
-          return arr;
         },
       },
     ],
@@ -218,7 +266,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps, uid: any }) => {
       actionRef={actionRef}
       request={async (params, sorter, filter) => {
         const res = await allList({
-          query_uid:uid,
+          query_uid: uid,
           ...params,
         });
         setTotal(res.count);

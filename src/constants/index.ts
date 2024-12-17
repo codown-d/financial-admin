@@ -263,7 +263,7 @@ export enum product_type {
 }
 export const purpose = {
   1: {
-    text: '生成经营',
+    text: '生产经营',
   },
 
   2: {
@@ -280,17 +280,23 @@ export const purpose = {
 };
 export const action_status = {
   1: {
-    text: '未受理',
-    status: 'Warning',
+    text: '已申请',
+    status: 'Default',
   },
-
   2: {
+    text: '未受理',
+    status: 'Processing',
+  },
+  3: {
+    text: '办理中',
+    status: 'Success',
+  },
+  4: {
     text: '谢绝',
     status: 'Error',
   },
-
-  3: {
-    text: '已受理',
+  5: {
+    text: '完成',
     status: 'Success',
   },
 };
@@ -340,20 +346,24 @@ export const product_type_filter = {
 };
 export const action_status_filter = {
   1: {
-    text: '未受理',
+    text: '已申请',
     status: 'Default',
   },
   2: {
-    text: '已受理',
+    text: '未受理',
     status: 'Processing',
   },
   3: {
-    text: '完成',
+    text: '办理中',
     status: 'Success',
   },
   4: {
     text: '谢绝',
     status: 'Error',
+  },
+  5: {
+    text: '完成',
+    status: 'Success',
   },
 };
 export const organs_data_type = {

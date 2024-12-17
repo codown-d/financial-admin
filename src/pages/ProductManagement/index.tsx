@@ -7,14 +7,14 @@ import {
   repayment_method,
 } from '@/constants';
 import { useAreaData } from '@/hooks';
-import { applyAction, applyList } from '@/services';
+import { allocation, applyAction, applyList, financialOrgs } from '@/services';
 import type {
   ActionType,
   ProColumns,
   ProTableProps,
 } from '@ant-design/pro-components';
-import { ProFormDigitRange, ProTable } from '@ant-design/pro-components';
-import { useNavigate } from '@umijs/max';
+import { ModalForm, ProFormSelect, ProTable } from '@ant-design/pro-components';
+import { Access, useAccess, useNavigate } from '@umijs/max';
 import { DatePicker, message } from 'antd';
 import { useMemo, useRef, useState } from 'react';
 
@@ -32,8 +32,8 @@ export type SearchAndOptionsProps = Pick<
   ProTableProps<any, Record<string, any>>,
   'search' | 'options' | 'headerTitle'
 >;
-export default (props: { proTableProps?: SearchAndOptionsProps;uid:any }) => {
-  let { proTableProps,uid } = props;
+export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
+  let { proTableProps, uid } = props;
   const actionRef = useRef<ActionType>();
   const navigate = useNavigate();
   const [total, setTotal] = useState(0);
@@ -41,11 +41,14 @@ export default (props: { proTableProps?: SearchAndOptionsProps;uid:any }) => {
   let headerTitle = useMemo(() => {
     return `共 ${total} 条数据`;
   }, [total]);
+
+  const access = useAccess();
   const columns: ProColumns<GithubIssueItem>[] = useMemo(
     () => [
       {
         title: '申请人',
         dataIndex: 'apply_user',
+        
         render: (text, record: any, _, action) => {
           return record.name;
         },
@@ -78,20 +81,17 @@ export default (props: { proTableProps?: SearchAndOptionsProps;uid:any }) => {
       },
       {
         title: '期限',
-        dataIndex: 'term',
-        render: (text, record: any, _, action) => {
-          return record.term+'个月';
-        },
+        dataIndex: 'term_desc',
       },
       {
         title: '用途',
         dataIndex: 'purpose',
-        valueEnum: {...purpose,0:'-'},
+        valueEnum: { ...purpose, 0: '-' },
       },
       {
         title: '担保方式',
-        dataIndex: 'loan_guarantee_method',
-        valueEnum:  {...data_type,0:'-'},
+        dataIndex: 'guarantee_method',
+        valueEnum: { ...data_type, 0: '-' },
       },
       {
         title: '地区',
@@ -121,7 +121,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps;uid:any }) => {
       {
         title: '还款方式',
         dataIndex: 'repayment_method',
-        valueEnum: {...repayment_method,0:'-'},
+        valueEnum: { ...repayment_method, 0: '-' },
       },
       {
         title: '受益人',
@@ -162,77 +162,117 @@ export default (props: { proTableProps?: SearchAndOptionsProps;uid:any }) => {
         hideInSearch: true,
         width: 320,
         render: (text, record: any, _, action) => {
-          let arr:any = [];
-          if (record.action_status == 1) {
-            arr = [
+          return (
+            <>
+              <Access accessible={access.canEdit}>
+                <ModalForm
+                  title="分配机构"
+                  width={500}
+                  trigger={
+                    <TzButton type="link" key={'fp'}>
+                      分配
+                    </TzButton>
+                  }
+                  labelAlign={'left'}
+                  submitter={{
+                    searchConfig: {
+                      submitText: '确认',
+                      resetText: '取消',
+                    },
+                  }}
+                  onFinish={(values) => {
+                    return allocation({ ...values, id: record.id }).then(
+                      (res) => {
+                        message.success('提交成功');
+                      },
+                    );
+                  }}
+                >
+                  <ProFormSelect
+                    name="fo_id"
+                    label="机构名称"
+                    request={async () => {
+                      let res = await financialOrgs();
+                      return res.dataList.map(
+                        (item: { organs_name: any; id: any }) => {
+                          return { label: item.organs_name, value: item.id };
+                        },
+                      );
+                    }}
+                  />
+                </ModalForm>
+              </Access>
+              {record.action_status == 1 ? (
+                <>
+                  <TzButton
+                    type="link"
+                    key={'accept'}
+                    onClick={() => {
+                      applyAction({ id: record.id, status: 3 }).then((res) => {
+                        actionRef.current?.reload();
+                        message.success('操作成功');
+                      });
+                    }}
+                  >
+                    受理
+                  </TzButton>
+                  <TzButton
+                    type="link"
+                    key={'un-accept'}
+                    onClick={() => {
+                      applyAction({ id: record.id, status: 2 }).then((res) => {
+                        actionRef.current?.reload();
+                        message.success('操作成功');
+                      });
+                    }}
+                  >
+                    不受理
+                  </TzButton>
+                </>
+              ) : null}
+              {record.action_status == 2 ? (
+                <>
+                  <TzButton
+                    type="link"
+                    key={'2'}
+                    onClick={() => {
+                      applyAction({ id: record.id, status: 4 }).then((res) => {
+                        actionRef.current?.reload();
+                        message.success('操作成功');
+                      });
+                    }}
+                  >
+                    完成
+                  </TzButton>
+                  <TzButton
+                    type="link"
+                    key={'3'}
+                    danger
+                    onClick={() => {
+                      applyAction({ id: record.id, status: 5 }).then((res) => {
+                        actionRef.current?.reload();
+                        message.success('操作成功');
+                      });
+                    }}
+                  >
+                    谢绝
+                  </TzButton>
+                </>
+              ) : null}
+
               <TzButton
                 type="link"
-                key={'accept'}
+                key={'info'}
                 onClick={() => {
-                  applyAction({ id: record.id, status: 3 }).then((res) => {
-                    actionRef.current?.reload();
-                    message.success('操作成功');
-                  });
+                  navigate(
+                    `/customer/customer-list/customer-info?uid=${record.uid}`,
+                  );
                 }}
               >
-                受理
-              </TzButton>,
-              <TzButton
-                type="link"
-                key={'un-accept'}
-                onClick={() => {
-                  applyAction({ id: record.id, status: 2 }).then((res) => {
-                    actionRef.current?.reload();
-                    message.success('操作成功');
-                  });
-                }}
-              >
-                不受理
-              </TzButton>,
-            ];
-          } else if (record.action_status == 2) {
-            arr = [
-              <TzButton
-                type="link"
-                key={'2'}
-                onClick={() => {
-                  applyAction({ id: record.id, status: 4 }).then(res => {
-                    actionRef.current?.reload()
-                    message.success('操作成功');
-                  })
-                }}
-              >
-                完成
-              </TzButton>,
-              <TzButton
-                type="link"
-                key={'3'}
-                danger
-                onClick={() => {
-                  applyAction({ id: record.id, status: 5 }).then(res => {
-                    actionRef.current?.reload()
-                    message.success('操作成功');
-                  })
-                }}
-              >
-                谢绝
-              </TzButton>,
-            ];
-          }
-          arr.push(
-            <TzButton
-              type="link"
-              key={'info'}
-              onClick={() => {
-                navigate(
-                  `/customer/customer-list/customer-info?uid=${record.uid}`,
-                );
-              }}
-            >
-              查看详情
-            </TzButton>,
+                查看详情
+              </TzButton>
+            </>
           );
-          return arr;
         },
       },
     ],
@@ -244,7 +284,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps;uid:any }) => {
       actionRef={actionRef}
       request={async (params, sorter, filter) => {
         const res = await applyList({
-          query_uid:uid,
+          query_uid: uid,
           ...params,
         });
         setTotal(res.count);

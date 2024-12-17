@@ -664,3 +664,15 @@ export async function financeAction(
     ...(options || {}),
   });
 }
+export async function allocation(
+  params?: any,
+  options?: { [key: string]: any },
+) {
+  return request<any>(`${api.allocation}`, {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
