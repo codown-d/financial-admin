@@ -84,7 +84,6 @@ export default () => {
             <ProForm.Item
               name={'text'}
               label={'企业认证'}
-              wrapperCol={{ span: 8 }}
             >
              <Certify title={userInfo?.enterprise_name} key={userInfo.enterprise_name} status={userInfo.enterprise_verify_status} />
             </ProForm.Item>

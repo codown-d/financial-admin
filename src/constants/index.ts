@@ -179,18 +179,15 @@ export const SUB_UNIT = {
 };
 export const repayment_method = {
   1: {
-    text: '按周期付息',
+    text: '按周期付息,到期还本',
   },
   2: {
-    text: '到期还本',
-  },
-  3: {
     text: '分期还款',
   },
-  4: {
+  3: {
     text: '一次性还本付息',
   },
-  5: {
+  4: {
     text: '随借随还',
   },
 };

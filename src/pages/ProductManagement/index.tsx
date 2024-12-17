@@ -14,7 +14,7 @@ import type {
   ProTableProps,
 } from '@ant-design/pro-components';
 import { ModalForm, ProFormSelect, ProTable } from '@ant-design/pro-components';
-import { Access, useAccess, useNavigate } from '@umijs/max';
+import { useAccess, useNavigate } from '@umijs/max';
 import { DatePicker, message } from 'antd';
 import { useMemo, useRef, useState } from 'react';
 
@@ -48,7 +48,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
       {
         title: '申请人',
         dataIndex: 'apply_user',
-        
+
         render: (text, record: any, _, action) => {
           return record.name;
         },
@@ -164,45 +164,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
         render: (text, record: any, _, action) => {
           return (
             <>
-              <Access accessible={access.canEdit}>
-                <ModalForm
-                  title="分配机构"
-                  width={500}
-                  trigger={
-                    <TzButton type="link" key={'fp'}>
-                      分配
-                    </TzButton>
-                  }
-                  labelAlign={'left'}
-                  submitter={{
-                    searchConfig: {
-                      submitText: '确认',
-                      resetText: '取消',
-                    },
-                  }}
-                  onFinish={(values) => {
-                    return allocation({ ...values, id: record.id }).then(
-                      (res) => {
-                        message.success('提交成功');
-                      },
-                    );
-                  }}
-                >
-                  <ProFormSelect
-                    name="fo_id"
-                    label="机构名称"
-                    request={async () => {
-                      let res = await financialOrgs();
-                      return res.dataList.map(
-                        (item: { organs_name: any; id: any }) => {
-                          return { label: item.organs_name, value: item.id };
-                        },
-                      );
-                    }}
-                  />
-                </ModalForm>
-              </Access>
-              {record.action_status == 1 ? (
+              { record.action_status == 1 ? (
                 <>
                   <TzButton
                     type="link"
@@ -229,14 +191,13 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
                     不受理
                   </TzButton>
                 </>
-              ) : null}
-              {record.action_status == 2 ? (
+              ) : record.action_status == 3 ? (
                 <>
                   <TzButton
                     type="link"
                     key={'2'}
                     onClick={() => {
-                      applyAction({ id: record.id, status: 4 }).then((res) => {
+                      applyAction({ id: record.id, status: 5}).then((res) => {
                         actionRef.current?.reload();
                         message.success('操作成功');
                       });
@@ -249,7 +210,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
                     key={'3'}
                     danger
                     onClick={() => {
-                      applyAction({ id: record.id, status: 5 }).then((res) => {
+                      applyAction({ id: record.id, status: 4 }).then((res) => {
                         actionRef.current?.reload();
                         message.success('操作成功');
                       });
@@ -259,7 +220,6 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
                   </TzButton>
                 </>
               ) : null}
-
               <TzButton
                 type="link"
                 key={'info'}
