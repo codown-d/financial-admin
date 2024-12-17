@@ -48,10 +48,17 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
       {
         title: '申请人',
         dataIndex: 'apply_user',
-
         render: (text, record: any, _, action) => {
           return record.name;
         },
+      },
+      {
+        title: "机构名称",
+        dataIndex: ['financial_organs','organs_name'],
+      },
+      {
+        title: "产品名称",
+        dataIndex: ['product','name'],
       },
       {
         title: '类型',
@@ -153,6 +160,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
         title: '状态',
         dataIndex: 'action_status',
         valueEnum: action_status_filter,
+        width:100
       },
 
       {
@@ -160,7 +168,6 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
         fixed: 'right',
         align: 'center',
         hideInSearch: true,
-        width: 320,
         render: (text, record: any, _, action) => {
           return (
             <>

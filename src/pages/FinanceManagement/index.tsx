@@ -126,7 +126,6 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
         title: '操作',
         fixed: 'right',
         align: 'center',
-        width: '300px',
         hideInSearch: true,
         render: (text, record: any, _, action) => {
           return (
@@ -176,7 +175,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
                     type="link"
                     key={'accept'}
                     onClick={() => {
-                      financeAction({ id: record.id, status: 2 }).then(
+                      financeAction({ id: record.id, status:3 }).then(
                         (res) => {
                           if (res.code == 200) {
                             message.success('操作成功');
@@ -192,7 +191,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
                     type="link"
                     key={'un-accept'}
                     onClick={() => {
-                      financeAction({ id: record.id, status: 1 }).then(
+                      financeAction({ id: record.id, status: 2 }).then(
                         (res) => {
                           if (res.code == 200) {
                             message.success('操作成功');
@@ -211,7 +210,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
                     type="link"
                     key={'3'}
                     onClick={() => {
-                      financeAction({ id: record.id, status: 3 }).then(
+                      financeAction({ id: record.id, status: 5 }).then(
                         (res) => {
                           if (res.code == 200) {
                             message.success('操作成功');
