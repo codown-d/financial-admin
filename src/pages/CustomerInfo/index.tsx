@@ -10,16 +10,16 @@ import { useAccess, useModel, useNavigate, useSearchParams } from '@umijs/max';
 import Certify from '@/components/UI/Certify';
 import { useState } from 'react';
 export default () => {
-  let [userInfo,setUserInfo] = useState({realname_name:'',verify_status:'1',enterprise_name:'',enterprise_verify_status:'1',});
-  let [searchParams] = useSearchParams(); 
-  let uid = searchParams.get('uid')||'';
+  let [userInfo, setUserInfo] = useState({ realname_name: '', verify_status: '1', enterprise_name: '', enterprise_verify_status: '1', });
+  let [searchParams] = useSearchParams();
+  let uid = searchParams.get('uid') || '';
   const [modal, contextHolder] = Modal.useModal();
   const navigate = useNavigate();
   const confirm = () => {
     modal.confirm({
       content: '是否确认注销此账号？',
-      onOk: ()=>{
-        adminUserLogout({uid}).then((res)=>{
+      onOk: () => {
+        adminUserLogout({ uid }).then((res) => {
           message.success('注销成功')
         })
       },
@@ -31,24 +31,24 @@ export default () => {
   const access = useAccess();
   return (
     <>
-    {contextHolder}
+      {contextHolder}
       <ProForm
         form={form}
         onFinish={async (values) => {
-          const res = await adminUpdateInfo({...values,uid})    
-          if(res.code==200){
-            message.success('提交成功'); 
+          const res = await adminUpdateInfo({ ...values, uid })
+          if (res.code == 200) {
+            message.success('提交成功');
             navigate(-1)
           }
         }}
         request={async () => {
           if (uid) {
-            let res = await getUserInfo({query_uid:uid});
+            let res = await getUserInfo({ query_uid: uid });
             setUserInfo(res.data)
             console.log(res)
             return { ...res.data };
           } else {
-            return { };
+            return {};
           }
         }}
         layout={'horizontal'}
@@ -70,7 +70,7 @@ export default () => {
           </Col>
           <Col span={8}>
             <ProForm.Item name={'text'} label={'实名认证'}>
-            <Certify title={userInfo?.realname_name} key={userInfo.realname_name} status={userInfo.verify_status} />
+              <Certify title={userInfo?.realname_name} key={userInfo?.realname_name} status={userInfo?.verify_status} />
             </ProForm.Item>
           </Col>
           <Col span={8}>
@@ -89,32 +89,32 @@ export default () => {
               name={'text'}
               label={'企业认证'}
             >
-             <Certify title={userInfo?.enterprise_name} key={userInfo.enterprise_name} status={userInfo.enterprise_verify_status} />
+              <Certify title={userInfo?.enterprise_name} key={userInfo?.enterprise_name} status={userInfo?.enterprise_verify_status} />
             </ProForm.Item>
           </Col>
         </Row>
         <TzTitleDesc title={'一键融资'} className="mt-4 mb-5" />
-        <FinanceTable uid={uid}/>
+        <FinanceTable uid={uid} />
         <TzTitleDesc title={'产品申请'} className="mt-10 mb-5" />
-        <ProductTable  uid={uid}/>
-        {access.canEdit?<> <TzTitleDesc title={'注销账号'} className="mt-10 mb-5" />
-        <div className="mb-[70px] text-[#999999] text-[12px]">
-          <ConfigProvider
-            theme={{
-              components: {
-                Button: {
-                  defaultBg: '#EEEEEE',
+        <ProductTable uid={uid} />
+        {access.canEdit ? <> <TzTitleDesc title={'注销账号'} className="mt-10 mb-5" />
+          <div className="mb-[70px] text-[#999999] text-[12px]">
+            <ConfigProvider
+              theme={{
+                components: {
+                  Button: {
+                    defaultBg: '#EEEEEE',
+                  },
                 },
-              },
-            }}
-          >
-            <TzButton onClick={confirm}>注销账号</TzButton>
-          </ConfigProvider>
-          <InfoCircleFilled className="ml-5 mr-1" />
-          注销后账号不可找回
-        </div></>:null
+              }}
+            >
+              <TzButton onClick={confirm}>注销账号</TzButton>
+            </ConfigProvider>
+            <InfoCircleFilled className="ml-5 mr-1" />
+            注销后账号不可找回
+          </div></> : null
         }
-       
+
       </ProForm>
     </>
   );
