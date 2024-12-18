@@ -88,7 +88,6 @@ export default () => {
         title: '操作',
         fixed: 'right',
         align: 'center',
-        width: '300px',
         hideInSearch: true,
         hideInTable: !access.canEdit,
         render: (text, record, _, action) => [

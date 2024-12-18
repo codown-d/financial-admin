@@ -12,7 +12,7 @@ import {
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-components';
-import { useSearchParams } from '@umijs/max';
+import { useNavigate, useSearchParams } from '@umijs/max';
 import { Col, message, Row } from 'antd';
 import { Form } from 'antd/lib';
 import dayjs from 'dayjs';
@@ -40,6 +40,7 @@ export default () => {
       ]);
     });
   }, [logo]);
+  const navigate = useNavigate();
   return (
     <>
       {contextHolder}
@@ -53,9 +54,10 @@ export default () => {
             city_id: values.area_id?.[1],
             area_id: values.area_id?.[2],
           });
-          refreshPageUrl('id', res.id);
-          setUid(res.id);
-          messageApi.success('提交成功');
+          if(res.code==200){
+            message.success('提交成功'); 
+            navigate(-1)
+          }
         }}
         request={async () => {
           if (id) {

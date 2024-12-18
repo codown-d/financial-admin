@@ -5,7 +5,7 @@ import {
   ProFormText,
   ProFormUploadButton,
 } from '@ant-design/pro-components';
-import { useSearchParams } from '@umijs/max';
+import { useNavigate, useSearchParams } from '@umijs/max';
 import { Col, Form, message, Row } from 'antd';
 import { useCallback, useEffect } from 'react';
 const waitTime = (time: number = 100) => {
@@ -24,14 +24,18 @@ export default () => {
   useEffect(() => {
     getFinanceInfo();
   }, []);
-  const [form] = Form.useForm();
+  const [form] = Form.useForm(); 
+  const navigate = useNavigate();
   return (
     <>
       <ProForm
         form={form}
         onFinish={async (values) => {
-          await waitTime(2000);
-          message.success('提交成功');
+          let res = await waitTime(2000);   
+          if(res.code==200){
+            message.success('提交成功'); 
+            navigate(-1)
+          }
         }}
         initialValues={{
           name: '蚂蚁设计有限公司',

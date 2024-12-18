@@ -10,7 +10,7 @@ import {
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-components';
-import { useModel, useSearchParams } from '@umijs/max';
+import { useModel, useNavigate, useSearchParams } from '@umijs/max';
 import { Col, Form, message, Row } from 'antd';
 import dayjs from 'dayjs';
 
@@ -20,16 +20,18 @@ export default () => {
   let { financialOrg } = useModel('financialOrg');
   const [form] = Form.useForm();
   const application_form = Form.useWatch('application_form', form);
-
+  const navigate = useNavigate();
   return (
     <>
       {contextHolder}
       <ProForm
         form={form}
         onFinish={async (values) => {
-          await loanSave({ product_type: 6, ...values });
-          console.log(values);
-          messageApi.success('提交成功');
+          let res = await loanSave({ product_type: 6, ...values });
+          if(res.code==200){
+            message.success('提交成功'); 
+            navigate(-1)
+          }
         }}
         request={async () => {
           let id = searchParams.get('id');

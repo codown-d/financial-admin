@@ -80,7 +80,6 @@ const columns: ProColumns<TableListItem>[] = [
   {
     title: '操作',
     key: 'option',
-    width:'100px',
     valueType: 'option',
     render: () => [
       <TzButton type="link">受理</TzButton>,

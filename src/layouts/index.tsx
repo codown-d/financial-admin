@@ -8,6 +8,7 @@ import {
 } from '@ant-design/pro-components';
 import './index.css'
 import {
+  history,
   Outlet,
   useAccess,
   useAppData,
@@ -15,9 +16,11 @@ import {
   useNavigate,
 } from '@umijs/max';
 
-import { App, ConfigProvider } from 'antd';
+import { App, ConfigProvider, Dropdown, MenuProps } from 'antd';
 import { cloneDeepWith, has, values } from 'lodash';
 import { memo, useMemo } from 'react';
+import { DownOutlined } from '@ant-design/icons';
+import { storage } from '@/utils/storage';
 const Layout = () => {
   const AppData = useAppData();
   const accessFull = useAccess();
@@ -46,6 +49,20 @@ const Layout = () => {
     });
     return treeData;
   }, [routes, userPermission]);
+  
+  let { userInfo } = useModel('userInfo');
+  const items: MenuProps['items'] = [
+    {
+      key: '1',
+      label: <>退出登录</>,
+      onClick() {
+        console.log(67868);
+        storage.remove('userInfo');
+        storage.removeCookie('token');
+        history.replace('/login');
+      },
+    },
+  ];
   return (
     <App>
       <ProConfigProvider dark={false}>
@@ -86,19 +103,19 @@ const Layout = () => {
               </div>
             );
           }}
-          // menuFooterRender={(props) => {
-          //   if (props?.collapsed) return undefined;
-          //   return (
-          //     <p
-          //       style={{
-          //         textAlign: 'center',
-          //         paddingBlockStart: 12,
-          //       }}
-          //     >
-          //       Power by Ant Design
-          //     </p>
-          //   );
-          // }}
+          menuFooterRender={(props) => {
+            if (props?.collapsed) return undefined;
+            return (
+              <div key={'user'} className='flex justify-center'>
+              用户名：
+              <Dropdown menu={{ items }} placement="bottom">
+                <span>
+                  {userInfo.user_name} <DownOutlined />
+                </span>
+              </Dropdown>
+            </div>
+            );
+          }}
           // headerRender={false}
         >
           <ConfigProvider

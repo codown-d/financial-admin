@@ -231,6 +231,7 @@ const routes = [
     component: '@/layouts/TzPageContainer',
     icon: 'cpgl',
     hideInBreadcrumb: true,
+    access: 'admin',
     routes: [
       {
         path: '',
@@ -295,6 +296,7 @@ const routes = [
     component: '@/layouts/TzPageContainer',
     icon: 'zcgl',
     hideInBreadcrumb: true,
+    access: 'admin',
     routes: [
       {
         path: '',

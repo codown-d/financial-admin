@@ -64,7 +64,6 @@ const columns: ProColumns<GithubIssueItem>[] = [
     fixed: 'right',
     align: 'center',
     hideInSearch:true,
-    width: 100,
     render: (text, record, _, action) => (
       <TzButton
         type="link"

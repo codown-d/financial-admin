@@ -133,7 +133,6 @@ export default (props: { product_type: product_type }) => {
         title: '操作',
         fixed: 'right',
         align: 'center',
-        width: '140px',
         hideInTable: !access.canEdit,
         hideInSearch: true,
         render: (text, record, _, action) => [

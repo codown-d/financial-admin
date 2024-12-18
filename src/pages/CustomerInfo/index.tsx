@@ -6,7 +6,7 @@ import { Col, ConfigProvider, Form, message, Modal, Row } from 'antd';
 import FinanceTable from './components/FinanceTable';
 import ProductTable from './components/ProductTable';
 import { adminUpdateInfo, adminUserLogout, getUserInfo } from '@/services';
-import { useModel, useSearchParams } from '@umijs/max';
+import { useAccess, useModel, useNavigate, useSearchParams } from '@umijs/max';
 import Certify from '@/components/UI/Certify';
 import { useState } from 'react';
 export default () => {
@@ -14,7 +14,7 @@ export default () => {
   let [searchParams] = useSearchParams(); 
   let uid = searchParams.get('uid')||'';
   const [modal, contextHolder] = Modal.useModal();
-
+  const navigate = useNavigate();
   const confirm = () => {
     modal.confirm({
       content: '是否确认注销此账号？',
@@ -28,14 +28,18 @@ export default () => {
     });
   };
   const [form] = Form.useForm();
+  const access = useAccess();
   return (
     <>
     {contextHolder}
       <ProForm
         form={form}
         onFinish={async (values) => {
-          const response = await adminUpdateInfo({...values,uid})          
-          message.success('提交成功');
+          const res = await adminUpdateInfo({...values,uid})    
+          if(res.code==200){
+            message.success('提交成功'); 
+            navigate(-1)
+          }
         }}
         request={async () => {
           if (uid) {
@@ -93,7 +97,7 @@ export default () => {
         <FinanceTable uid={uid}/>
         <TzTitleDesc title={'产品申请'} className="mt-10 mb-5" />
         <ProductTable  uid={uid}/>
-        <TzTitleDesc title={'注销账号'} className="mt-10 mb-5" />
+        {access.canEdit?<> <TzTitleDesc title={'注销账号'} className="mt-10 mb-5" />
         <div className="mb-[70px] text-[#999999] text-[12px]">
           <ConfigProvider
             theme={{
@@ -108,7 +112,9 @@ export default () => {
           </ConfigProvider>
           <InfoCircleFilled className="ml-5 mr-1" />
           注销后账号不可找回
-        </div>
+        </div></>:null
+        }
+       
       </ProForm>
     </>
   );

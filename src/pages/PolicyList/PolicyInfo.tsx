@@ -9,7 +9,7 @@ import {
   ProFormSelect,
   ProFormText,
 } from '@ant-design/pro-components';
-import { useModel, useSearchParams } from '@umijs/max';
+import { useModel, useNavigate, useSearchParams } from '@umijs/max';
 import { Col, Form, message, Row } from 'antd';
 import FormItem from 'antd/es/form/FormItem';
 import dayjs from 'dayjs';
@@ -20,16 +20,18 @@ export default () => {
   let { interpretation } = useModel('policyInterpretation');
   let id = searchParams.get('id');
   const [form] = Form.useForm();
-  console.log(theme);
+  const navigate = useNavigate();
   return (
     <>
       {contextHolder}
       <ProForm
         form={form}
         onFinish={async (values) => {
-          await policySave(values);
-          console.log(values);
-          messageApi.success('提交成功');
+          let res = await policySave(values); 
+          if(res.code==200){
+            message.success('提交成功'); 
+            navigate(-1)
+          }
         }}
         request={async () => {
           if (id) {
@@ -103,11 +105,13 @@ export default () => {
             <ProFormDateTimePicker
               width={'md'}
               name={'add_time'}
+              disabled
               label="发布时间"
             />
           </Col>
           <Col span={8}>
-            <ProFormText name={'summary'} label="摘要" />
+            <ProFormText name={'summary'} label="摘要" 
+              rules={[{ required: true }]}/>
           </Col>
           <Col span={8}>
             <ProFormSelect
@@ -118,7 +122,7 @@ export default () => {
           </Col>
         </Row>
         <TzTitleDesc title={'正文内容'} className="mt-4 mb-5" />
-        <FormItem name={'body'} rules={[{ required: true }]}>
+        <FormItem name={'body'} rules={[{ required: true,message:'请输入正文内容' }]}>
           <MyEditor className={'mb-[60px]'} />
         </FormItem>
       </ProForm>

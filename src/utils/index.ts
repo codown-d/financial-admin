@@ -1,6 +1,6 @@
 import { useNavigate } from '@umijs/max';
 import { message } from 'antd';
-import { debounce, keyBy, keys } from 'lodash';
+import { debounce, isArray, keyBy, keys } from 'lodash';
 
 export function buildTree(
   data: { id: any; parentId: any;[x: string]: any }[],
@@ -118,8 +118,18 @@ export const formatKey=(object:any,keyList:string[])=>{
   return {
     ...object,
     ...keyList.reduce((acc:any, key) => {
-      acc[key]=object[key]+''
+      if(isArray(object[key])){
+         acc[key]=object[key]
+      }else{
+        acc[key]=object[key]+''
+      }
       return acc
     },{})
+  }
+}
+export const handleRes=(res: { code: number; })=>{
+
+  if(res.code==200){
+    message.success('提交成功'); 
   }
 }

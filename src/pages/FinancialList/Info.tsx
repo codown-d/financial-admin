@@ -11,7 +11,7 @@ import {
   ProFormTextArea,
   ProFormUploadButton,
 } from '@ant-design/pro-components';
-import { useSearchParams } from '@umijs/max';
+import { useNavigate, useSearchParams } from '@umijs/max';
 import { Col, message, Row } from 'antd';
 import { Form } from 'antd/lib';
 import dayjs from 'dayjs';
@@ -40,14 +40,13 @@ export default () => {
       ]);
     });
   }, [logo]);
-  console.log(API_BASE_URL)
+  const navigate = useNavigate();
   return (
     <>
       {contextHolder}
       <ProForm
         form={form}
         onFinish={async (values) => {
-          console.log(values)
           let res = await financialSave({
             ...values,
             logo: values.logo?.[0]?.response?.file,
@@ -55,15 +54,14 @@ export default () => {
             city_id: values.area_id?.[1],
             area_id: values.area_id?.[2],
           });
-          messageApi.success('提交成功');
-          refreshPageUrl('id', res.id);
-          setUid(res.id)
+          if(res.code==200){
+            message.success('提交成功'); 
+            navigate(-1)
+          }
         }}
         request={async () => {
           if (id) {
             let { data } = await financialDetail({ id });
-            console.log(data,{
-              data_type:data.data_type+'',})
             return {
               ...data,
               data_type:data.data_type+'',
@@ -74,6 +72,7 @@ export default () => {
                       status: 'done',
                       url: data.logo,
                       thumbUrl: '',
+                      response:{file: data.logo,}
                     },
                   ]
                 : undefined,

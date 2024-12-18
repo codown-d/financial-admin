@@ -16,29 +16,11 @@ const TzPageContainer: React.FC = () => {
   const navigate = useNavigate();
   const { routes } = AppData;
   let { userInfo } = useModel('userInfo');
-  const items: MenuProps['items'] = [
-    {
-      key: '1',
-      label: <>退出登录</>,
-      onClick() {
-        console.log(67868);
-        storage.remove('userInfo');
-        storage.removeCookie('token');
-        history.replace('/login');
-      },
-    },
-  ];
+
   return (
     <PageContainer
       extra={[
-        <div key={'user'}>
-          用户名：
-          <Dropdown menu={{ items }} placement="bottom">
-            <span>
-              {userInfo.user_name} <DownOutlined />
-            </span>
-          </Dropdown>
-        </div>,
+       
       ]}
     >
       <Outlet />

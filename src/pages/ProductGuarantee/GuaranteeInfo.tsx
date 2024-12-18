@@ -11,22 +11,28 @@ import {
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-components';
-import { useModel, useSearchParams } from '@umijs/max';
+import { useModel, useNavigate, useSearchParams } from '@umijs/max';
 import { Col, message, Row } from 'antd';
 import dayjs from 'dayjs';
+import { isArray } from 'lodash';
 
 export default () => {
   let [searchParams] = useSearchParams();
   const [messageApi, contextHolder] = message.useMessage();
   let { financialOrg } = useModel('financialOrg');
+  const navigate = useNavigate();
   return (
     <>
       {contextHolder}
       <ProForm
         onFinish={async (values) => {
-          await loanSave({ ...values, product_type: 7 ,guarantee_form:typeof values.guarantee_form==='string'?[values.guarantee_form]:values.guarantee_form});
-          console.log(values);
-          messageApi.success('提交成功');
+          console.log(values)
+          let res = await loanSave({ ...values, product_type: 7 ,guarantee_form:isArray(values.guarantee_form)?values.guarantee_form:[values.guarantee_form]});
+        
+          if(res.code==200){
+            message.success('提交成功'); 
+            navigate(-1)
+          }
         }}
         request={async () => {
           let id = searchParams.get('id');
@@ -88,7 +94,7 @@ export default () => {
             <ProFormCheckbox.Group
               name={'guarantee_form'}
               label="保函形式"
-              valueEnum={GUARANTEE_FROM_OP}
+              options={GUARANTEE_FROM_OP}
               rules={[{ required: true, message: '请选择保函形式' }]}
             />
           </Col>
@@ -96,6 +102,9 @@ export default () => {
             <ProFormSelect
               name={'data_type'}
               label="担保方式"
+              fieldProps={{
+                mode:"multiple"
+              }}
               valueEnum={data_type}
               rules={[{ required: true, message: '请选择担保方式' }]}
             />

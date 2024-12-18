@@ -150,25 +150,25 @@ export const GUARANTEE_FROM = {
     text: '全部',
   },
 };
-export const GUARANTEE_FROM_OP = {
-  1: {
-    text: '电子保函',
-  },
-  2: {
-    text: '纸质保函',
-  },
-};
+// export const GUARANTEE_FROM_OP = {
+//   1: {
+//     text: '电子保函',
+//   },
+//   2: {
+//     text: '纸质保函',
+//   },
+// };
 
-// export const GUARANTEE_FROM_OP = [
-//   {
-//     value: 1,
-//     label: '电子保函',
-//   },
-//   {
-//     value: 2,
-//     label: '纸质保函',
-//   },
-// ];
+export const GUARANTEE_FROM_OP = [
+  {
+    value: 1,
+    label: '电子保函',
+  },
+  {
+    value: 2,
+    label: '纸质保函',
+  },
+];
 export const SUB_UNIT = {
   1: {
     text: '万元',

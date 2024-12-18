@@ -9,7 +9,7 @@ import {
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-components';
-import { useModel, useSearchParams } from '@umijs/max';
+import { useModel, useNavigate, useSearchParams } from '@umijs/max';
 import { Col, Flex, Form, InputNumber, message, Row, Select } from 'antd';
 import dayjs from 'dayjs';
 
@@ -18,15 +18,18 @@ export default () => {
   const [messageApi, contextHolder] = message.useMessage();
   let { financialOrg } = useModel('financialOrg');
   const [form] = Form.useForm();
+  const navigate = useNavigate();
   return (
     <>
       {contextHolder}
       <ProForm
         form={form}
         onFinish={async (values) => {
-          await loanSave({product_type: 5,highest_money_unit:1,...values});
-          console.log(values);
-          messageApi.success('提交成功');
+         let res =  await loanSave({product_type: 5,highest_money_unit:1,...values});
+          if(res.code==200){
+            message.success('提交成功'); 
+            navigate(-1)
+          }
         }}
         request={async () => {
           let id = searchParams.get('id');
