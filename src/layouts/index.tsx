@@ -122,23 +122,23 @@ const Layout = () => {
           // headerRender={false}
         >
           <ConfigProvider
-          // theme={{
-          //   components: {
-          //     Button: {
-          //       borderRadius: 8,
-          //       controlHeight: 36,
-          //       paddingInline: 20,
-          //       defaultColor: '#2177D1',
-          //     },
-          //     Input: {
-          //       paddingBlock: 7,
-          //       algorithm: true,
-          //     },
-          //   },
-          //   token: {
-          //     colorPrimary: '#2177D1',
-          //   },
-          // }}
+          theme={{
+            components: {
+              Menu: {
+                colorItemBgActive: "#3C5BF6",
+                // controlHeight: 36,
+                // paddingInline: 20,
+                // defaultColor: '#2177D1',
+              },
+              // Input: {
+              //   paddingBlock: 7,
+              //   algorithm: true,
+              // },
+            },
+            // token: {
+            //   colorPrimary: '#2177D1',
+            // },
+          }}
           >
             {/* <PageContainer > */}
             <AppConfigProvider>

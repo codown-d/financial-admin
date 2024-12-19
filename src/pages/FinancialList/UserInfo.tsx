@@ -1,12 +1,11 @@
 import TzTitleDesc from '@/components/TzTitleDesc';
-import { useAreaData } from '@/hooks';
-import { financialDetail, financialSave, financialUserDetail, organsUserSave } from '@/services';
+import { financialUserDetail, organsUserSave } from '@/services';
 import {
   ProForm,
   ProFormDateTimePicker,
   ProFormText,
 } from '@ant-design/pro-components';
-import { useSearchParams } from '@umijs/max';
+import { useNavigate, useSearchParams } from '@umijs/max';
 import { Col, message, Row } from 'antd';
 import { Form } from 'antd/lib';
 import dayjs from 'dayjs';
@@ -23,16 +22,20 @@ export default () => {
   const [form] = Form.useForm();
   let id = searchParams.get('id');
   let fo_id = searchParams.get('fo_id');
+  const navigate = useNavigate();
   return (
     <>
       {contextHolder}
       <ProForm
         form={form}
         onFinish={async (values) => {
-          await organsUserSave({
+          let res = await organsUserSave({
             ...values,
           });
-          messageApi.success('提交成功');
+          if (res.code == 200) {
+            message.success('提交成功');
+            navigate(-1);
+          }
         }}
         request={async () => {
           if (id) {
@@ -42,7 +45,8 @@ export default () => {
             };
           } else {
             return {
-              id: 0,fo_id,
+              id: 0,
+              fo_id,
               add_time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
             };
           }
@@ -64,7 +68,7 @@ export default () => {
             />
           </Col>
           <Col span={8}>
-            <ProFormText
+            <ProFormText.Password
               name={'user_pass_view'}
               label="密码"
               placeholder="请输入密码"

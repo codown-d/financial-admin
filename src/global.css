@@ -11,7 +11,7 @@
     background-color: #fff;
     border-radius: 12px;
 }
-
+/* .ant-menu-light .ant-menu-item-selected */
 .ant-menu-light .ant-menu-item-selected{
     background-color:#3C5BF6 ;
     color: #fff;
