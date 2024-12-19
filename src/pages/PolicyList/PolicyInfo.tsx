@@ -83,9 +83,10 @@ export default () => {
             <ProFormSelect
               name={'feature_id'}
               label={'特色'}
-              fieldProps={{
-                options: formatOption(feature),
-              }}
+              valueEnum={feature}
+              // fieldProps={{
+              //   options: formatOption(feature),
+              // }}
             />
           </Col>
           <Col span={8}>

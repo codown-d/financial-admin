@@ -88,7 +88,13 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
       },
       {
         title: '期限',
+        dataIndex: 'term',
+        hideInTable: true,
+      },
+      {
+        title: '期限',
         dataIndex: 'term_desc',
+        hideInSearch: true,  
       },
       {
         title: '用途',
@@ -120,10 +126,8 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
       },
       {
         title: '联系方式',
-        dataIndex: 'user_name',
-        render: (text, record: any, _, action) => {
-          return record.user.user_name;
-        },
+        dataIndex: ['user','user_name'],
+        
       },
       {
         title: '还款方式',

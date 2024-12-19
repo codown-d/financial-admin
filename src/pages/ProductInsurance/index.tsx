@@ -74,10 +74,12 @@ export default () => {
       {
         title: '期限',
         dataIndex: 'term',
-        sorter: true,
-        hideInSearch: true,   
-        render: (_, record) => `${_}个月`
-    
+        hideInTable: true,
+      },
+      {
+        title: '期限',
+        dataIndex: 'term_desc',
+        hideInSearch: true,  
       },
       {
         title: '添加时间',

@@ -68,11 +68,10 @@ export default () => {
       },
       {
         title: '担保期限',
-        dataIndex: 'term',
+        dataIndex: 'term_desc',
         fieldProps:{
           suffix: '月',
         },
-        render: (_, record) => `${_}个月`
       },
       {
         title: '保函形式',

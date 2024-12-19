@@ -93,8 +93,12 @@ export default (props: { product_type: product_type }) => {
       {
         title: '期限',
         dataIndex: 'term',
+        hideInTable: true,
+      },
+      {
+        title: '期限',
+        dataIndex: 'term_desc',
         hideInSearch: true,  
-        render: (_, record) => `${_}个月`
       },
       {
         title: '担保方式',

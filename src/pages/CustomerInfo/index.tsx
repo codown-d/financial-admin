@@ -74,7 +74,7 @@ export default () => {
             </ProForm.Item>
           </Col>
           <Col span={8}>
-            <ProFormText name={'user_pass_view'} label="密码" placeholder="请输入密码" />
+            <ProFormText.Password name={'user_pass_view'} label="密码" placeholder="请输入密码" />
           </Col>
           <Col span={8}>
             <ProFormText

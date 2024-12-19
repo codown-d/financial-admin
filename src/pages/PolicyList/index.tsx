@@ -67,15 +67,13 @@ export default () => {
         title: '主题',
         dataIndex: 'theme_id',
         valueType: 'select',
-        valueEnum: theme,
-        render: (_, record:any) => `${record.theme_id==0?'-':record.theme_id}`
+        valueEnum: {...theme,0:'-'},
       },
       {
         title: '特色',
         dataIndex: 'feature_id',
         valueType: 'select',
-        valueEnum: feature,
-        render: (_, record:any) => `${record.feature_id==0?'-':record.feature_id}`
+        valueEnum: {...feature,0:'-'},
       },
 
       {
@@ -120,8 +118,6 @@ export default () => {
             description="确认删除政策?"
             key={'del'}
             onConfirm={() => {
-              action?.reload();
-              return;
               policyDelete({ id: record.id }).then((res) => {
                 action?.reload();
               });

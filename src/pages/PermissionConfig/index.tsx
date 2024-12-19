@@ -4,26 +4,25 @@ import TzImg from '@/components/TzImg';
 import { adminPermission } from '@/services';
 import {  ProCard } from '@ant-design/pro-components';
 import { useModel } from '@umijs/max';
-import { Spin, Switch } from 'antd';
-import { keys } from 'lodash';
+import { message, Spin, Switch } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 
 export default () => {
   let { menu } = useModel('menu');
   let [sendData, setSendData] = useState<any>({
+    admin_user_permission: [],
     financial_organs_user_permission: [],
     government_department_user_permission: [],
-    admin_user_permission: [],
   });
   let menuList = useMemo(() => {
-    console.log(menu)
-    return menu.filter((item) => item.key != '/permissionConfig');
+    return menu
   }, [menu]);
   
   let { permissionData } = useModel('permission');
   useEffect(() => {
     setSendData(permissionData)
   },[permissionData])
+
   let onChange = (checked: boolean, path: string, key: string) => {
     setSendData((pre: { [x: string]: any[] }) => {
       if (checked) {
@@ -74,8 +73,8 @@ export default () => {
                     >
                       <span>{ite.name}</span>
                       <Switch
-                        defaultChecked={sendData.admin_user_permission.includes(
-                          ite.key,
+                      defaultChecked={sendData.admin_user_permission.includes(
+                          ite.key
                         )}
                         onChange={(checked) =>
                           onChange(checked, ite.key, 'admin_user_permission')
@@ -194,12 +193,14 @@ export default () => {
           className="mt-[60px] mr-[20px] mb-[60px]"
           onClick={() => {
             console.log(sendData)
-            let obj = keys(sendData).reduce((pre: any, item) => {
-              pre[item] = sendData[item].join(",")
-              return pre
-            }, {})
+            // let obj = keys(sendData).reduce((pre: any, item) => {
+            //   pre[item] = sendData[item].join(",")
+            //   return pre
+            // }, {})
             adminPermission(sendData).then(res => {
-              console.log(res);
+              if(res.code==200){
+                message.success('保存成功')
+              }
             })
           }}
         >

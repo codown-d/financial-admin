@@ -29,7 +29,7 @@ const Login: React.FC = () => {
               console.log(values)
               let res = await adminLogin(values)
               console.log(123,res)
-              storage.setCookie('token',res.token);  
+              storage.set('token',res.token);  
               // storage.setCookie('userInfo',res.userInfo);
               window.location.href = '/'
             }}

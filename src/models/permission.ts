@@ -7,11 +7,11 @@ export default function () {
   let fetchPermissions = useCallback(async () => {
     const response = await permission();
     setPermissionData(
-      merge(response.permission, {
+      merge({
+        admin_user_permission: ['permission','permission_config'],
         financial_organs_user_permission: [],
         government_department_user_permission: [],
-        admin_user_permission: [],
-      }),
+      },response.permission),
     );
   }, []);
   useEffect(() => {

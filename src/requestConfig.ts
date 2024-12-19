@@ -55,7 +55,7 @@ const errorHandler = (response: any) => {
     });
     if (status === 401 || data.code === 401) {
       storage.remove('userInfo');
-      storage.removeCookie('token');
+      storage.clear();
       history.replace('/login');
     } else if (503 === status) {
       history.replace('/503');
@@ -71,9 +71,9 @@ const requestInterceptors = (request: {
   isSignal?: boolean;
   headers: { Authorization: string; Token: string };
 }) => {
-  const token = storage.getCookie('token');
-  if (token) request.headers.Authorization = `Bearer ${token}`;
-  if (token) request.headers.Token = `${token}`;
+  const tk = storage.get('token');
+  if (tk) request.headers.Authorization = `Bearer ${tk}`;
+  if (tk) request.headers.Token = `${tk}`;
   const contentType = get(request, ['headers', 'Content-Type']);
   !contentType && set(request, ['headers', 'Content-Type'], 'application/json');
   // set(request, ['headers', 'Accept-Language'], lang === EN_LANG ? 'en' : 'zh');

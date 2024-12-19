@@ -8,20 +8,7 @@ export default function () {
   let fetchUserInfo = useCallback(async () => {
     const response = await getUserInfo();
     setUserInfo(response.data);
-    setUserPermission(response.permission||[
-      "financialList",
-      'customerList',
-    'governmentList',
-    "financeManagement",
-    "productManagement",
-    "productBank",
-    "productMicroloan",
-    "productFinanceGuarantee",
-    "productEmergency",
-    "productGuarantee",
-    "productInsurance",
-    "productFund",
-    "policyList"])
+    setUserPermission(response.permission||[])
   }, []);
   useEffect(() => {
     fetchUserInfo();

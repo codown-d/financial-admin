@@ -19,7 +19,6 @@ import {
 import { App, ConfigProvider, Dropdown, MenuProps } from 'antd';
 import { cloneDeepWith, has, values } from 'lodash';
 import { memo, useMemo } from 'react';
-import { DownOutlined } from '@ant-design/icons';
 import { storage } from '@/utils/storage';
 const Layout = () => {
   const AppData = useAppData();
@@ -27,10 +26,13 @@ const Layout = () => {
   const navigate = useNavigate();
   const { routes } = AppData;
   let { userPermission } = useModel('userInfo');
+  console.log(userPermission)
   let menu = useMemo(() => {
     const _routes = cloneDeepWith(routes);
     const noPermission = (key: any) => {
-      return key === undefined || userPermission.includes(key);
+      return key === undefined || userPermission.some((item:string)=>{
+        return item.indexOf(key)==0
+      })
     };
     const noAccess = (access: string) => access && accessFull.role != access; //&& !get(accessFull, access)
     const notInMenu = (item: MenuDataItem) =>
@@ -47,6 +49,7 @@ const Layout = () => {
       children: 'routes',
       parentKey: '@@/global-layout',
     });
+      console.log(treeData)
     return treeData;
   }, [routes, userPermission]);
   
@@ -58,7 +61,7 @@ const Layout = () => {
       onClick() {
         console.log(67868);
         storage.remove('userInfo');
-        storage.removeCookie('token');
+        storage.clear();
         history.replace('/login');
       },
     },
@@ -103,19 +106,19 @@ const Layout = () => {
               </div>
             );
           }}
-          menuFooterRender={(props) => {
-            if (props?.collapsed) return undefined;
-            return (
-              <div key={'user'} className='flex justify-center'>
-              用户名：
-              <Dropdown menu={{ items }} placement="bottom">
-                <span>
-                  {userInfo.user_name} <DownOutlined />
-                </span>
-              </Dropdown>
-            </div>
-            );
-          }}
+          // menuFooterRender={(props) => {
+          //   if (props?.collapsed) return undefined;
+          //   return (
+          //     <div key={'user'} className='flex justify-center'>
+          //     用户名：
+          //     <Dropdown menu={{ items }} placement="bottom">
+          //       <span>
+          //         {userInfo.user_name} <DownOutlined />
+          //       </span>
+          //     </Dropdown>
+          //   </div>
+          //   );
+          // }}
           // headerRender={false}
         >
           <ConfigProvider
