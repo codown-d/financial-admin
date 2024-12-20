@@ -1,5 +1,5 @@
 import TzTitleDesc from '@/components/TzTitleDesc';
-import { data_type, repayment_method, termC } from '@/constants';
+import { data_type, repayment_method, termC, termOp } from '@/constants';
 import { loanDetail, loanSave } from '@/services';
 import { formatKey } from '@/utils';
 import {
@@ -39,6 +39,7 @@ export default (props: { product_type: any }) => {
           let id = searchParams.get('id');
           if (id) {
             let res = await loanDetail({ id, product_type });
+            console.log(res.data.term_unit)
             return {
               ...res.data,
               term_unit:res.data.term_unit+''||'1',
@@ -101,17 +102,17 @@ export default (props: { product_type: any }) => {
           </Col>
           <Col span={8}>
             <Row>
-              <Col span={20}>
+              <Col span={18}>
                 <ProFormDigit
                   name={'term'}
                   label={'最高期限'}
                   rules={[{ required: true }]}
                 />
               </Col>
-              <Col span={4}>
+              <Col span={6}>
                 <ProFormSelect
                   name={'term_unit'}
-                  valueEnum={termC}
+                  options={termOp}
                   fieldProps={{ className: '!w-[100%] !min-w-[50%]' }}
                 />
               </Col>

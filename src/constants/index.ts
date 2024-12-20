@@ -388,3 +388,11 @@ export const termC = {
     text: '月',
   },
 };
+export const termOp = [{
+    label: '天',
+    value:1
+  },{
+    label: '月',
+    value:2
+  },
+]

@@ -1,5 +1,5 @@
 import TzTitleDesc from '@/components/TzTitleDesc';
-import { insurance_type, termC } from '@/constants';
+import { insurance_type, termC, termOp } from '@/constants';
 import { loanDetail, loanSave } from '@/services';
 import { formatKey } from '@/utils';
 import {
@@ -104,17 +104,17 @@ export default () => {
           </Col>
           <Col span={8}>
             <Row>
-              <Col span={20}>
+              <Col span={18}>
                 <ProFormDigit
                   name={'term'}
                   label={'期限'}
                   rules={[{ required: true }]}
                 />
               </Col>
-              <Col span={4}>
+              <Col span={6}>
                 <ProFormSelect
                   name={'term_unit'}
-                  valueEnum={termC}
+                  options={termOp}
                   fieldProps={{ className: '!w-[100%] !min-w-[50%]' }}
                 />
               </Col>

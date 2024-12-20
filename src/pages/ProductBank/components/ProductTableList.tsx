@@ -100,13 +100,13 @@ export default (props: { product_type: product_type }) => {
           if (type === 'table') {
             return (
               <div className='flex'>
-                <Form.Item name="term" className='w-[80%]'>
+                <Form.Item name="term" className='w-[70%]'>
                   <InputNumber
                     style={{ width: '100%' }}
                     placeholder="请输入期限值"
                   />
                 </Form.Item>
-                <Form.Item name="term_unit" className='w-[20%]'>
+                <Form.Item name="term_unit" className='w-[30%]'>
                   <TzSelect
                     options={[
                       { label: '天', value: "1" },
