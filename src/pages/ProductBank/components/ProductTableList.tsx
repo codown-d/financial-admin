@@ -1,12 +1,13 @@
 import { TzButton } from '@/components/TzButton';
 import TzPopconfirm from '@/components/TzPopconfirm';
+import TzSelect from '@/components/TzSelect';
 import { data_type, product_type, repayment_method } from '@/constants';
 import { loanDelete, loanList } from '@/services';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
-import { ProFormDigitRange, ProTable } from '@ant-design/pro-components';
-import { useAccess, useModel, useNavigate ,Access} from '@umijs/max';
-import { Button, DatePicker } from 'antd';
+import { ProTable } from '@ant-design/pro-components';
+import { Access, useAccess, useModel, useNavigate } from '@umijs/max';
+import { Button, DatePicker, Form, InputNumber } from 'antd';
 import { useMemo, useRef, useState } from 'react';
 import { URLPATH } from '../constants';
 
@@ -49,10 +50,10 @@ export default (props: { product_type: product_type }) => {
           label: '额度范围',
           name: 'moneyRange',
         },
-        fieldProps:{
+        fieldProps: {
           suffix: '万元',
         },
-        valueType:'digitRange',
+        valueType: 'digitRange',
         search: {
           transform: (value) => {
             let [highest_money_start, highest_money_end] = value;
@@ -62,9 +63,9 @@ export default (props: { product_type: product_type }) => {
             };
           },
         },
-        render: (_, record:any) => {
-          return `${record.highest_money}万元`
-        }
+        render: (_, record: any) => {
+          return `${record.highest_money}万元`;
+        },
       },
       {
         title: '利率',
@@ -73,10 +74,10 @@ export default (props: { product_type: product_type }) => {
           label: '利率范围',
           name: 'rateRange',
         },
-        fieldProps:{
+        fieldProps: {
           suffix: '%',
         },
-        valueType:'digitRange',
+        valueType: 'digitRange',
         search: {
           transform: (value) => {
             let [rate_start, rate_end] = value;
@@ -86,19 +87,43 @@ export default (props: { product_type: product_type }) => {
             };
           },
         },
-        render: (_, record:any) => {
-          return `${record.rate}%`
-        }
+        render: (_, record: any) => {
+          return `${record.rate}%`;
+        },
       },
       {
         title: '期限',
         dataIndex: 'term',
         hideInTable: true,
+        renderFormItem: (_, { type, defaultRender, ...rest }) => {
+          console.log(type)
+          if (type === 'table') {
+            return (
+              <div className='flex'>
+                <Form.Item name="term" className='w-[80%]'>
+                  <InputNumber
+                    style={{ width: '100%' }}
+                    placeholder="请输入期限值"
+                  />
+                </Form.Item>
+                <Form.Item name="term_unit" className='w-[20%]'>
+                  <TzSelect
+                    options={[
+                      { label: '天', value: "1" },
+                      { label: '月', value: "2" },
+                    ]}
+                  />
+                </Form.Item>
+              </div>
+            );
+          }
+          return defaultRender(_); // 默认渲染
+        },
       },
       {
         title: '期限',
         dataIndex: 'term_desc',
-        hideInSearch: true,  
+        hideInSearch: true,
       },
       {
         title: '担保方式',
@@ -155,7 +180,7 @@ export default (props: { product_type: product_type }) => {
             description="确认删除此贷款产品?"
             key={'del'}
             onConfirm={() => {
-              loanDelete({ id: record.id,product_type }).then((res) => {
+              loanDelete({ id: record.id, product_type }).then((res) => {
                 action?.reload();
               });
             }}
@@ -210,7 +235,7 @@ export default (props: { product_type: product_type }) => {
       }}
       form={{
         labelWidth: 120,
-        wrapperCol:{flex:1},
+        wrapperCol: { flex: 1 },
         colon: false,
         // 由于配置了 transform，提交的参数与定义的不同这里需要转化一下
         syncToUrl: (values, type) => {
@@ -219,8 +244,12 @@ export default (props: { product_type: product_type }) => {
             return {
               ...rest,
               created_at: [values.start, values.end],
-              moneyRange: [values.highest_money_start, values.highest_money_end],
+              moneyRange: [
+                values.highest_money_start,
+                values.highest_money_end,
+              ],
               rateRange: [values.rate_start, values.rate_end],
+              term_unit:values.term_unit||'1'
             };
           }
           return values;
@@ -232,18 +261,17 @@ export default (props: { product_type: product_type }) => {
       }}
       headerTitle={headerTitle}
       toolBarRender={() => [
-        <Access  accessible={access.canEdit}>
-          
-        <Button
-          key="button"
-          icon={<PlusOutlined />}
-          onClick={() => {
-            navigate(`/product/${URLPATH[product_type]}/info`);
-          }}
-          type="primary"
-        >
-          添加
-        </Button>
+        <Access accessible={access.canEdit}>
+          <Button
+            key="button"
+            icon={<PlusOutlined />}
+            onClick={() => {
+              navigate(`/product/${URLPATH[product_type]}/info`);
+            }}
+            type="primary"
+          >
+            添加
+          </Button>
         </Access>,
       ]}
     />

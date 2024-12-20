@@ -1,12 +1,13 @@
 import { TzButton } from '@/components/TzButton';
 import TzPopconfirm from '@/components/TzPopconfirm';
+import TzSelect from '@/components/TzSelect';
 import { data_type, GUARANTEE_FROM } from '@/constants';
 import { guaranteeList, loanDelete, loanList } from '@/services';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProFormDigitRange, ProTable } from '@ant-design/pro-components';
 import { Access, useAccess, useModel, useNavigate } from '@umijs/max';
-import { Button, DatePicker } from 'antd';
+import { Button, DatePicker, Form, InputNumber } from 'antd';
 import { useMemo, useRef, useState } from 'react';
 
 const { RangePicker } = DatePicker;
@@ -68,10 +69,36 @@ export default () => {
       },
       {
         title: '担保期限',
-        dataIndex: 'term_desc',
-        fieldProps:{
-          suffix: '月',
+        dataIndex: 'term',
+        hideInTable: true,
+        renderFormItem: (_, { type, defaultRender, ...rest }) => {
+          if (type === 'table') {
+            return (
+              <div className='flex'>
+                <Form.Item name="term" className='w-[80%]'>
+                  <InputNumber
+                    style={{ width: '100%' }}
+                    placeholder="请输入期限值"
+                  />
+                </Form.Item>
+                <Form.Item name="term_unit" className='w-[20%]'>
+                  <TzSelect
+                    options={[
+                      { label: '天', value: "1" },
+                      { label: '月', value: "2" },
+                    ]}
+                  />
+                </Form.Item>
+              </div>
+            );
+          }
+          return defaultRender(_); // 默认渲染
         },
+      },
+      {
+        title: '担保期限',
+        dataIndex: 'term_desc',
+        hideInSearch: true,  
       },
       {
         title: '保函形式',
@@ -165,6 +192,7 @@ export default () => {
             const { minimum_money, highest_money, ...rest } = values;
             return {
               ...rest,
+              term_unit:values.term_unit||'1',
               rate:
                 minimum_money !== undefined && highest_money !== undefined
                   ? [minimum_money, highest_money]

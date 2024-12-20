@@ -1,5 +1,5 @@
 import TzTitleDesc from '@/components/TzTitleDesc';
-import { insurance_type } from '@/constants';
+import { insurance_type, termC } from '@/constants';
 import { loanDetail, loanSave } from '@/services';
 import { formatKey } from '@/utils';
 import {
@@ -28,17 +28,19 @@ export default () => {
         form={form}
         onFinish={async (values) => {
           let res = await loanSave({ product_type: 6, ...values });
-          if(res.code==200){
-            message.success('提交成功'); 
-            navigate(-1)
+          if (res.code == 200) {
+            message.success('提交成功');
+            navigate(-1);
           }
         }}
         request={async () => {
           let id = searchParams.get('id');
           if (id) {
             let res = await loanDetail({ id, product_type: 6 });
+            console.log(res.data.term_unit);
             return {
               ...res,
+              term_unit: res.data.term_unit+'' || '1',
               ...formatKey(res.data, [
                 'fo_id',
                 'data_type',
@@ -52,6 +54,8 @@ export default () => {
               id: 0,
               application_form: '4',
               product_type: 6,
+              term_unit: '1',
+              highest_money_unit: 1,
             };
           }
         }}
@@ -88,12 +92,7 @@ export default () => {
           </Col>
 
           <Col span={8}>
-            <ProFormText
-              name={'highest_money_unit'}
-              label={'单位'}
-              initialValue={1}
-              hidden
-            />
+            <ProFormText name={'highest_money_unit'} label={'单位'} hidden />
             <ProFormDigit
               name={'highest_money'}
               label={'保额'}
@@ -104,14 +103,22 @@ export default () => {
             />
           </Col>
           <Col span={8}>
-            <ProFormDigit
-              name={'term'}
-              label={'期限'}
-              fieldProps={{
-                suffix: '月',
-              }}
-              rules={[{ required: true }]}
-            />
+            <Row>
+              <Col span={20}>
+                <ProFormDigit
+                  name={'term'}
+                  label={'期限'}
+                  rules={[{ required: true }]}
+                />
+              </Col>
+              <Col span={4}>
+                <ProFormSelect
+                  name={'term_unit'}
+                  valueEnum={termC}
+                  fieldProps={{ className: '!w-[100%] !min-w-[50%]' }}
+                />
+              </Col>
+            </Row>
           </Col>
           <Col span={8}>
             <ProFormDateTimePicker

@@ -1,4 +1,5 @@
 import { TzButton } from '@/components/TzButton';
+import TzSelect from '@/components/TzSelect';
 import {
   action_status_filter,
   data_type,
@@ -15,7 +16,7 @@ import type {
 } from '@ant-design/pro-components';
 import { ModalForm, ProFormSelect, ProTable } from '@ant-design/pro-components';
 import { useAccess, useNavigate } from '@umijs/max';
-import { DatePicker, message } from 'antd';
+import { DatePicker, Form, InputNumber, message } from 'antd';
 import { useMemo, useRef, useState } from 'react';
 
 const { RangePicker } = DatePicker;
@@ -90,6 +91,30 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
         title: '期限',
         dataIndex: 'term',
         hideInTable: true,
+        renderFormItem: (_, { type, defaultRender, ...rest }) => {
+          console.log(type)
+          if (type === 'table') {
+            return (
+              <div className='flex'>
+                <Form.Item name="term" className='w-[80%]'>
+                  <InputNumber
+                    style={{ width: '100%' }}
+                    placeholder="请输入期限值"
+                  />
+                </Form.Item>
+                <Form.Item name="term_unit" className='w-[20%]'>
+                  <TzSelect
+                    options={[
+                      { label: '天', value: "1" },
+                      { label: '月', value: "2" },
+                    ]}
+                  />
+                </Form.Item>
+              </div>
+            );
+          }
+          return defaultRender(_); // 默认渲染
+        },
       },
       {
         title: '期限',
@@ -291,6 +316,8 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
           if (type === 'get') {
             return {
               ...values,
+              
+              term_unit:values.term_unit||'1',
               created_at: [values.start, values.end],
             };
           }

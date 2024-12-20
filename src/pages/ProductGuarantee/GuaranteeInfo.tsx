@@ -1,5 +1,5 @@
 import TzTitleDesc from '@/components/TzTitleDesc';
-import { data_type, GUARANTEE_FROM_OP } from '@/constants';
+import { data_type, GUARANTEE_FROM_OP, termC } from '@/constants';
 import { loanDetail, loanSave } from '@/services';
 import { formatKey } from '@/utils';
 import {
@@ -40,11 +40,13 @@ export default () => {
             let res = await loanDetail({ id, product_type: 7 });
             return {
               ...res.data,
+               term_unit:res.data.term_unit+''||'1',
               ...formatKey(res.data, ['fo_id','guarantee_form','data_type']),
             };
           } else {
             return {
               add_time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+              term_unit:'1'
             };
           }
         }}
@@ -81,14 +83,22 @@ export default () => {
             />
           </Col>
           <Col span={8}>
-            <ProFormDigit
-              name={'term'}
-              label="担保期限"
-              fieldProps={{
-                suffix: '月', // 添加后缀
-              }}
-              rules={[{ required: true }]}
-            />
+              <Row>
+              <Col span={20}>
+                <ProFormDigit
+                  name={'term'}
+                  label={'担保期限'}
+                  rules={[{ required: true }]}
+                />
+              </Col>
+              <Col span={4}>
+                <ProFormSelect
+                  name={'term_unit'}
+                  valueEnum={termC}
+                  fieldProps={{ className: '!w-[100%] !min-w-[50%]' }}
+                />
+              </Col>
+            </Row>
           </Col>
           <Col span={8}>
             <ProFormCheckbox.Group

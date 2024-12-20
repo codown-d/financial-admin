@@ -380,3 +380,11 @@ export const organs_data_type = {
     text: '保险公司',
   },
 };
+export const termC = {
+  1: {
+    text: '天',
+  },
+  2: {
+    text: '月',
+  },
+};
