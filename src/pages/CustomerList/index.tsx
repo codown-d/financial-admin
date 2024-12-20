@@ -93,6 +93,7 @@ export default () => {
         dataIndex: 'user_pass_view',
         ellipsis: true,
         hideInSearch: true,
+        render:()=>'******'
       },
       {
         title: '注册时间',

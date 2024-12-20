@@ -77,9 +77,9 @@ const Layout = () => {
               // colorMenuBackground: '#fff',
             },
           }}
-          menu={{ autoClose: false }}
+          menu={{ autoClose: false ,}}
           route={{
-            path: '/',
+            // path: location.pathname,
             routes: menu,
           }}
           layout="side"

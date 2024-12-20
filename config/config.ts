@@ -2,9 +2,6 @@ import { defineConfig } from '@umijs/max';
 import proxy from './proxy';
 import routes from './routes';
 const { BASE_URL, API_BASE_URL, PUBLIC_PATH } = process.env;
-console.log('BASE_URL',BASE_URL)
-console.log('API_BASE_URL', API_BASE_URL)
-console.log('PUBLIC_PATH', PUBLIC_PATH)
 export default defineConfig({
   define: {
     BASE_URL,

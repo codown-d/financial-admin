@@ -20,6 +20,7 @@ export default (props: { uid: any; }) => {
     {
       title: '密码',
       dataIndex: 'user_pass_view',
+        render:()=>'******'
     },
     {
       title: '联系电话',

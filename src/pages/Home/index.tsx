@@ -28,42 +28,43 @@ const columns: ProColumns<GithubIssueItem>[] = [
     dataIndex: 'account',
     ellipsis: true,
     onFilter: true,
-    order:5,
+    order: 5,
   },
   {
     title: '密码',
     dataIndex: 'password',
     ellipsis: true,
-    hideInSearch:true,
+    hideInSearch: true,
+    render: () => '******',
   },
   {
     title: '地区',
     dataIndex: 'area',
     onFilter: true,
-    order:2,
+    order: 2,
   },
   {
     title: '实名认证',
     dataIndex: 'realAuth',
-    formItemProps:{
-      label:'认证方式'
+    formItemProps: {
+      label: '认证方式',
     },
-    order:4,
+    order: 4,
   },
 
   {
     title: '企业认证',
     dataIndex: 'enterpriseAuth',
-    formItemProps:{
-      label:'公司名称'
+    formItemProps: {
+      label: '公司名称',
     },
-    order:3,
+    order: 3,
   },
   {
     title: '操作',
     fixed: 'right',
     align: 'center',
-    hideInSearch:true,
+    hideInSearch: true,
     render: (text, record, _, action) => (
       <TzButton
         type="link"
@@ -111,7 +112,7 @@ export default () => {
       }}
       rowKey="id"
       search={{
-        span:8
+        span: 8,
       }}
       options={{
         setting: {
@@ -119,8 +120,8 @@ export default () => {
         },
       }}
       form={{
-        labelWidth:120,
-        colon:false,
+        labelWidth: 120,
+        colon: false,
         // 由于配置了 transform，提交的参数与定义的不同这里需要转化一下
         syncToUrl: (values, type) => {
           if (type === 'get') {
