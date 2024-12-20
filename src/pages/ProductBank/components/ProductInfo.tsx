@@ -1,5 +1,5 @@
 import TzTitleDesc from '@/components/TzTitleDesc';
-import { data_type, repayment_method } from '@/constants';
+import { data_type, repayment_method, termC } from '@/constants';
 import { loanDetail, loanSave } from '@/services';
 import { formatKey } from '@/utils';
 import {
@@ -41,6 +41,7 @@ export default (props: { product_type: any }) => {
             let res = await loanDetail({ id, product_type });
             return {
               ...res.data,
+              term_unit:res.data.term_unit+''||'1',
               ...formatKey(res.data, ['fo_id',  'application_form']),
             };
           } else {
@@ -50,6 +51,7 @@ export default (props: { product_type: any }) => {
               highest_money_unit:2,
               id: 0,
               product_type,
+              term_unit:'1'
             };
           }
         }}
@@ -98,14 +100,22 @@ export default (props: { product_type: any }) => {
             />
           </Col>
           <Col span={8}>
-            <ProFormDigit
-              name={'term'}
-              label={'最高期限'}
-              fieldProps={{
-                suffix: '月',
-              }}
-              rules={[{ required: true }]}
-            />
+            <Row>
+              <Col span={20}>
+                <ProFormDigit
+                  name={'term'}
+                  label={'最高期限'}
+                  rules={[{ required: true }]}
+                />
+              </Col>
+              <Col span={4}>
+                <ProFormSelect
+                  name={'term_unit'}
+                  valueEnum={termC}
+                  fieldProps={{ className: '!w-[100%] !min-w-[50%]' }}
+                />
+              </Col>
+            </Row>
           </Col>
           <Col span={8}>
             <ProFormSelect

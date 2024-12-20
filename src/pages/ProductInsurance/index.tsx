@@ -76,7 +76,6 @@ export default () => {
         title: '期限',
         dataIndex: 'term',
         hideInTable: true,
-        
         renderFormItem: (_, { type, defaultRender, ...rest }) => {
           console.log(type)
           if (type === 'table') {
