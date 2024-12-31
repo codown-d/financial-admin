@@ -1,6 +1,6 @@
 import { useNavigate } from '@umijs/max';
 import { message } from 'antd';
-import { debounce, isArray, keyBy, keys } from 'lodash';
+import { debounce, isArray, keyBy, keys, split } from 'lodash';
 
 export function buildTree(
   data: { id: any; parentId: any;[x: string]: any }[],
@@ -133,4 +133,44 @@ export const handleRes=(res: { code: number; })=>{
   if(res.code==200){
     message.success('提交成功'); 
   }
+}
+export const getParentNodes = (id: any, tree: any[]) => {
+  const result: any[] = [];
+  // 递归函数查找父节点
+  const findParent = (currentId: any) => {
+    const node = tree.find(item => item.id === currentId);
+    if (node && node.parentId !== null) {
+      result.push(node);  // 将当前节点加入结果
+      findParent(node.parentId);  // 递归查找父节点
+    }
+  };
+  findParent(id);  // 启动递归查找
+  return result.reverse();  // 结果是从目标节点到根节点，所以需要反转数组
+};
+export function getSubPaths(path: string | null | undefined) {
+  // 将路径按 '/' 分割并去掉空字符串
+  const pathArray = split(path, '/').filter(Boolean);
+
+  // 构建每个子路径
+  const subPaths = [];
+  for (let i = 1; i <= pathArray.length; i++) {
+    subPaths.push('/' + pathArray.slice(0, i).join('/'));
+  }
+
+  return subPaths;
+}
+/**
+* 获取指定路径的部分路径（从开始到指定深度）
+* @param {string} path - 原始路径
+* @param {number} depth - 需要获取的路径深度
+* @returns {string} - 截取的路径
+*/
+export function getSubPathAtDepth(path: string, depth?: number) {
+ // 将路径按 '/' 分割并去掉空字符串
+ const pathArray = split(path, '/').filter(Boolean);
+
+ // 获取指定深度的路径部分
+ const subPath = '/' + pathArray.slice(0, depth||(path.split('/').length-2)).join('/');
+
+ return subPath;
 }

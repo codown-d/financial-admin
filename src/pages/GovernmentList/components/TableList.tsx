@@ -79,14 +79,12 @@ export default (props: { uid: any; }) => {
           option: { fixed: 'right', disable: true },
         },
         onChange(value) {
-          console.log('value: ', value);
         },
       }}
       rowKey="id"
       search={false}
       pagination={{
         pageSize: 10,
-        onChange: (page) => console.log(page),
       }}
       toolBarRender={() => [
         <Button

@@ -59,7 +59,6 @@ export default () => {
             page: 1,
             limit: 10,
           });
-          console.log(res)
           return [];
         }
       },
@@ -67,13 +66,19 @@ export default () => {
         title: '主题',
         dataIndex: 'theme_id',
         valueType: 'select',
-        valueEnum: {...theme,0:'-'},
+        valueEnum: {...theme},
+        renderText: (value) => {
+          return theme[value]?theme[value].text : '-';
+        },
       },
       {
         title: '特色',
         dataIndex: 'feature_id',
         valueType: 'select',
-        valueEnum: {...feature,0:'-'},
+        valueEnum: {...feature},
+        renderText: (value) => {
+          return feature[value]?feature[value].text : '-';
+        },
       },
 
       {
@@ -109,7 +114,7 @@ export default () => {
             type="link"
             key={'edit'}
             onClick={() => {
-              navigate(`/policy/list/policy-info?id=${record.id}`);
+              navigate(`/policy/policy-list/policy-info?id=${record.id}`);
             }}
           >
             编辑

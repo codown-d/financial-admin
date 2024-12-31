@@ -258,7 +258,7 @@ export enum product_type {
   Insurance = '6',
   Fund = '5',
 }
-export const purpose = {
+export const purpose:any = {
   1: {
     text: '生产经营',
   },

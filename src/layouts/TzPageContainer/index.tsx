@@ -21,7 +21,6 @@ const TzPageContainer: React.FC = () => {
       key: '1',
       label: <>退出登录</>,
       onClick() {
-        console.log(67868);
         storage.remove('userInfo');
         storage.clear();
         history.replace('/login');

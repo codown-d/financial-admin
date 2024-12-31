@@ -92,7 +92,6 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
         dataIndex: 'term',
         hideInTable: true,
         renderFormItem: (_, { type, defaultRender, ...rest }) => {
-          console.log(type)
           if (type === 'table') {
             return (
               <div className='flex'>
@@ -124,12 +123,18 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
       {
         title: '用途',
         dataIndex: 'purpose',
-        valueEnum: { ...purpose, 0: '-' },
+        valueEnum: { ...purpose },
+        renderText: (value) => {
+          return purpose[value]?purpose[value].text : '-';
+        },
       },
       {
         title: '担保方式',
         dataIndex: 'guarantee_method',
-        valueEnum: { ...data_type, 0: '-' },
+        valueEnum: { ...data_type}, 
+        renderText: (value) => {
+          return data_type[value]?data_type[value].text : '-';
+        },
       },
       {
         title: '地区',
@@ -157,7 +162,10 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
       {
         title: '还款方式',
         dataIndex: 'repayment_method',
-        valueEnum: { ...repayment_method, 0: '-' },
+        valueEnum: { ...repayment_method },
+        renderText: (value) => {
+          return repayment_method[value]?repayment_method[value].text : '-';
+        },
       },
       {
         title: '受益人',

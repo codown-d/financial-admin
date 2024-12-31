@@ -26,11 +26,8 @@ const Login: React.FC = () => {
           <h1 className=" text-2xl font-semibold mb-[76px]">欢迎登录</h1>
           <ProForm
             onFinish={async (values) => {
-              console.log(values)
               let res = await adminLogin(values)
-              console.log(123,res)
               storage.set('token',res.token);  
-              // storage.setCookie('userInfo',res.userInfo);
               window.location.href = '/'
             }}
             formRef={formRef}

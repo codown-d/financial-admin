@@ -3,8 +3,8 @@ import { useCallback, useEffect, useState } from 'react';
 
 export default function () {
   const [hot, setHot] = useState({});
-  const [theme, setTheme] = useState({});
-  const [feature, setFeature] = useState({});
+  const [theme, setTheme] = useState<any>({});
+  const [feature, setFeature] = useState<any>({});
   let policyThemeFeatureFn = useCallback(() => {
     policyThemeFeature().then((res) => {
       let { hot, theme, feature } = res;

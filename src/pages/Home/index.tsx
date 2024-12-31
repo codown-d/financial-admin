@@ -107,7 +107,6 @@ export default () => {
           option: { fixed: 'right', disable: true },
         },
         onChange(value) {
-          console.log('value: ', value);
         },
       }}
       rowKey="id"
@@ -135,7 +134,6 @@ export default () => {
       }}
       pagination={{
         pageSize: 10,
-        onChange: (page) => console.log(page),
       }}
       headerTitle={headerTitle}
       toolBarRender={() => [

@@ -282,7 +282,6 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
           option: { fixed: 'right', disable: true },
         },
         onChange(value) {
-          console.log('value: ', value);
         },
       }}
       rowKey="id"
@@ -310,7 +309,6 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
       }}
       pagination={{
         pageSize: 10,
-        onChange: (page) => console.log(page),
       }}
       headerTitle={headerTitle}
       {...proTableProps}

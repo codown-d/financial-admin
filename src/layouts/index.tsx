@@ -1,36 +1,34 @@
 import TzImg from '@/components/TzImg';
 import { AppConfigProvider } from '@/contexts/AppConfigContext';
-import { buildTree } from '@/utils';
+import { buildTree, getSubPathAtDepth, getSubPaths } from '@/utils';
 import {
   MenuDataItem,
   ProConfigProvider,
   ProLayout,
 } from '@ant-design/pro-components';
-import './index.css'
 import {
-  history,
   Outlet,
   useAccess,
   useAppData,
+  useLocation,
   useModel,
   useNavigate,
 } from '@umijs/max';
-import { App, ConfigProvider, Dropdown, MenuProps } from 'antd';
-import { cloneDeepWith, has, values } from 'lodash';
-import { memo, useMemo } from 'react';
-import { storage } from '@/utils/storage';
+import { App, ConfigProvider } from 'antd';
+import { cloneDeepWith, has, intersection, isUndefined, values } from 'lodash';
+import { memo, useEffect, useMemo, useState } from 'react';
+import './index.css';
 const Layout = () => {
   const AppData = useAppData();
   const accessFull = useAccess();
   const navigate = useNavigate();
+  const location = useLocation();
   const { routes } = AppData;
+  const _routes = cloneDeepWith(routes);
   let { userPermission } = useModel('userInfo');
   let menu = useMemo(() => {
-    const _routes = cloneDeepWith(routes);
-    const noPermission = (key: any) => {
-      return key === undefined || userPermission.some((item:string)=>{
-        return item.indexOf(key)==0
-      })
+    const hasPermission = (item: MenuDataItem) => {
+      return isUndefined(item.key)|| userPermission.some(ite=>ite.indexOf(item.key)==0);
     };
     const noAccess = (access: string) => access && accessFull.role != access; //&& !get(accessFull, access)
     const notInMenu = (item: MenuDataItem) =>
@@ -40,17 +38,21 @@ const Layout = () => {
         item.icon && (item.icon = <TzImg src={`/images/${item.icon}.png`} />);
         return !(notInMenu(item) || noAccess(item.access));
       })
-      .filter((item:MenuDataItem) => {
-        return noPermission(item.key);
+      .filter((item: MenuDataItem) => {
+        return hasPermission(item);
       });
     let treeData = buildTree(_menu, {
       children: 'routes',
       parentKey: '@@/global-layout',
     });
-      console.log(treeData)
     return treeData;
   }, [routes, userPermission]);
-  console.log(location.pathname,location.pathname.split('/').map(item=>item.replace('-','_')))
+  
+  let newPathname = location.pathname.replace('/backendadmin','')
+  let [openKeys, setOpenKeys] = useState(getSubPaths(newPathname));
+  useEffect(()=>{
+    setOpenKeys(getSubPaths(newPathname))
+  },[location])
   return (
     <App>
       <ProConfigProvider dark={false}>
@@ -63,11 +65,14 @@ const Layout = () => {
             },
           }}
           menuProps={{
-            selectedKeys:location.pathname.split('/').map(item=>item.replace('-','_'))
+            selectedKeys: getSubPaths(newPathname),
+            openKeys,
+            onOpenChange: (openKeys) => {
+              setOpenKeys((pre) => [...openKeys]);
+            },
           }}
-          menu={{ 
-            
-            autoClose: false ,
+          menu={{
+            autoClose: false,
           }}
           route={{
             routes: menu,
@@ -112,23 +117,23 @@ const Layout = () => {
           // headerRender={false}
         >
           <ConfigProvider
-          theme={{
-            components: {
-              Menu: {
-                colorItemBgActive: "#3C5BF6",
-                // controlHeight: 36,
-                // paddingInline: 20,
-                // defaultColor: '#2177D1',
+            theme={{
+              components: {
+                Menu: {
+                  colorItemBgActive: '#3C5BF6',
+                  // controlHeight: 36,
+                  // paddingInline: 20,
+                  // defaultColor: '#2177D1',
+                },
+                // Input: {
+                //   paddingBlock: 7,
+                //   algorithm: true,
+                // },
               },
-              // Input: {
-              //   paddingBlock: 7,
-              //   algorithm: true,
+              // token: {
+              //   colorPrimary: '#2177D1',
               // },
-            },
-            // token: {
-            //   colorPrimary: '#2177D1',
-            // },
-          }}
+            }}
           >
             {/* <PageContainer > */}
             <AppConfigProvider>

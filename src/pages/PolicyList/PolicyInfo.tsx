@@ -17,6 +17,7 @@ export default () => {
   let [searchParams] = useSearchParams();
   const [messageApi, contextHolder] = message.useMessage();
   let { theme, feature } = useModel('policy');
+  console.log(feature)
   let { interpretation } = useModel('policyInterpretation');
   let id = searchParams.get('id');
   const [form] = Form.useForm();
@@ -38,7 +39,8 @@ export default () => {
             let res = await policyDetail({ id });
             return {
               ...res.data,
-              // ...formatKey(res.data, ['fo_id',  'data_type','repayment_method','application_form']),
+              theme_id:res.data.theme_id!==0?res.data.theme_id:undefined,
+              feature_id:res.data.feature_id!==0?res.data.feature_id:undefined
             };
           } else {
             return {

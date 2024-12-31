@@ -3,12 +3,15 @@ import TzCard from '@/components/TzCard';
 import TzImg from '@/components/TzImg';
 import { adminPermission } from '@/services';
 import {  ProCard } from '@ant-design/pro-components';
-import { useModel } from '@umijs/max';
+import { useAppData, useModel } from '@umijs/max';
 import { message, Spin, Switch } from 'antd';
+import { merge, values } from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
 
 export default () => {
   let { menu } = useModel('menu');
+  const AppData = useAppData();
+  const { routes } = AppData;
   let [sendData, setSendData] = useState<any>({
     admin_user_permission: [],
     financial_organs_user_permission: [],
@@ -20,7 +23,11 @@ export default () => {
   
   let { permissionData } = useModel('permission');
   useEffect(() => {
-    setSendData(permissionData)
+    let arr = values(routes).map((item:any)=>item.key)
+    permissionData['admin_user_permission']=permissionData['admin_user_permission'].filter(item=>arr.includes(item))
+    permissionData['financial_organs_user_permission']=permissionData['financial_organs_user_permission'].filter(item=>arr.includes(item))
+    permissionData['government_department_user_permission']=permissionData['government_department_user_permission'].filter(item=>arr.includes(item))
+    setSendData(merge(permissionData,{financial_organs_user_permission:['/customer/customer-list']}))
   },[permissionData])
 
   let onChange = (checked: boolean, path: string, key: string) => {
@@ -192,11 +199,6 @@ export default () => {
           type={'primary'}
           className="mt-[60px] mr-[20px] mb-[60px]"
           onClick={() => {
-            console.log(sendData)
-            // let obj = keys(sendData).reduce((pre: any, item) => {
-            //   pre[item] = sendData[item].join(",")
-            //   return pre
-            // }, {})
             adminPermission(sendData).then(res => {
               if(res.code==200){
                 message.success('保存成功')

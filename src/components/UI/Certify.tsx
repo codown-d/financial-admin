@@ -9,7 +9,7 @@ export default function (props: { title: string; status: CertifyStatusProps }) {
   }, [status]);
   return (
     <span className='flex w-fit rounded-[8px] overflow-hidden' style={data?.style}>
-      <span className='py-1 px-3 font-bold'>{data?.text}</span>
+      <span className='py-1 px-3 font-bold min-w-[66px] flex items-center'>{data?.text}</span>
       {title&&<span className='bg-white py-1 px-3 text-[#333333]' style={{
         borderLeft: `1px solid ${data?.style?.borderColor}`,
       }}>{title}</span>}

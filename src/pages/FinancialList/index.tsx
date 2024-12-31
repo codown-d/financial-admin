@@ -183,7 +183,6 @@ export default () => {
       }}
       pagination={{
         pageSize: 10,
-        onChange: (page) => console.log(page),
       }}
       headerTitle={headerTitle}
       toolBarRender={() => [

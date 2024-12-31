@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 export default function () {
   const [userInfo, setUserInfo] = useState({user_name:''});
-  const [userPermission, setUserPermission] = useState([
+  const [userPermission, setUserPermission] = useState<any[]>([
     ]);
   let fetchUserInfo = useCallback(async () => {
     const response = await getUserInfo();

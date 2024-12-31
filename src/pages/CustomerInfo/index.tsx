@@ -45,7 +45,6 @@ export default () => {
           if (uid) {
             let res = await getUserInfo({ query_uid: uid });
             setUserInfo(res.data)
-            console.log(res)
             return { ...res.data };
           } else {
             return {};
