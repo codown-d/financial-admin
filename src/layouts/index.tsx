@@ -50,11 +50,10 @@ const Layout = () => {
       console.log(treeData)
     return treeData;
   }, [routes, userPermission]);
-  console.log(location.pathname,location.pathname.replace('/backendadmin',''))
+  console.log(location.pathname,location.pathname.split('/').map(item=>item.replace('-','_')))
   return (
     <App>
       <ProConfigProvider dark={false}>
-        
         <ProLayout
           siderWidth={250}
           token={{
@@ -63,7 +62,11 @@ const Layout = () => {
               // colorMenuBackground: '#fff',
             },
           }}
+          menuProps={{
+            selectedKeys:location.pathname.split('/').map(item=>item.replace('-','_'))
+          }}
           menu={{ 
+            
             autoClose: false ,
           }}
           route={{
