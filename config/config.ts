@@ -10,8 +10,10 @@ export default defineConfig({
   },
   title: '广元市综合金融管理平台',
   base: BASE_URL,
-  publicPath: PUBLIC_PATH+'/',
-  history: { type: 'browser' },
+  publicPath: PUBLIC_PATH + '/',
+  history: {
+    type: 'browser',
+  },
   antd: {},
   access: {},
   model: {},

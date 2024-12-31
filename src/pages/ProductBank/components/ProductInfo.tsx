@@ -42,7 +42,7 @@ export default (props: { product_type: any }) => {
             console.log(res.data.term_unit)
             return {
               ...res.data,
-              term_unit:res.data.term_unit+''||'1',
+              term_unit:res.data.term_unit+''||1,
               ...formatKey(res.data, ['fo_id',  'application_form']),
             };
           } else {
@@ -52,7 +52,7 @@ export default (props: { product_type: any }) => {
               highest_money_unit:2,
               id: 0,
               product_type,
-              term_unit:'1'
+              term_unit:1
             };
           }
         }}

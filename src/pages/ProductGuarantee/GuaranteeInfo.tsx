@@ -40,13 +40,13 @@ export default () => {
             let res = await loanDetail({ id, product_type: 7 });
             return {
               ...res.data,
-               term_unit:res.data.term_unit+''||'1',
+               term_unit:res.data.term_unit||1,
               ...formatKey(res.data, ['fo_id','guarantee_form','data_type']),
             };
           } else {
             return {
               add_time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-              term_unit:'1'
+              term_unit:1
             };
           }
         }}

@@ -97,7 +97,7 @@ export default () => {
         hideInTable: !access.canEdit,
         render: (text, record, _, action) => [
           <Access accessible={access.canEdit}>
-            <TzButton type="link" key={'edit'}>
+            <TzButton type="link" key={'edit'} >
               <Link
                 to={`/customer/government-list/info?id=${record.id}`}
               >

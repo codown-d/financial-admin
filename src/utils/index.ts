@@ -19,6 +19,9 @@ export function buildTree(
     .filter((item) => {
       // 找到所有没有父节点的节点（根节点）
       if (item.parentId === parentKey) {
+        if (item.path) {
+          item.path = `${BASE_URL}${item.path}`;
+        }
         return true;
       }
       // 如果有父节点，则将当前节点添加到父节点的 children 数组中

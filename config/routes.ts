@@ -28,26 +28,26 @@ const routes = [
     routes: [
       {
         path: '',
-        redirect: '/customer/customer-list',
+        redirect: 'customer-list',
       },
       {
         name: '客户列表',
         title: '客户列表',
-        path: '/customer/customer-list',
+        path: 'customer-list',
         key:'customer_list',
         component: './CustomerList',
       },
       {
         name: '金融机构列表',
         title: '金融机构列表',
-        path: '/customer/financial-list',
+        path: 'financial-list',
         component: './FinancialList',
         key:'customer_financialList',
       },
       {
         name: '政府部门列表',
         title: '政府部门列表',
-        path: '/customer/government-list',
+        path: 'government-list',
         component: './GovernmentList',
         key:'customer_governmentList',
       },

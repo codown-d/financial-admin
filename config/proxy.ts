@@ -1,6 +1,6 @@
 const proxy = {
     '/api': {
-      target: 'http://219.151.185.167:3900/',
+      target: 'https://admin.gyzhjr.com/',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
   },

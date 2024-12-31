@@ -96,7 +96,6 @@ export default (props: { product_type: product_type }) => {
         dataIndex: 'term',
         hideInTable: true,
         renderFormItem: (_, { type, defaultRender, ...rest }) => {
-          console.log(type)
           if (type === 'table') {
             return (
               <div className='flex'>

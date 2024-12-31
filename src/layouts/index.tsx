@@ -15,7 +15,6 @@ import {
   useModel,
   useNavigate,
 } from '@umijs/max';
-
 import { App, ConfigProvider, Dropdown, MenuProps } from 'antd';
 import { cloneDeepWith, has, values } from 'lodash';
 import { memo, useMemo } from 'react';
@@ -26,7 +25,6 @@ const Layout = () => {
   const navigate = useNavigate();
   const { routes } = AppData;
   let { userPermission } = useModel('userInfo');
-  console.log(userPermission)
   let menu = useMemo(() => {
     const _routes = cloneDeepWith(routes);
     const noPermission = (key: any) => {
@@ -52,23 +50,11 @@ const Layout = () => {
       console.log(treeData)
     return treeData;
   }, [routes, userPermission]);
-  
-  let { userInfo } = useModel('userInfo');
-  const items: MenuProps['items'] = [
-    {
-      key: '1',
-      label: <>退出登录</>,
-      onClick() {
-        console.log(67868);
-        storage.remove('userInfo');
-        storage.clear();
-        history.replace('/login');
-      },
-    },
-  ];
+  console.log(location.pathname,location.pathname.replace('/backendadmin',''))
   return (
     <App>
       <ProConfigProvider dark={false}>
+        
         <ProLayout
           siderWidth={250}
           token={{
@@ -77,9 +63,10 @@ const Layout = () => {
               // colorMenuBackground: '#fff',
             },
           }}
-          menu={{ autoClose: false ,}}
+          menu={{ 
+            autoClose: false ,
+          }}
           route={{
-            // path: location.pathname,
             routes: menu,
           }}
           layout="side"

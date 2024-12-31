@@ -40,7 +40,7 @@ export default () => {
             console.log(res.data.term_unit);
             return {
               ...res,
-              term_unit: res.data.term_unit+'' || '1',
+              term_unit: res.data.term_unit || 1,
               ...formatKey(res.data, [
                 'fo_id',
                 'data_type',
@@ -54,7 +54,7 @@ export default () => {
               id: 0,
               application_form: '4',
               product_type: 6,
-              term_unit: '1',
+              term_unit: 1,
               highest_money_unit: 1,
             };
           }
