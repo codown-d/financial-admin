@@ -66,7 +66,9 @@ export default () => {
         title: '主题',
         dataIndex: 'theme_id',
         valueType: 'select',
-        valueEnum: {...theme},
+        valueEnum: {...theme},fieldProps: {
+          mode: 'multiple',  // 设置多选
+        },
         renderText: (value) => {
           return theme[value]?theme[value].text : '-';
         },
@@ -75,7 +77,9 @@ export default () => {
         title: '特色',
         dataIndex: 'feature_id',
         valueType: 'select',
-        valueEnum: {...feature},
+        valueEnum: {...feature},fieldProps: {
+          mode: 'multiple',  // 设置多选
+        },
         renderText: (value) => {
           return feature[value]?feature[value].text : '-';
         },

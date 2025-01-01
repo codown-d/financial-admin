@@ -64,7 +64,9 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
       {
         title: '类型',
         dataIndex: 'product_type',
-        valueEnum: product_type_filter,
+        valueEnum: product_type_filter,fieldProps: {
+          mode: 'multiple',  // 设置多选
+        },
       },
       {
         title: '金额',
@@ -127,6 +129,9 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
         renderText: (value) => {
           return purpose[value]?purpose[value].text : '-';
         },
+        fieldProps: {
+          mode: 'multiple',  // 设置多选
+        },
       },
       {
         title: '担保方式',
@@ -134,6 +139,9 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
         valueEnum: { ...data_type}, 
         renderText: (value) => {
           return data_type[value]?data_type[value].text : '-';
+        },
+        fieldProps: {
+          mode: 'multiple',  // 设置多选
         },
       },
       {
@@ -165,6 +173,8 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
         valueEnum: { ...repayment_method },
         renderText: (value) => {
           return repayment_method[value]?repayment_method[value].text : '-';
+        },  fieldProps: {
+          mode: 'multiple',  // 设置多选
         },
       },
       {

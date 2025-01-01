@@ -128,11 +128,16 @@ export default (props: { product_type: product_type }) => {
         title: '担保方式',
         dataIndex: 'data_type',
         valueEnum: data_type,
+        fieldProps: {
+          mode: 'multiple',  // 设置多选
+        },
       },
       {
         title: '还款方式',
         dataIndex: 'repayment_method',
-        valueEnum: repayment_method,
+        valueEnum: repayment_method,  fieldProps: {
+          mode: 'multiple',  // 设置多选
+        },
       },
       {
         title: '添加时间',

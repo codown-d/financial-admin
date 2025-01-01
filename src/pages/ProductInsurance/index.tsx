@@ -44,7 +44,9 @@ export default () => {
       {
         title: '种类',
         dataIndex: 'data_type',
-        valueEnum: insurance_type,
+        valueEnum: insurance_type,fieldProps: {
+          mode: 'multiple',  // 设置多选
+        },
       },
       {
         title: '保额（万元）',

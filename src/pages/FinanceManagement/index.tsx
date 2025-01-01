@@ -62,7 +62,13 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
       {
         title: '用途',
         dataIndex: 'purpose',
-        valueEnum: purpose,
+        valueEnum: purpose, 
+        renderText: (value) => {
+          return purpose[value]?purpose[value].text : '-';
+        },
+        fieldProps: {
+          mode: 'multiple',  // 设置多选
+        },
       },
       {
         title: '期限范围',
@@ -73,6 +79,9 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
         title: '担保方式',
         dataIndex: 'guarantee_method',
         valueEnum: data_type,
+        fieldProps: {
+          mode: 'multiple',  // 设置多选
+        },
       },
       {
         title: '地区',

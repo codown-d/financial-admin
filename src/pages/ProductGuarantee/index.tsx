@@ -103,12 +103,17 @@ export default () => {
       {
         title: '保函形式',
         dataIndex: 'guarantee_form',
-        valueEnum: GUARANTEE_FROM,
+        valueEnum: GUARANTEE_FROM,fieldProps: {
+          mode: 'multiple',  // 设置多选
+        },
       },
       {
         title: '担保方式',
         dataIndex: 'data_type',
         valueEnum: data_type,
+        fieldProps: {
+          mode: 'multiple',  // 设置多选
+        },
       },
       {
         title: '操作',

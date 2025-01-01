@@ -52,6 +52,9 @@ export default () => {
         hideInTable: true,
         valueType: 'select',
         valueEnum: VERIFY_TYPE,
+        fieldProps: {
+          mode: 'multiple',  // 设置多选
+        },
       },
       {
         title: '公司名称',
