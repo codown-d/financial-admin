@@ -5,6 +5,7 @@ import { policyDetail, policySave } from '@/services';
 import { formatOption } from '@/utils';
 import {
   ProForm,
+  ProFormContext,
   ProFormDateTimePicker,
   ProFormSelect,
   ProFormText,
@@ -117,10 +118,9 @@ export default () => {
               rules={[{ required: true }]}/>
           </Col>
           <Col span={8}>
-            <ProFormSelect
+            <ProFormText
               name={'interpret'}
               label="关联解读"
-              valueEnum={interpretation}
             />
           </Col>
         </Row>

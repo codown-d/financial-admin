@@ -197,22 +197,7 @@ export default () => {
         pageSize: 10,
         onChange: (page) => console.log(page),
       }}
-      headerTitle={headerTitle}
-      toolBarRender={() => [
-        <Access accessible={access.canEdit}>
-          <Button
-            key="button"
-            icon={<PlusOutlined />}
-            onClick={() => {
-              // actionRef.current?.reload();
-              navigate(`/policy/list/policy-info`);
-            }}
-            type="primary"
-          >
-            添加
-          </Button>
-        </Access>,
-      ]}
+
     />
   );
 };
