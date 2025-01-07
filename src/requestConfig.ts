@@ -105,10 +105,14 @@ export const requestConfig = {
       set(
         newParams,
         key,
-        isArray(params[key]) && !params[key].length ? '' : params[key],
+        isArray(params[key]) && !params[key].length ? JSON.stringify(params[key]) : params[key],
+       //params[key]
       ),
     );
-    return queryString.stringify(newParams);
+    //return qs.stringify(params, { indices: false });
+    return queryString.stringify(newParams,{ 
+      arrayFormat: 'comma' 
+    });
   },
   baseURL: API_BASE_URL,
   retryTimes: 3,
