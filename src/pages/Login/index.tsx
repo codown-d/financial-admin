@@ -1,16 +1,12 @@
 import { TzButton } from '@/components/TzButton';
 import TzCard from '@/components/TzCard';
-import TzImage from '@/components/TzImage';
 import TzImg from '@/components/TzImg';
 import { adminLogin } from '@/services';
 import { storage } from '@/utils/storage';
 import { ProForm, ProFormCheckbox, ProFormText } from '@ant-design/pro-components';
-import { useModel } from '@umijs/max';
 import { useRef } from 'react';
 
 const Login: React.FC = () => {
-  const { name } = useModel('global');
-
   const formRef = useRef();
   return (
     <div

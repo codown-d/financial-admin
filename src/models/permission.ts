@@ -9,7 +9,7 @@ export default function () {
     government_department_user_permission:[],
   });
   let fetchPermissions = useCallback(async () => {
-    const response = await permission();
+    const response = await permission({},{skipErrorHandler:true});
     setPermissionData(
       merge({
         admin_user_permission: ['permission','permission_config'],

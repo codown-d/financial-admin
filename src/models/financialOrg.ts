@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 export default function () {
   const [financialOrg, setFinancialOrg] = useState({});
   let fetchFinancialOrgs = useCallback(async () => {
-    const response = await financialOrgs();
+    const response = await financialOrgs({},{skipErrorHandler:true});
     setFinancialOrg(response);
     setFinancialOrg(
       response.dataList.reduce(

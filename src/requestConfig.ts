@@ -47,12 +47,16 @@ const axiosCanceler = new AxiosCanceler();
 
 const errorHandler = (response: any) => {
   if (response?.status) {
-    const { status, data } = response;
+    console.log(response);
+    const { status, data, config,headers } = response;
     const errorTxt = data?.desc;
-    showError({
-      key: status === 401 ? status : +new Date(),
-      content: errorTxt,
-    });
+    if (!config?.skipErrorHandler) {
+      console.log(headers)
+      showError({
+        key: status === 401 ? status : +new Date(),
+        content: errorTxt,
+      });
+    }
     if (status === 401 || data.code === 401) {
       storage.remove('userInfo');
       storage.clear();
@@ -82,14 +86,10 @@ const requestInterceptors = (request: {
 };
 const responseInterceptors = async (response: any) => {
   const {
-    data,
-    config: { customHandleRes },
+    data:{ code },
+    config: { customHandleRes, skipErrorHandler },
   } = response;
-  if (customHandleRes) {
-    return response;
-  }
-  const { code } = data;
-  if (code == 200) {
+  if (code == 200||customHandleRes || skipErrorHandler) {
     return response;
   }
   return Promise.reject(response);
@@ -105,36 +105,32 @@ export const requestConfig = {
       set(
         newParams,
         key,
-        isArray(params[key]) && !params[key].length ? JSON.stringify(params[key]) : params[key],
-       //params[key]
+        isArray(params[key]) && !params[key].length
+          ? JSON.stringify(params[key])
+          : params[key],
+        //params[key]
       ),
     );
     //return qs.stringify(params, { indices: false });
-    return queryString.stringify(newParams,{ 
-      arrayFormat: 'comma' 
+    return queryString.stringify(newParams, {
+      arrayFormat: 'comma',
     });
   },
   baseURL: API_BASE_URL,
   retryTimes: 3,
   timeout: 10 * 1000,
   // getResponse: true,
-  errorConfig: { errorHandler },
   requestInterceptors: [requestInterceptors],
   responseInterceptors: [
-    [
-      responseInterceptors,
-      (error: any) => {
-        const { config, response } = error;
-        // NProgress.done();
-        if (config?.skipErrorHandler) {
-          errorHandler(error);
-        } else {
-          showError({
-            content: response?.data?.message,
-          });
-        }
-        return Promise.reject(response?.data);
-      },
-    ],
+    responseInterceptors,
+    (error: any) => {
+      const { config, response } = error;
+      // NProgress.done();
+      if (config?.skipErrorHandler) {
+        errorHandler(error);
+      }
+      return Promise.reject(response?.data);
+    },
   ],
+  errorConfig: { errorHandler },
 };

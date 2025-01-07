@@ -2,7 +2,6 @@ export default {
   userLogin: '/api/user/login',
   adminLogin:'/admin/login',
   userList:'/admin/user/all/list',
-  financialList:'/admin/financial/organs/all/list',
   governmentList:'/admin/government/department/all/list',
   financialDelete:'/admin/financial/organs/delete',
   financialDetail:'/admin/financial/organs/detail',

@@ -14,7 +14,7 @@ setupGlobalErrorHandling();
 
 const history = createBrowserHistory();
 export async function getInitialState() {
-  const user = await getUserInfo();
+  const user = await getUserInfo({},{skipErrorHandler:true});
   return { name: '@umijs/max', history, user };
 }
 

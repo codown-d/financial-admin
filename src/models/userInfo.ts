@@ -6,7 +6,8 @@ export default function () {
   const [userPermission, setUserPermission] = useState<any[]>([
     ]);
   let fetchUserInfo = useCallback(async () => {
-    const response = await getUserInfo();
+   
+    const response = await getUserInfo({},{skipErrorHandler:true});
     setUserInfo(response.data);
     setUserPermission(response.permission||[])
   }, []);

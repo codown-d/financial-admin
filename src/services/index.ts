@@ -52,7 +52,7 @@ export async function financialList(
   },
   options?: { [key: string]: any },
 ) {
-  return request<any>(api.financialList, {
+  return request<any>(api.financialOrgs, {
     method: 'GET',
     params: {
       ...params,
@@ -191,6 +191,7 @@ export async function permission(
   params?: any,
   options?: { [key: string]: any },
 ) {
+  console.log(options)
   return request<any>(`${api.permission}`, {
     method: 'GET',
     params: {
