@@ -191,7 +191,6 @@ export async function permission(
   params?: any,
   options?: { [key: string]: any },
 ) {
-  console.log(options)
   return request<any>(`${api.permission}`, {
     method: 'GET',
     params: {

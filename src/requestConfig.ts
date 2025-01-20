@@ -45,32 +45,6 @@ export const requestStore = proxy<requestStoreProps>({
 
 const axiosCanceler = new AxiosCanceler();
 
-const errorHandler = (response: any) => {
-  if (response?.status) {
-    console.log(response);
-    const { status, data, config,headers } = response;
-    const errorTxt = data?.desc;
-    if (!config?.skipErrorHandler) {
-      console.log(headers)
-      showError({
-        key: status === 401 ? status : +new Date(),
-        content: errorTxt,
-      });
-    }
-    if (status === 401 || data.code === 401) {
-      storage.remove('userInfo');
-      storage.clear();
-      history.replace('/login');
-    } else if (503 === status) {
-      history.replace('/503');
-    }
-
-    return response;
-  } else if (!response) {
-    // message.error(translate('request.errorTip'));
-  }
-  return response;
-};
 const requestInterceptors = (request: {
   isSignal?: boolean;
   headers: { Authorization: string; Token: string };
@@ -86,13 +60,38 @@ const requestInterceptors = (request: {
 };
 const responseInterceptors = async (response: any) => {
   const {
-    data:{ code },
+    status,
+    data: { code },
     config: { customHandleRes, skipErrorHandler },
   } = response;
-  if (code == 200||customHandleRes || skipErrorHandler) {
+  if (status == 200) {
     return response;
+  } else {
+    return Promise.reject(response);
   }
-  return Promise.reject(response);
+};
+const errorHandler = (response: any) => {
+  if (response?.status) {
+    const { status, data, config, headers } = response;
+    const errorTxt = data?.desc;
+    if (!config?.skipErrorHandler) {
+      showError({
+        key: status === 401 ? status : +new Date(),
+        content: errorTxt,
+      });
+    }
+    if (status === 401 || data.code === 401) {
+      storage.remove('userInfo');
+      storage.clear();
+      history.replace('/login');
+    } else if (503 === status) {
+      history.replace('/503');
+    }
+    return response;
+  } else if (!response) {
+    // message.error('request.errorTip');
+  }
+  return response;
 };
 export const requestConfig = {
   paramsSerializer: (params: { [x: string]: any }) => {
@@ -123,13 +122,12 @@ export const requestConfig = {
   requestInterceptors: [requestInterceptors],
   responseInterceptors: [
     responseInterceptors,
-    (error: any) => {
-      const { config, response } = error;
-      // NProgress.done();
-      if (config?.skipErrorHandler) {
-        errorHandler(error);
+    (response: any) => {
+      const { code } = response.data;
+      if (code == 200) {
+        return response;
       }
-      return Promise.reject(response?.data);
+      return Promise.reject(response);
     },
   ],
   errorConfig: { errorHandler },

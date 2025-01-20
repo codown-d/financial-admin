@@ -28,13 +28,11 @@ export default () => {
   const [fileList, setFileList] = useState<any[]>([]);
   const logo = Form.useWatch('logo', form);
   useEffect(() => {
-    if (!logo || logo.length == 0) return;
-    let { url } = logo[0];
-    urlToBase64(url, (thumbUrl) => {
+    urlToBase64(logo, (thumbUrl) => {
       setFileList([
         {
           status: 'done',
-          url: url,
+          url: logo,
           thumbUrl: thumbUrl,
         },
       ]);
@@ -47,9 +45,10 @@ export default () => {
       <ProForm
         form={form}
         onFinish={async (values) => {
+          console.log('values',values,fileList)
           let res = await financialSave({
             ...values,
-            logo: values.logo?.[0]?.response?.file,
+            logo:fileList[0]?.url,
             prov_id: values.area_id?.[0],
             city_id: values.area_id?.[1],
             area_id: values.area_id?.[2],
@@ -62,20 +61,20 @@ export default () => {
         request={async () => {
           if (id) {
             let { data } = await financialDetail({ id });
+            setFileList(data.logo
+              ? [
+                  {
+                    status: 'done',
+                    url: data.logo,
+                    thumbUrl: '',
+                    response:{file: data.logo,}
+                  },
+                ]
+              : [])
             return {
               ...data,
               data_type:data.data_type+'',
               area_id: [data.prov_id, data.city_id, data.area_id],
-              logo: data.logo
-                ? [
-                    {
-                      status: 'done',
-                      url: data.logo,
-                      thumbUrl: '',
-                      response:{file: data.logo,}
-                    },
-                  ]
-                : undefined,
             };
           } else {
             return {
@@ -94,17 +93,18 @@ export default () => {
           <Col span={8}>
             <Col span={24}>
               <ProFormText name="id" hidden />
+              <ProFormText name="logo" hidden />
               <ProFormUploadButton
                 accept=".jpg,.jpeg,.png"
                 extra="支持扩展名：.jpg .png .jpeg"
                 label="企业LOGO"
-                name="logo"
                 fieldProps={{
                   name: 'image',
                   showUploadList: true,
                   multiple: false,
                   onChange: ({ fileList }) => {
                     let arr = fileList.map((item) => {
+                      console.log(item?.response?.file)
                       return {
                         ...item,
                         url: item?.response?.file,
@@ -117,7 +117,7 @@ export default () => {
                 value={fileList}
                 listType="picture-card"
                 title="上传文件"
-                action={`${API_BASE_URL}/upload/image`}
+                action={`${API_BASE_URL||''}/upload/image`}
               />
               <ProFormText
                 name="organs_name"
