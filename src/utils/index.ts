@@ -108,7 +108,7 @@ export function urlToBase64(url: string, callback: (arg: string) => void) {
     callback(url)
     console.error("图片加载失败");
   };
-  img.src = url.replace('http://219.151.185.167:3900',API_BASE_URL);
+  img.src = url.replace('https://admin.gyzhjr.com/',API_BASE_URL||'');
 }
 export const formatOption=(Object:{
   [x:string]:{text:string}
