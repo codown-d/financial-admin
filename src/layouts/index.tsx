@@ -130,9 +130,9 @@ const Layout = () => {
                 //   algorithm: true,
                 // },
               },
-              // token: {
-              //   colorPrimary: '#2177D1',
-              // },
+              token: {
+                colorPrimary: '#2177D1',
+              },
             }}
           >
             {/* <PageContainer > */}

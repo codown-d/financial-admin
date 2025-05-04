@@ -8,18 +8,21 @@ import {
   repayment_method,
 } from '@/constants';
 import { useAreaData } from '@/hooks';
-import { allocation, applyAction, applyList, financialOrgs } from '@/services';
+import { applyAction, applyList } from '@/services';
 import type {
   ActionType,
   ProColumns,
   ProTableProps,
 } from '@ant-design/pro-components';
-import { ModalForm, ProFormSelect, ProTable } from '@ant-design/pro-components';
-import { useAccess, useNavigate } from '@umijs/max';
-import { DatePicker, Form, InputNumber, message } from 'antd';
+import {
+  DrawerForm,
+  ProDescriptions,
+  ProTable,
+} from '@ant-design/pro-components';
+import { useNavigate } from '@umijs/max';
+import { Form, InputNumber, message,Image } from 'antd';
 import { useMemo, useRef, useState } from 'react';
 
-const { RangePicker } = DatePicker;
 type GithubIssueItem = {
   id: number;
   account: string;
@@ -43,7 +46,6 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
     return `共 ${total} 条数据`;
   }, [total]);
 
-  const access = useAccess();
   const columns: ProColumns<GithubIssueItem>[] = useMemo(
     () => [
       {
@@ -54,18 +56,19 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
         },
       },
       {
-        title: "机构名称",
-        dataIndex: ['financial_organs','organs_name'],
+        title: '机构名称',
+        dataIndex: ['financial_organs', 'organs_name'],
       },
       {
-        title: "产品名称",
-        dataIndex: ['product','name'],
+        title: '产品名称',
+        dataIndex: ['product', 'name'],
       },
       {
         title: '类型',
         dataIndex: 'product_type',
-        valueEnum: product_type_filter,fieldProps: {
-          mode: 'multiple',  // 设置多选
+        valueEnum: product_type_filter,
+        fieldProps: {
+          mode: 'multiple', // 设置多选
         },
       },
       {
@@ -96,18 +99,18 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
         renderFormItem: (_, { type, defaultRender, ...rest }) => {
           if (type === 'table') {
             return (
-              <div className='flex'>
-                <Form.Item name="term" className='w-[70%]'>
+              <div className="flex">
+                <Form.Item name="term" className="w-[70%]">
                   <InputNumber
                     style={{ width: '100%' }}
                     placeholder="请输入期限值"
                   />
                 </Form.Item>
-                <Form.Item name="term_unit" className='w-[30%]'>
+                <Form.Item name="term_unit" className="w-[30%]">
                   <TzSelect
                     options={[
-                      { label: '天', value: "1" },
-                      { label: '月', value: "2" },
+                      { label: '天', value: '1' },
+                      { label: '月', value: '2' },
                     ]}
                   />
                 </Form.Item>
@@ -120,28 +123,28 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
       {
         title: '期限',
         dataIndex: 'term_desc',
-        hideInSearch: true,  
+        hideInSearch: true,
       },
       {
         title: '用途',
         dataIndex: 'purpose',
         valueEnum: { ...purpose },
         renderText: (value) => {
-          return purpose[value]?purpose[value].text : '-';
+          return purpose[value] ? purpose[value].text : '-';
         },
         fieldProps: {
-          mode: 'multiple',  // 设置多选
+          mode: 'multiple', // 设置多选
         },
       },
       {
         title: '担保方式',
         dataIndex: 'guarantee_method',
-        valueEnum: { ...data_type}, 
-        renderText: (value) => {
-          return data_type[value]?data_type[value].text : '-';
-        },
+        valueEnum: { ...data_type },
+        // renderText: (value) => {
+        //   return data_type[value]?data_type[value].text : '-';
+        // },
         fieldProps: {
-          mode: 'multiple',  // 设置多选
+          mode: 'multiple', // 设置多选
         },
       },
       {
@@ -164,17 +167,17 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
       },
       {
         title: '联系方式',
-        dataIndex: ['user','user_name'],
-        
+        dataIndex: ['user', 'user_name'],
       },
       {
         title: '还款方式',
         dataIndex: 'repayment_method',
         valueEnum: { ...repayment_method },
-        renderText: (value) => {
-          return repayment_method[value]?repayment_method[value].text : '-';
-        },  fieldProps: {
-          mode: 'multiple',  // 设置多选
+        // renderText: (value) => {
+        //   return repayment_method[value]?repayment_method[value].text : '-';
+        // },
+        fieldProps: {
+          mode: 'multiple', // 设置多选
         },
       },
       {
@@ -207,7 +210,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
         title: '状态',
         dataIndex: 'action_status',
         valueEnum: action_status_filter,
-        width:100
+        width: 100,
       },
 
       {
@@ -218,7 +221,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
         render: (text, record: any, _, action) => {
           return (
             <>
-              { record.action_status == 1 ? (
+              {record.action_status == 1 ? (
                 <>
                   <TzButton
                     type="link"
@@ -251,7 +254,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
                     type="link"
                     key={'2'}
                     onClick={() => {
-                      applyAction({ id: record.id, status: 5}).then((res) => {
+                      applyAction({ id: record.id, status: 5 }).then((res) => {
                         actionRef.current?.reload();
                         message.success('操作成功');
                       });
@@ -274,17 +277,30 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
                   </TzButton>
                 </>
               ) : null}
-              <TzButton
-                type="link"
+              {record.attachment_list.length?<DrawerForm
+                title="附件"
                 key={'info'}
-                onClick={() => {
-                  navigate(
-                    `/customer/customer-list/customer-info?uid=${record.uid}`,
-                  );
+                trigger={<TzButton type="link">查看详情</TzButton>}
+                onFinish={async () => {
+                  return true;
                 }}
               >
-                查看详情
-              </TzButton>
+                <ProDescriptions
+                  actionRef={actionRef}
+                  column={1}
+                >
+                  {record.attachment_list.map((item, index) => {
+                    return (
+                      <ProDescriptions.Item key={index} label={item.attachment_name}>
+                        <Image
+                          width={200}
+                          src={item.attachment_url}
+                        />
+                      </ProDescriptions.Item>
+                    );
+                  })}
+                </ProDescriptions>
+              </DrawerForm>:null}
             </>
           );
         },
@@ -334,8 +350,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
           if (type === 'get') {
             return {
               ...values,
-              
-              term_unit:values.term_unit||'1',
+              term_unit: values.term_unit || '1',
               created_at: [values.start, values.end],
             };
           }

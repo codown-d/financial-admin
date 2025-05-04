@@ -396,3 +396,241 @@ export const termOp = [{
     value:2
   },
 ]
+export let fileList = [
+  {
+    label: "企业简介",
+    prop: "loan_company_profile",
+    required: true,
+  },
+  {
+    label: "公司章程",
+    prop: "loan_articles",
+    required: true,
+  },
+  {
+    label: "营业执照正本",
+    prop: "loan_license_original",
+    required: true,
+  },
+  {
+    label: "营业执照副本",
+    prop: "loan_license_copy",
+    required: true,
+  },
+  {
+    label: "法定代表人身份证",
+    prop: "loan_legal_id",
+    required: true,
+  },
+  {
+    label: "企业征信报告（近一月内）",
+    prop: "loan_company_credit_report",
+    required: true,
+  },
+  {
+    label: "法定代表人征信报告（近一月内",
+    prop: "loan_legal_credit_report",
+    required: true,
+  },
+  {
+    label: "经营场所权属（或租赁）证明",
+    prop: "loan_address_proof",
+    required: true,
+  },
+  {
+    label: "企业到期银行贷款合同",
+    prop: "loan_due_contract",
+    required: true,
+  },
+  {
+    label: "集团内部资金统借统还合同（若有）",
+    prop: "loan_group_contract",
+    required: false,
+  },
+  {
+    label: "企业权力机构出具同意申请应急转贷资金的决议",
+    prop: "loan_resolution",
+    required: true,
+  },
+  {
+    label: "上年度财务报表及报表附注",
+    prop: "loan_report_last",
+    required: true,
+  },
+  {
+    label: "应急转贷资金申请表（模板附件1）",
+    prop: "loan_form",
+    required: true,
+    downloadUrl: "https://admintest.gyzhjr.com/other/fj1.docx",
+  },
+  {
+    label: "申请企业主要负责情况（模板附件2）",
+    prop: "loan_leader_info",
+    required: true,
+    downloadUrl: "https://admintest.gyzhjr.com/other/fj2.docx",
+  },
+  {
+    label: "申请企业主要资产况表（模板附件3）",
+    prop: "loan_assets_info",
+    required: true,
+    downloadUrl: "https://admintest.gyzhjr.com/other/fj3.docx",
+  },
+  {
+    label: "资料真实性承诺书（模板附件4）",
+    prop: "loan_promise",
+    required: true,
+    downloadUrl: "https://admintest.gyzhjr.com/other/fj4.docx",
+  },
+  {
+    label: "借款申请书(模板附件5)",
+    prop: "loan_letter",
+    required: true,
+    downloadUrl: "https://admintest.gyzhjr.com/other/fj5.docx",
+  },
+];
+export let guaranteeList = [
+  {
+    label: "担保企业简介",
+    prop: "guarantee_company_profile",
+    required: true,
+  },
+  {
+    label: "担保企业章程",
+    prop: "guarantee_articles",
+    required: true,
+  },
+  {
+    label: "担保企业营业执照正本",
+    prop: "guarantee_license_original",
+    required: true,
+  },
+  {
+    label: "担保企业营业执照副本",
+    prop: "guarantee_license_copy",
+    required: true,
+  },
+  {
+    label: "担保企业法定代表人身份证",
+    prop: "guarantee_legal_id",
+    required: true,
+  },
+  {
+    label: "担保企业法定代表人简历",
+    prop: "guarantee_legal_resume",
+    required: true,
+  },
+  {
+    label: "担保企业企业征信报告（近一月内）",
+    prop: "guarantee_credit_report",
+    required: true,
+  },
+];
+export let enterpriseList = [
+  {
+    label: "企业简介",
+    prop: "enterprise_profile",
+    required: true,
+  },
+  {
+    label: "公司章程",
+    prop: "enterprise_articles",
+    required: true,
+  },
+  {
+    label: "营业执照",
+    prop: "enterprise_business_license",
+    required: true,
+  },
+  {
+    label: "法定代表人身份证",
+    prop: "enterprise_legal_id",
+    required: true,
+  },
+  {
+    label: "权利机构决议",
+    prop: "enterprise_authority_resolution",
+    required: true,
+  },
+  {
+    label: "银行流水",
+    prop: "enterprise_bank_statement",
+    required: true,
+  },
+  {
+    label: "财务报告",
+    prop: "enterprise_financial_report",
+    required: true,
+  },
+  {
+    label: "近期企业征信报告",
+    prop: "enterprise_credit_report",
+    required: true,
+  },
+  {
+    label: "近期法定代表人征信报告",
+    prop: "enterprise_legal_credit",
+    required: true,
+  },
+  {
+    label: "抵押物资料",
+    prop: "enterprise_collateral",
+    required: false,
+  },
+  {
+    label: "经营合同",
+    prop: "enterprise_contract",
+    required: true,
+  },
+];
+export let personalList = [
+  {
+    label: "情况简介",
+    prop: "personal_profile",
+    required: true,
+  },
+  {
+    label: "借款人身份证",
+    prop: "personal_legal_id",
+    required: true,
+  },
+  {
+    label: "配偶身份证（若有）",
+    prop: "personal_spouse_id",
+    required: true,
+  },
+  {
+    label: "借款人户口簿",
+    prop: "personal_household_register",
+    required: true,
+  },
+  {
+    label: "配偶户口簿",
+    prop: "personal_spouse_household",
+    required: true,
+  },
+  {
+    label: "结婚情况证明文件",
+    prop: "personal_marriage_proof",
+    required: false,
+  },
+  {
+    label: "征信报告",
+    prop: "personal_credit_report",
+    required: true,
+  },
+  {
+    label: "银行流水",
+    prop: "personal_bank_statement",
+    required: true,
+  },
+  {
+    label: "抵押物资料（若有）",
+    prop: "personal_collateral",
+    required: false,
+  },
+  {
+    label: "经营资料",
+    prop: "personal_business_info",
+    required: false,
+  },
+];

@@ -250,7 +250,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
                   </TzButton>
                 </>
               ) : null}
-              <TzButton
+              {/* <TzButton
                 type="link"
                 key={'info'}
                 onClick={() => {
@@ -260,7 +260,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
                 }}
               >
                 查看详情
-              </TzButton>
+              </TzButton> */}
             </>
           );
         },

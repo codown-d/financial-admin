@@ -93,6 +93,7 @@ const errorHandler = (response: any) => {
   }
   return response;
 };
+const isDev = process.env.NODE_ENV === 'development';
 export const requestConfig = {
   paramsSerializer: (params: { [x: string]: any }) => {
     const { current: page, pageSize: limit, ...rest } = params;
@@ -115,7 +116,7 @@ export const requestConfig = {
       arrayFormat: 'comma',
     });
   },
-  baseURL: API_BASE_URL,
+  baseURL: isDev?'/api':API_BASE_URL,
   retryTimes: 3,
   timeout: 10 * 1000,
   // getResponse: true,

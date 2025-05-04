@@ -6,7 +6,7 @@ import { Col, ConfigProvider, Form, message, Modal, Row } from 'antd';
 import FinanceTable from './components/FinanceTable';
 import ProductTable from './components/ProductTable';
 import { adminUpdateInfo, adminUserLogout, getUserInfo } from '@/services';
-import { useAccess, useModel, useNavigate, useSearchParams } from '@umijs/max';
+import { useAccess, useNavigate, useSearchParams } from '@umijs/max';
 import Certify from '@/components/UI/Certify';
 import { useState } from 'react';
 export default () => {
