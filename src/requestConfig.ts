@@ -125,7 +125,7 @@ export const requestConfig = {
     responseInterceptors,
     (response: any) => {
       const { code } = response.data;
-      if (code == 200) {
+      if (code === 200) {
         return response;
       }
       return Promise.reject(response);

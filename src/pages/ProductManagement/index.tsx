@@ -20,7 +20,7 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { useNavigate } from '@umijs/max';
-import { Form, InputNumber, message,Image } from 'antd';
+import { Form, InputNumber, message,Image, Button } from 'antd';
 import { useMemo, useRef, useState } from 'react';
 
 type GithubIssueItem = {
@@ -290,12 +290,15 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
                   column={1}
                 >
                   {record.attachment_list.map((item, index) => {
+                    let f = item.attachment_url.toLowerCase().endsWith('.pdf');
                     return (
                       <ProDescriptions.Item key={index} label={item.attachment_name}>
-                        <Image
+                        {f?<Button type={'primary'} onClick={()=>window.open(item.attachment_url)}>预览附件</Button>:<Image
                           width={200}
                           src={item.attachment_url}
-                        />
+                        />}
+                        <Button type={"link"} className='ml-2'><a href={`${item.attachment_url}?download=yes`}>下载附件</a></Button>
+                      
                       </ProDescriptions.Item>
                     );
                   })}
