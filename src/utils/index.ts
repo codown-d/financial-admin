@@ -3,7 +3,7 @@ import { message } from 'antd';
 import { debounce, isArray, keyBy, keys, split } from 'lodash';
 
 export function buildTree(
-  data: { id: any; parentId: any;[x: string]: any }[],
+  data: { id: any; parentId: any; [x: string]: any }[],
   defaultProps?: {
     children: string;
     parentKey: string;
@@ -19,7 +19,6 @@ export function buildTree(
     .filter((item) => {
       // 找到所有没有父节点的节点（根节点）
       if (item.parentId === parentKey) {
-        
         return true;
       }
       // 如果有父节点，则将当前节点添加到父节点的 children 数组中
@@ -89,63 +88,63 @@ export const refreshPageUrl = (key: string, value: any) => {
 };
 
 export function urlToBase64(url: string, callback: (arg: string) => void) {
-  if(!url)return;
-  console.log(url)
+  if (!url) return;
+  console.log(url);
   const img = new Image();
-  img.crossOrigin = "Anonymous"; // 如果图片是跨域的，需要设置这个属性
+  img.crossOrigin = 'Anonymous'; // 如果图片是跨域的，需要设置这个属性
 
   img.onload = function () {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
     canvas.width = img.width;
     canvas.height = img.height;
     ctx.drawImage(img, 0, 0);
-    const base64 = canvas.toDataURL("image/png");
+    const base64 = canvas.toDataURL('image/png');
     callback(base64);
   };
 
   img.onerror = function () {
-    callback(url)
-    console.error("图片加载失败");
+    callback(url);
+    console.error('图片加载失败');
   };
-  img.src = url.replace('https://admin.gyzhjr.com/',API_BASE_URL||'');
+  img.src = url.replace('https://admin.gyzhjr.com/', API_BASE_URL || '');
 }
-export const formatOption=(Object:{
-  [x:string]:{text:string}
-})=>{
-  return keys(Object).map(item=>({ label: Object[item].text, value: Number(item) }))
-}
-export const formatKey=(object:any,keyList:string[])=>{
+export const formatOption = (Object: { [x: string]: { text: string } }) => {
+  return keys(Object).map((item) => ({
+    label: Object[item].text,
+    value: Number(item),
+  }));
+};
+export const formatKey = (object: any, keyList: string[]) => {
   return {
     ...object,
-    ...keyList.reduce((acc:any, key) => {
-      if(isArray(object[key])){
-         acc[key]=object[key]
-      }else{
-        acc[key]=object[key]+''
+    ...keyList.reduce((acc: any, key) => {
+      if (isArray(object[key])) {
+        acc[key] = object[key];
+      } else {
+        acc[key] = object[key] + '';
       }
-      return acc
-    },{})
+      return acc;
+    }, {}),
+  };
+};
+export const handleRes = (res: { code: number }) => {
+  if (res.code == 200) {
+    message.success('提交成功');
   }
-}
-export const handleRes=(res: { code: number; })=>{
-
-  if(res.code==200){
-    message.success('提交成功'); 
-  }
-}
+};
 export const getParentNodes = (id: any, tree: any[]) => {
   const result: any[] = [];
   // 递归函数查找父节点
   const findParent = (currentId: any) => {
-    const node = tree.find(item => item.id === currentId);
+    const node = tree.find((item) => item.id === currentId);
     if (node && node.parentId !== null) {
-      result.push(node);  // 将当前节点加入结果
-      findParent(node.parentId);  // 递归查找父节点
+      result.push(node); // 将当前节点加入结果
+      findParent(node.parentId); // 递归查找父节点
     }
   };
-  findParent(id);  // 启动递归查找
-  return result.reverse();  // 结果是从目标节点到根节点，所以需要反转数组
+  findParent(id); // 启动递归查找
+  return result.reverse(); // 结果是从目标节点到根节点，所以需要反转数组
 };
 export function getSubPaths(path: string | null | undefined) {
   // 将路径按 '/' 分割并去掉空字符串
@@ -160,17 +159,22 @@ export function getSubPaths(path: string | null | undefined) {
   return subPaths;
 }
 /**
-* 获取指定路径的部分路径（从开始到指定深度）
-* @param {string} path - 原始路径
-* @param {number} depth - 需要获取的路径深度
-* @returns {string} - 截取的路径
-*/
+ * 获取指定路径的部分路径（从开始到指定深度）
+ * @param {string} path - 原始路径
+ * @param {number} depth - 需要获取的路径深度
+ * @returns {string} - 截取的路径
+ */
 export function getSubPathAtDepth(path: string, depth?: number) {
- // 将路径按 '/' 分割并去掉空字符串
- const pathArray = split(path, '/').filter(Boolean);
+  // 将路径按 '/' 分割并去掉空字符串
+  const pathArray = split(path, '/').filter(Boolean);
 
- // 获取指定深度的路径部分
- const subPath = '/' + pathArray.slice(0, depth||(path.split('/').length-2)).join('/');
+  // 获取指定深度的路径部分
+  const subPath =
+    '/' + pathArray.slice(0, depth || path.split('/').length - 2).join('/');
 
- return subPath;
+  return subPath;
 }
+export const isImage = (url: string) => {
+  const imageExts = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.bmp', '.svg'];
+  return imageExts.some((ext) => url.toLowerCase().endsWith(ext));
+};

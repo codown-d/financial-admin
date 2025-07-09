@@ -9,6 +9,7 @@ import {
 } from '@/constants';
 import { useAreaData } from '@/hooks';
 import { applyAction, applyList } from '@/services';
+import { isImage } from '@/utils';
 import type {
   ActionType,
   ProColumns,
@@ -20,7 +21,7 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { useNavigate } from '@umijs/max';
-import { Form, InputNumber, message,Image, Button } from 'antd';
+import { Button, Form, Image, InputNumber, message } from 'antd';
 import { useMemo, useRef, useState } from 'react';
 
 type GithubIssueItem = {
@@ -277,33 +278,48 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
                   </TzButton>
                 </>
               ) : null}
-              {record.attachment_list.length?<DrawerForm
-                title="附件"
-                key={'info'}
-                trigger={<TzButton type="link">查看详情</TzButton>}
-                onFinish={async () => {
-                  return true;
-                }}
-              >
-                <ProDescriptions
-                  actionRef={actionRef}
-                  column={1}
+              {record.attachment_list.length ? (
+                <DrawerForm
+                  title="附件"
+                  key={'info'}
+                  trigger={<TzButton type="link">查看详情</TzButton>}
+                  onFinish={async () => {
+                    return true;
+                  }}
                 >
-                  {record.attachment_list.map((item, index) => {
-                    let f = item.attachment_url.toLowerCase().endsWith('.pdf');
-                    return (
-                      <ProDescriptions.Item key={index} label={item.attachment_name}>
-                        {f?<Button type={'primary'} onClick={()=>window.open(item.attachment_url)}>预览附件</Button>:<Image
-                          width={200}
-                          src={item.attachment_url}
-                        />}
-                        <Button type={"link"} className='ml-2'><a href={`${item.attachment_url}?download=yes`}>下载附件</a></Button>
-                      
-                      </ProDescriptions.Item>
-                    );
-                  })}
-                </ProDescriptions>
-              </DrawerForm>:null}
+                  <ProDescriptions actionRef={actionRef} column={1}>
+                    {record.attachment_list.map((item, index) => {
+                      let isPDF = item.attachment_url
+                        .toLowerCase()
+                        .endsWith('.pdf');
+                      let isImg = isImage(item.attachment_url);
+                      return (
+                        <ProDescriptions.Item
+                          key={index}
+                          label={item.attachment_name}
+                        >
+                          {isPDF ? (
+                            <Button
+                              type={'primary'}
+                              onClick={() => window.open(item.attachment_url)}
+                            >
+                              预览附件
+                            </Button>
+                          ) : isImg ? (
+                            <Image width={200} src={item.attachment_url} />
+                          ) : null}
+                          <a
+                            href={`${item.attachment_url}?download=yes`}
+                            className="text-[#3d5af5]"
+                          >
+                            下载附件
+                          </a>
+                        </ProDescriptions.Item>
+                      );
+                    })}
+                  </ProDescriptions>
+                </DrawerForm>
+              ) : null}
             </>
           );
         },
