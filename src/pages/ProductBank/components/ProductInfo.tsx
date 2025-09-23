@@ -136,6 +136,13 @@ export default (props: { product_type: any }) => {
               rules={[{ required: true, message: '请选择还款方式' }]}
             />
           </Col>
+             <Col span={8}>
+            <ProFormDigit
+              width={'md'}
+              name={'view_sort'}
+              label="显示权重"
+            />
+          </Col>
           <Col span={8}>
             <ProFormDateTimePicker
               width={'md'}

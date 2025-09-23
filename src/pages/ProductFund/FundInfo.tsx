@@ -79,6 +79,13 @@ export default () => {
               rules={[{ required: true }]}
             />
           </Col>
+             <Col span={8}>
+            <ProFormDigit
+              width={'md'}
+              name={'view_sort'}
+              label="显示权重"
+            />
+          </Col>
           <Col span={8}>
             <ProFormDateTimePicker
               width={'md'}
