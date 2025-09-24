@@ -58,7 +58,10 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
       },
       {
         title: '机构名称',
-        dataIndex: ['financial_organs', 'organs_name'],
+        dataIndex: 'organs_name',
+           render: (_, record: any) => {
+          return `${record.financial_organs?.organs_name}万元`;
+        },
       },
       {
         title: '产品名称',
@@ -332,6 +335,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
       columns={columns}
       actionRef={actionRef}
       request={async (params, sorter, filter) => {
+        console.log(params)
         const res = await applyList({
           query_uid: uid,
           ...params,
