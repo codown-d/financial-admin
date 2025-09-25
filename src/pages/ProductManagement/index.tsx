@@ -40,7 +40,6 @@ export type SearchAndOptionsProps = Pick<
 export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
   let { proTableProps, uid } = props;
   const actionRef = useRef<ActionType>();
-  const navigate = useNavigate();
   const [total, setTotal] = useState(0);
   let { areaData } = useAreaData();
   let headerTitle = useMemo(() => {
@@ -52,7 +51,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
       {
         title: '申请人',
         dataIndex: 'apply_user',
-        render: (text, record: any, _, action) => {
+        render: (text, record: any) => {
           return record.name;
         },
       },
@@ -60,7 +59,7 @@ export default (props: { proTableProps?: SearchAndOptionsProps; uid: any }) => {
         title: '机构名称',
         dataIndex: 'organs_name',
            render: (_, record: any) => {
-          return `${record.financial_organs?.organs_name}万元`;
+          return `${record.financial_organs?.organs_name}`;
         },
       },
       {
